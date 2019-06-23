@@ -1,0 +1,34 @@
+{
+  "name": "ewelink-api",
+  "version": "1.0.0",
+  "description": "eWeLink API for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Martín M.",
+  "license": "MIT",
+  "dependencies": {
+    "delay": "^4.3.0",
+    "nonce": "^1.0.4",
+    "random": "^2.1.1",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "websocket": "^1.0.28",
+    "websocket-as-promised": "^0.10.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^9.0.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-config-wesbos": "0.0.19",
+    "eslint-plugin-html": "^5.0.5",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.13.0",
+    "eslint-plugin-react-hooks": "^1.6.0",
+    "prettier": "^1.18.2"
+  }
+}
