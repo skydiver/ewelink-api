@@ -3,12 +3,14 @@ const W3CWebSocket = require('websocket').w3cwebsocket;
 const WebSocketAsPromised = require('websocket-as-promised');
 const delay = require('delay');
 
+const { _get } = require('./lib/helpers');
+
 const {
   makeAuthorizationSign,
   loginPayload,
   wssLoginPayload,
   wssUpdatePayload,
-} = require('./lib/helper');
+} = require('./lib/ewelink-helper');
 
 class eWeLink {
   constructor({ region = 'us', email, password }) {
@@ -51,8 +53,8 @@ class eWeLink {
       body,
       json: true,
     });
-    this.apiKey = response.user.apikey;
-    this.at = response.at;
+    this.apiKey = _get(response, 'user.apikey', '');
+    this.at = _get(response, 'at', '');
     return response;
   }
 
