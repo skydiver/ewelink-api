@@ -4,7 +4,7 @@
   "description": "eWeLink API for Node.js",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "demo": "node ./demo/example.js"
   },
   "author": "Martín M.",
   "license": "MIT",
