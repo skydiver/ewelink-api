@@ -3,11 +3,25 @@
   "version": "1.0.0",
   "description": "eWeLink API for Node.js",
   "main": "main.js",
+  "author": "Martín M.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skydiver/ewelink-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/skydiver/ewelink-api/issues"
+  },
+  "keywords": [
+    "ewelink",
+    "sonoff",
+    "api",
+    "node",
+    "nodejs"
+  ],
   "scripts": {
     "demo": "node ./demo/example.js"
   },
-  "author": "Martín M.",
-  "license": "MIT",
   "dependencies": {
     "delay": "^4.3.0",
     "nonce": "^1.0.4",
