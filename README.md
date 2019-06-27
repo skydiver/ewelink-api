@@ -7,4 +7,21 @@
 ```
 
 ## Usage
-Check `demo/example.js`
+```
+const ewelink = require('ewelink-api');
+
+(async () => {
+
+  const conn = new ewelink({
+    email: '<your ewelink email>',
+    password: '<your ewelink password>',
+  });
+
+  /* get all devices */
+  const devices = await conn.getDevices();
+  console.log(devices);
+
+})();
+```
+
+Check `demo/example.js` for more examples.
