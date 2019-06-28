@@ -20,7 +20,8 @@
     "nodejs"
   ],
   "scripts": {
-    "demo": "node ./demo/example.js"
+    "demo": "node ./demo/example.js",
+    "test": "jest --testPathIgnorePatterns '(node_modules|.cache)'"
   },
   "dependencies": {
     "delay": "^4.3.0",
@@ -43,6 +44,7 @@
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.13.0",
     "eslint-plugin-react-hooks": "^1.6.0",
+    "jest": "^24.8.0",
     "prettier": "^1.18.2"
   }
 }
