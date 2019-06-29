@@ -24,4 +24,4 @@ const ewelink = require('ewelink-api');
 })();
 ```
 
-Check `demo/example.js` for more examples.
+Check `demo/` directory for more examples.
