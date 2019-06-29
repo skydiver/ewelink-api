@@ -13,19 +13,23 @@ const {
 } = require('./lib/ewelink-helper');
 
 class eWeLink {
-  constructor({ region = 'us', email, password }) {
+  constructor({ region = 'us', email, password, at, apiKey }) {
+    if (!at && (!email && !password)) {
+      return { error: 'No credentials provided' };
+    }
+
     this.apiUrl = `https://${region}-api.coolkit.cc:8080/api`;
     this.apiWebSocket = 'wss://us-pconnect3.coolkit.cc:8080/api/ws';
     this.email = email;
     this.password = password;
-    this.apiKey = '';
-    this.at = '';
+    this.at = at;
+    this.apiKey = apiKey;
   }
 
   async makeRequest({ method = 'GET', uri, body = {}, qs = {} }) {
-    const { apiKey, at } = this;
+    const { at } = this;
 
-    if (!apiKey && !at) {
+    if (!at) {
       await this.login();
     }
 
