@@ -19,7 +19,7 @@ class eWeLink {
     }
 
     this.apiUrl = `https://${region}-api.coolkit.cc:8080/api`;
-    this.apiWebSocket = 'wss://us-pconnect3.coolkit.cc:8080/api/ws';
+    this.apiWebSocket = `wss://${region}-pconnect3.coolkit.cc:8080/api/ws`;
     this.email = email;
     this.password = password;
     this.at = at;
