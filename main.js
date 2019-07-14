@@ -78,16 +78,31 @@ class eWeLink {
     return response;
   }
 
-  async toggleDevice(deviceId, channel = 1) {
+  async getDevicePowerState(deviceId, channel = 1) {
+    const device = await this.getDevice(deviceId);
+    const status = _get(device, 'params.switch', false);
+    const switches = _get(device, 'params.switches', false);
+
+    if (!status && !switches) {
+      return { error: 'Device does not exist' };
+    }
+
+    if (switches) {
+      status = switches[channel - 1].switch;
+    }
+    const state = status === 'on' ? 'off' : 'on';
+
+    return { status: 'ok', state };
+  }
+
+  async setDevicePowerState(deviceId, state, channel = 1) {
     const device = await this.getDevice(deviceId);
     const status = _get(device, 'params.switch', false);
     const switches = _get(device, 'params.switchs', false);
 
-    if (!status || !switches) {
+    if (!status && !switches) {
       return { error: 'Device does not exist' };
     }
-
-    const state = status === 'on' ? 'off' : 'on';
 
     const payloadLogin = wssLoginPayload({ at: this.at, apiKey: this.apiKey });
     const payloadUpdate = wssUpdatePayload({
@@ -98,8 +113,7 @@ class eWeLink {
     if (switches) {
       payloadUpdate.params.switches = switches;
       payloadUpdate.params.switches[channel - 1].switch = state;
-    }
-    else {
+    } else {
       payloadUpdate.params.switch = state;
     }
 
@@ -114,6 +128,21 @@ class eWeLink {
     await wsp.close();
 
     return { status: 'ok', state };
+  }
+
+  async toggleDevice(deviceId, channel = 1) {
+    const powerState = await getDevicePowerState(deviceId, channel);
+    const state = _get(powerState, 'state', false);
+
+    if (!state) {
+      return { error: 'Device does not exist' };
+    }
+
+    const newState = state === 'on' ? 'off' : 'on';
+
+    const newResponse = await setDevicePowerState(deviceId, newState, channel);
+
+    return newResponse;
   }
 }
 
