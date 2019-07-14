@@ -78,11 +78,12 @@ class eWeLink {
     return response;
   }
 
-  async toggleDevice(deviceId) {
+  async toggleDevice(deviceId, channel = 1) {
     const device = await this.getDevice(deviceId);
     const status = _get(device, 'params.switch', false);
+    const switches = _get(device, 'params.switchs', false);
 
-    if (!status) {
+    if (!status || !switches) {
       return { error: 'Device does not exist' };
     }
 
@@ -92,8 +93,15 @@ class eWeLink {
     const payloadUpdate = wssUpdatePayload({
       apiKey: this.apiKey,
       deviceId,
-      params: { switch: state },
     });
+
+    if (switches) {
+      payloadUpdate.params.switches = switches;
+      payloadUpdate.params.switches[channel - 1].switch = state;
+    }
+    else {
+      payloadUpdate.params.switch = state;
+    }
 
     const wsp = new WebSocketAsPromised(this.apiWebSocket, {
       createWebSocket: url => new W3CWebSocket(url),
