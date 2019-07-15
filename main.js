@@ -84,7 +84,7 @@ class eWeLink {
     const switches = _get(device, 'params.switches', false);
 
     if (!state && !switches) {
-      return { error: 'Device does not exist' };
+      return { error: device.error, msg: 'Device does not exist' };
     }
 
     if (switches) {
@@ -100,7 +100,7 @@ class eWeLink {
     const switches = _get(device, 'params.switches', false);
 
     if (!status && !switches) {
-      return { error: 'Device does not exist' };
+      return { error: device.error, msg: 'Device does not exist' };
     }
 
     const params = {};
