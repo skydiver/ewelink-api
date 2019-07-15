@@ -80,17 +80,16 @@ class eWeLink {
 
   async getDevicePowerState(deviceId, channel = 1) {
     const device = await this.getDevice(deviceId);
-    const status = _get(device, 'params.switch', false);
+    let state = _get(device, 'params.switch', false);
     const switches = _get(device, 'params.switches', false);
 
-    if (!status && !switches) {
+    if (!state && !switches) {
       return { error: 'Device does not exist' };
     }
 
     if (switches) {
-      status = switches[channel - 1].switch;
+      state = switches[channel - 1].switch;
     }
-    const state = status === 'on' ? 'off' : 'on';
 
     return { status: 'ok', state };
   }
@@ -98,24 +97,27 @@ class eWeLink {
   async setDevicePowerState(deviceId, state, channel = 1) {
     const device = await this.getDevice(deviceId);
     const status = _get(device, 'params.switch', false);
-    const switches = _get(device, 'params.switchs', false);
+    const switches = _get(device, 'params.switches', false);
 
     if (!status && !switches) {
       return { error: 'Device does not exist' };
+    }
+
+    const params = {};
+
+    if (switches) {
+      params.switches = switches;
+      params.switches[channel - 1].switch = state;
+    } else {
+      params.switch = state;
     }
 
     const payloadLogin = wssLoginPayload({ at: this.at, apiKey: this.apiKey });
     const payloadUpdate = wssUpdatePayload({
       apiKey: this.apiKey,
       deviceId,
+      params,
     });
-
-    if (switches) {
-      payloadUpdate.params.switches = switches;
-      payloadUpdate.params.switches[channel - 1].switch = state;
-    } else {
-      payloadUpdate.params.switch = state;
-    }
 
     const wsp = new WebSocketAsPromised(this.apiWebSocket, {
       createWebSocket: url => new W3CWebSocket(url),
@@ -131,7 +133,7 @@ class eWeLink {
   }
 
   async toggleDevice(deviceId, channel = 1) {
-    const powerState = await getDevicePowerState(deviceId, channel);
+    const powerState = await this.getDevicePowerState(deviceId, channel);
     const state = _get(powerState, 'state', false);
 
     if (!state) {
@@ -140,7 +142,11 @@ class eWeLink {
 
     const newState = state === 'on' ? 'off' : 'on';
 
-    const newResponse = await setDevicePowerState(deviceId, newState, channel);
+    const newResponse = await this.setDevicePowerState(
+      deviceId,
+      newState,
+      channel
+    );
 
     return newResponse;
   }
