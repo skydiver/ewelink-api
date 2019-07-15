@@ -42,6 +42,11 @@ class eWeLink {
       json: true,
     });
 
+    const error = _get(response, 'error', false);
+    if (error && [401, 402].indexOf(parseInt(error)) !== -1) {
+      return { error, msg: 'Authentication error' };
+    }
+
     return response;
   }
 
@@ -50,13 +55,20 @@ class eWeLink {
       email: this.email,
       password: this.password,
     });
-    const response = await rp({
+    let response = await rp({
       method: 'POST',
       uri: `${this.apiUrl}/user/login`,
       headers: { Authorization: `Sign ${makeAuthorizationSign(body)}` },
       body,
       json: true,
     });
+
+    const error = _get(response, 'error', false);
+
+    if (error && parseInt(error) == 400) {
+      return { error, msg: 'Authentication error' };
+    }
+
     this.apiKey = _get(response, 'user.apikey', '');
     this.at = _get(response, 'at', '');
     return response;
@@ -80,11 +92,15 @@ class eWeLink {
 
   async getDevicePowerState(deviceId, channel = 1) {
     const device = await this.getDevice(deviceId);
+    const error = _get(device, 'error', false);
     let state = _get(device, 'params.switch', false);
     const switches = _get(device, 'params.switches', false);
 
-    if (!state && !switches) {
-      return { error: device.error, msg: 'Device does not exist' };
+    if (error || (!state && !switches)) {
+      if (error && parseInt(error) == 401) {
+        return device;
+      }
+      return { error: error, msg: 'Device does not exist' };
     }
 
     if (switches) {
@@ -96,11 +112,15 @@ class eWeLink {
 
   async setDevicePowerState(deviceId, state, channel = 1) {
     const device = await this.getDevice(deviceId);
+    const error = _get(device, 'error', false);
     const status = _get(device, 'params.switch', false);
     const switches = _get(device, 'params.switches', false);
 
-    if (!status && !switches) {
-      return { error: device.error, msg: 'Device does not exist' };
+    if (error || (!status && !switches)) {
+      if (error && parseInt(error) == 401) {
+        return device;
+      }
+      return { error: error, msg: 'Device does not exist' };
     }
 
     const params = {};
@@ -137,7 +157,7 @@ class eWeLink {
     const state = _get(powerState, 'state', false);
 
     if (!state) {
-      return { error: 'Device does not exist' };
+      return { error: powerState.error, msg: device.msg | 'Device does not exist' };
     }
 
     const newState = state === 'on' ? 'off' : 'on';
