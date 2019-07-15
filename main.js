@@ -10,6 +10,7 @@ const {
   loginPayload,
   wssLoginPayload,
   wssUpdatePayload,
+  getDeviceChannelCount,
 } = require('./lib/ewelink-helper');
 
 class eWeLink {
@@ -93,10 +94,11 @@ class eWeLink {
   async getDevicePowerState(deviceId, channel = 1) {
     const device = await this.getDevice(deviceId);
     const error = _get(device, 'error', false);
+    const switchesAmount = getDeviceChannelCount(device);
     let state = _get(device, 'params.switch', false);
     const switches = _get(device, 'params.switches', false);
 
-    if (error || (!state && !switches)) {
+    if (error || switchesAmount < channel || (!state && !switches)) {
       if (error && parseInt(error) == 401) {
         return device;
       }
@@ -113,10 +115,11 @@ class eWeLink {
   async setDevicePowerState(deviceId, state, channel = 1) {
     const device = await this.getDevice(deviceId);
     const error = _get(device, 'error', false);
+    const switchesAmount = getDeviceChannelCount(device);
     const status = _get(device, 'params.switch', false);
     const switches = _get(device, 'params.switches', false);
 
-    if (error || (!status && !switches)) {
+    if (error || switchesAmount < channel || (!status && !switches)) {
       if (error && parseInt(error) == 401) {
         return device;
       }
@@ -169,6 +172,13 @@ class eWeLink {
     );
 
     return newResponse;
+  }
+
+  async getDeviceChannelCount(deviceId) {
+    const device = await this.getDevice(deviceId);
+    const switchesAmount = getDeviceChannelCount(device);
+
+    return switchesAmount;
   }
 }
 
