@@ -129,6 +129,17 @@ describe('valid credentials, invalid device', () => {
   });
 });
 
+describe('valid credentials, wrong region', () => {
+  test('login into ewelink should fail', async () => {
+    const conn = new ewelink({ region: 'eu', email, password });
+    expect(conn.region).toBe('eu');
+    const login = await conn.login();
+    expect(typeof login).toBe('object');
+    expect(login).toMatchObject(loginExpectations);
+    expect(conn.region).toBe('us');
+  });
+});
+
 describe('invalid credentials', () => {
   test('no credentials given', async () => {
     const conn = new ewelink({});

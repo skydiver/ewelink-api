@@ -19,12 +19,19 @@ class eWeLink {
       return { error: 'No credentials provided' };
     }
 
-    this.apiUrl = `https://${region}-api.coolkit.cc:8080/api`;
-    this.apiWebSocket = `wss://${region}-pconnect3.coolkit.cc:8080/api/ws`;
+    this.region = region;
     this.email = email;
     this.password = password;
     this.at = at;
     this.apiKey = apiKey;
+  }
+
+  getApiUrl() {
+    return `https://${this.region}-api.coolkit.cc:8080/api`;
+  }
+
+  getApiWebSocket() {
+    return `wss://${this.region}-pconnect3.coolkit.cc:8080/api/ws`;
   }
 
   async makeRequest({ method = 'GET', uri, body = {}, qs = {} }) {
@@ -36,7 +43,7 @@ class eWeLink {
 
     const response = await rp({
       method,
-      uri: `${this.apiUrl}${uri}`,
+      uri: `${this.getApiUrl()}${uri}`,
       headers: { Authorization: `Bearer ${this.at}` },
       body,
       qs,
@@ -58,16 +65,26 @@ class eWeLink {
     });
     let response = await rp({
       method: 'POST',
-      uri: `${this.apiUrl}/user/login`,
+      uri: `${this.getApiUrl()}/user/login`,
       headers: { Authorization: `Sign ${makeAuthorizationSign(body)}` },
       body,
       json: true,
     });
 
     const error = _get(response, 'error', false);
+    const region = _get(response, 'region', false);
 
     if (error && parseInt(error) == 400) {
       return { error, msg: 'Authentication error' };
+    }
+
+    if (error && parseInt(error) == 301 && region) {
+      if (this.region != region) {
+        this.region = region;
+        response = await this.login();
+        return response;
+      }
+      return { error, msg: 'Region does not exist' };
     }
 
     this.apiKey = _get(response, 'user.apikey', '');
@@ -142,7 +159,7 @@ class eWeLink {
       params,
     });
 
-    const wsp = new WebSocketAsPromised(this.apiWebSocket, {
+    const wsp = new WebSocketAsPromised(this.getApiWebSocket(), {
       createWebSocket: url => new W3CWebSocket(url),
     });
 
