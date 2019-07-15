@@ -31,6 +31,15 @@ describe('env: node script', () => {
     expect(device.deviceid).toBe(deviceId);
     expect(device).toMatchObject(specificDeviceExpectations);
   });
+
+  test('get device power state', async () => {
+    const device = await conn.getDevice(deviceId);
+    const currentState = device.params.switch;
+    const powerState = await conn.getDevicePowerState(deviceId);
+    expect(typeof powerState).toBe('object');
+    expect(powerState.status).toBe('ok');
+    expect(powerState.state).toBe(currentState);
+  });
 });
 
 describe('env: serverless', () => {
@@ -57,6 +66,16 @@ describe('env: serverless', () => {
     expect(typeof device).toBe('object');
     expect(device.deviceid).toBe(deviceId);
     expect(device).toMatchObject(specificDeviceExpectations);
+  });
+
+  test('get device power state', async () => {
+    const conn = new ewelink({ at: accessToken });
+    const device = await conn.getDevice(deviceId);
+    const currentState = device.params.switch;
+    const powerState = await conn.getDevicePowerState(deviceId);
+    expect(typeof powerState).toBe('object');
+    expect(powerState.status).toBe('ok');
+    expect(powerState.state).toBe(currentState);
   });
 });
 
