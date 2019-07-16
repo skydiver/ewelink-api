@@ -63,6 +63,7 @@ class eWeLink {
       email: this.email,
       password: this.password,
     });
+
     let response = await rp({
       method: 'POST',
       uri: `${this.getApiUrl()}/user/login`,
@@ -74,12 +75,12 @@ class eWeLink {
     const error = _get(response, 'error', false);
     const region = _get(response, 'region', false);
 
-    if (error && parseInt(error) == 400) {
+    if (error && [400, 401, 404].indexOf(parseInt(error)) !== -1) {
       return { error, msg: 'Authentication error' };
     }
 
-    if (error && parseInt(error) == 301 && region) {
-      if (this.region != region) {
+    if (error && parseInt(error) === 301 && region) {
+      if (this.region !== region) {
         this.region = region;
         response = await this.login();
         return response;
@@ -116,10 +117,10 @@ class eWeLink {
     const switches = _get(device, 'params.switches', false);
 
     if (error || switchesAmount < channel || (!state && !switches)) {
-      if (error && parseInt(error) == 401) {
+      if (error && parseInt(error) === 401) {
         return device;
       }
-      return { error: error, msg: 'Device does not exist' };
+      return { error, msg: 'Device does not exist' };
     }
 
     if (switches) {
@@ -137,10 +138,10 @@ class eWeLink {
     const switches = _get(device, 'params.switches', false);
 
     if (error || switchesAmount < channel || (!status && !switches)) {
-      if (error && parseInt(error) == 401) {
+      if (error && parseInt(error) === 401) {
         return device;
       }
-      return { error: error, msg: 'Device does not exist' };
+      return { error, msg: 'Device does not exist' };
     }
 
     const params = {};
@@ -177,7 +178,10 @@ class eWeLink {
     const state = _get(powerState, 'state', false);
 
     if (!state) {
-      return { error: powerState.error, msg: device.msg | 'Device does not exist' };
+      return {
+        error: powerState.error,
+        msg: 'Device does not exist',
+      };
     }
 
     const newState = state === 'on' ? 'off' : 'on';
@@ -194,7 +198,6 @@ class eWeLink {
   async getDeviceChannelCount(deviceId) {
     const device = await this.getDevice(deviceId);
     const switchesAmount = getDeviceChannelCount(device);
-
     return switchesAmount;
   }
 }
