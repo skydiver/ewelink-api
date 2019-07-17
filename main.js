@@ -10,6 +10,7 @@ const {
   loginPayload,
   wssLoginPayload,
   wssUpdatePayload,
+  getDeviceTotalChannels,
 } = require('./lib/ewelink-helper');
 
 class eWeLink {
@@ -18,12 +19,19 @@ class eWeLink {
       return { error: 'No credentials provided' };
     }
 
-    this.apiUrl = `https://${region}-api.coolkit.cc:8080/api`;
-    this.apiWebSocket = `wss://${region}-pconnect3.coolkit.cc:8080/api/ws`;
+    this.region = region;
     this.email = email;
     this.password = password;
     this.at = at;
     this.apiKey = apiKey;
+  }
+
+  getApiUrl() {
+    return `https://${this.region}-api.coolkit.cc:8080/api`;
+  }
+
+  getApiWebSocket() {
+    return `wss://${this.region}-pconnect3.coolkit.cc:8080/api/ws`;
   }
 
   async makeRequest({ method = 'GET', uri, body = {}, qs = {} }) {
@@ -35,12 +43,17 @@ class eWeLink {
 
     const response = await rp({
       method,
-      uri: `${this.apiUrl}${uri}`,
+      uri: `${this.getApiUrl()}${uri}`,
       headers: { Authorization: `Bearer ${this.at}` },
       body,
       qs,
       json: true,
     });
+
+    const error = _get(response, 'error', false);
+    if (error && [401, 402].indexOf(parseInt(error)) !== -1) {
+      return { error, msg: 'Authentication error' };
+    }
 
     return response;
   }
@@ -50,13 +63,31 @@ class eWeLink {
       email: this.email,
       password: this.password,
     });
-    const response = await rp({
+
+    let response = await rp({
       method: 'POST',
-      uri: `${this.apiUrl}/user/login`,
+      uri: `${this.getApiUrl()}/user/login`,
       headers: { Authorization: `Sign ${makeAuthorizationSign(body)}` },
       body,
       json: true,
     });
+
+    const error = _get(response, 'error', false);
+    const region = _get(response, 'region', false);
+
+    if (error && [400, 401, 404].indexOf(parseInt(error)) !== -1) {
+      return { error, msg: 'Authentication error' };
+    }
+
+    if (error && parseInt(error) === 301 && region) {
+      if (this.region !== region) {
+        this.region = region;
+        response = await this.login();
+        return response;
+      }
+      return { error, msg: 'Region does not exist' };
+    }
+
     this.apiKey = _get(response, 'user.apikey', '');
     this.at = _get(response, 'at', '');
     return response;
@@ -78,24 +109,58 @@ class eWeLink {
     return response;
   }
 
-  async toggleDevice(deviceId) {
+  async getDevicePowerState(deviceId, channel = 1) {
     const device = await this.getDevice(deviceId);
-    const status = _get(device, 'params.switch', false);
+    const error = _get(device, 'error', false);
+    const switchesAmount = getDeviceTotalChannels(device.uiid);
+    let state = _get(device, 'params.switch', false);
+    const switches = _get(device, 'params.switches', false);
 
-    if (!status) {
-      return { error: 'Device does not exist' };
+    if (error || switchesAmount < channel || (!state && !switches)) {
+      if (error && parseInt(error) === 401) {
+        return device;
+      }
+      return { error, msg: 'Device does not exist' };
     }
 
-    const state = status === 'on' ? 'off' : 'on';
+    if (switches) {
+      state = switches[channel - 1].switch;
+    }
+
+    return { status: 'ok', state };
+  }
+
+  async setDevicePowerState(deviceId, state, channel = 1) {
+    const device = await this.getDevice(deviceId);
+    const error = _get(device, 'error', false);
+    const switchesAmount = getDeviceTotalChannels(device.uiid);
+    const status = _get(device, 'params.switch', false);
+    const switches = _get(device, 'params.switches', false);
+
+    if (error || switchesAmount < channel || (!status && !switches)) {
+      if (error && parseInt(error) === 401) {
+        return device;
+      }
+      return { error, msg: 'Device does not exist' };
+    }
+
+    const params = {};
+
+    if (switches) {
+      params.switches = switches;
+      params.switches[channel - 1].switch = state;
+    } else {
+      params.switch = state;
+    }
 
     const payloadLogin = wssLoginPayload({ at: this.at, apiKey: this.apiKey });
     const payloadUpdate = wssUpdatePayload({
       apiKey: this.apiKey,
       deviceId,
-      params: { switch: state },
+      params,
     });
 
-    const wsp = new WebSocketAsPromised(this.apiWebSocket, {
+    const wsp = new WebSocketAsPromised(this.getApiWebSocket(), {
       createWebSocket: url => new W3CWebSocket(url),
     });
 
@@ -106,6 +171,31 @@ class eWeLink {
     await wsp.close();
 
     return { status: 'ok', state };
+  }
+
+  async toggleDevice(deviceId, channel = 1) {
+    const powerState = await this.getDevicePowerState(deviceId, channel);
+    const state = _get(powerState, 'state', false);
+
+    if (!state) {
+      return { error: powerState.error, msg: 'Device does not exist' };
+    }
+
+    const newState = state === 'on' ? 'off' : 'on';
+
+    const newResponse = await this.setDevicePowerState(
+      deviceId,
+      newState,
+      channel
+    );
+
+    return newResponse;
+  }
+
+  async getDeviceChannelCount(deviceId) {
+    const device = await this.getDevice(deviceId);
+    const switchesAmount = getDeviceTotalChannels(device.uiid);
+    return switchesAmount;
   }
 }
 

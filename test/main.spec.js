@@ -31,15 +31,40 @@ describe('env: node script', () => {
     expect(device.deviceid).toBe(deviceId);
     expect(device).toMatchObject(specificDeviceExpectations);
   });
+
+  test('get device power state', async () => {
+    const device = await conn.getDevice(deviceId);
+    const currentState = device.params.switch;
+    const powerState = await conn.getDevicePowerState(deviceId);
+    expect(typeof powerState).toBe('object');
+    expect(powerState.status).toBe('ok');
+    expect(powerState.state).toBe(currentState);
+  });
+
+  test('set device power state', async () => {
+    jest.setTimeout(30000);
+    const device = await conn.getDevice(deviceId);
+    const currentState = device.params.switch;
+    const newState = currentState === 'on' ? 'off' : 'on';
+    const powerState = await conn.setDevicePowerState(deviceId, newState);
+    expect(typeof powerState).toBe('object');
+    expect(powerState.status).toBe('ok');
+    expect(powerState.state).toBe(newState);
+    const deviceVerify = await conn.getDevice(deviceId);
+    const currentStateVerify = deviceVerify.params.switch;
+    expect(newState).toBe(currentStateVerify);
+  });
 });
 
 describe('env: serverless', () => {
   let accessToken;
+  let apiKey;
 
   test('login into ewelink', async () => {
     const conn = new ewelink({ email, password });
     const login = await conn.login();
     accessToken = login.at;
+    apiKey = login.user.apikey;
     expect(typeof login).toBe('object');
     expect(login).toMatchObject(loginExpectations);
   });
@@ -58,6 +83,61 @@ describe('env: serverless', () => {
     expect(device.deviceid).toBe(deviceId);
     expect(device).toMatchObject(specificDeviceExpectations);
   });
+
+  test('get device power state', async () => {
+    const conn = new ewelink({ at: accessToken });
+    const device = await conn.getDevice(deviceId);
+    const currentState = device.params.switch;
+    const powerState = await conn.getDevicePowerState(deviceId);
+    expect(typeof powerState).toBe('object');
+    expect(powerState.status).toBe('ok');
+    expect(powerState.state).toBe(currentState);
+  });
+
+  test('set device power state', async () => {
+    jest.setTimeout(30000);
+    const conn = new ewelink({ at: accessToken, apiKey });
+    const device = await conn.getDevice(deviceId);
+    const currentState = device.params.switch;
+    const newState = currentState === 'on' ? 'off' : 'on';
+    const powerState = await conn.setDevicePowerState(deviceId, newState);
+    expect(typeof powerState).toBe('object');
+    expect(powerState.status).toBe('ok');
+    expect(powerState.state).toBe(newState);
+    const deviceVerify = await conn.getDevice(deviceId);
+    const currentStateVerify = deviceVerify.params.switch;
+    expect(newState).toBe(currentStateVerify);
+  });
+});
+
+describe('valid credentials, invalid device', () => {
+  test('get device power state should fail', async () => {
+    const conn = new ewelink({ email, password });
+    const powerState = await conn.getDevicePowerState('invalid deviceid');
+    expect(typeof powerState).toBe('object');
+    expect(powerState.msg).toBe('Device does not exist');
+    expect(powerState.error).toBe(500);
+  });
+
+  test('set device power state should fail', async () => {
+    jest.setTimeout(30000);
+    const conn = new ewelink({ email, password });
+    const powerState = await conn.setDevicePowerState('invalid deviceid', 'on');
+    expect(typeof powerState).toBe('object');
+    expect(powerState.msg).toBe('Device does not exist');
+    expect(powerState.error).toBe(500);
+  });
+});
+
+describe('valid credentials, wrong region', () => {
+  test('login into ewelink should fail', async () => {
+    const conn = new ewelink({ region: 'eu', email, password });
+    expect(conn.region).toBe('eu');
+    const login = await conn.login();
+    expect(typeof login).toBe('object');
+    expect(login).toMatchObject(loginExpectations);
+    expect(conn.region).toBe('us');
+  });
 });
 
 describe('invalid credentials', () => {
@@ -71,9 +151,7 @@ describe('invalid credentials', () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const login = await conn.login();
     expect(typeof login).toBe('object');
-    expect(login).toMatchObject({
-      error: expect.any(Number),
-    });
+    expect(login.msg).toBe('Authentication error');
     expect(login.error).toBe(400);
   });
 
@@ -81,19 +159,32 @@ describe('invalid credentials', () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const devices = await conn.getDevices();
     expect(typeof devices).toBe('object');
-    expect(devices).toMatchObject({
-      msg: expect.any(String),
-    });
+    expect(devices.msg).toBe('Authentication error');
     expect(devices.error).toBe(401);
   });
 
   test('get error response on specific device', async () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
-    const device = await conn.getDevice('invalid device id');
+    const device = await conn.getDevice(deviceId);
     expect(typeof device).toBe('object');
-    expect(device).toMatchObject({
-      msg: expect.any(String),
-    });
+    expect(device.msg).toBe('Authentication error');
     expect(device.error).toBe(401);
+  });
+
+  test('get device power state should fail', async () => {
+    const conn = new ewelink({ email: 'invalid', password: 'credentials' });
+    const powerState = await conn.getDevicePowerState(deviceId);
+    expect(typeof powerState).toBe('object');
+    expect(powerState.msg).toBe('Authentication error');
+    expect(powerState.error).toBe(401);
+  });
+
+  test('set device power state should fail', async () => {
+    jest.setTimeout(30000);
+    const conn = new ewelink({ email: 'invalid', password: 'credentials' });
+    const powerState = await conn.setDevicePowerState(deviceId, 'on');
+    expect(typeof powerState).toBe('object');
+    expect(powerState.msg).toBe('Authentication error');
+    expect(powerState.error).toBe(401);
   });
 });

@@ -14,9 +14,9 @@ const allDevicesExpectations = {
 };
 
 const specificDeviceExpectations = {
-  apikey: expect.any(String),
-  deviceid: expect.any(String),
   name: expect.any(String),
+  deviceid: expect.any(String),
+  apikey: expect.any(String),
   online: expect.any(Boolean),
   uiid: expect.any(Number),
 };
