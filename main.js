@@ -183,13 +183,7 @@ class eWeLink {
 
     const newState = state === 'on' ? 'off' : 'on';
 
-    const newResponse = await this.setDevicePowerState(
-      deviceId,
-      newState,
-      channel
-    );
-
-    return newResponse;
+    return this.setDevicePowerState(deviceId, newState, channel);
   }
 }
 
