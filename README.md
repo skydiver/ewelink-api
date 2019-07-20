@@ -1,27 +1,19 @@
 # ewelink-api
 > eWeLink API for Node.js
 
+
 ## Installation
 ``` sh
  npm install ewelink-api
 ```
 
+
 ## Usage
-```
-const ewelink = require('ewelink-api');
+Check `demo/` directory for examples.
 
-(async () => {
 
-  const conn = new ewelink({
-    email: '<your ewelink email>',
-    password: '<your ewelink password>',
-  });
+## Testing
+1. open `test/credentials.json` and update parameters.
+2. in a terminal, `npm run test`
 
-  /* get all devices */
-  const devices = await conn.getDevices();
-  console.log(devices);
-
-})();
-```
-
-Check `demo/` directory for more examples.
+* Tests needs to be performed serially, so if run jest manually, add `--runInBand` parameter.
