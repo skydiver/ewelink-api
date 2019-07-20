@@ -20,7 +20,6 @@
   ],
   "main": "main.js",
   "scripts": {
-    "demo": "node ./demo/example.js",
     "test": "jest --runInBand --verbose --testPathIgnorePatterns '(node_modules|.cache)'"
   },
   "dependencies": {
