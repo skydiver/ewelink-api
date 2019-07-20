@@ -19,6 +19,15 @@ describe('valid credentials, invalid device', () => {
     expect(powerState.msg).toBe('Device does not exist');
     expect(powerState.error).toBe(500);
   });
+
+  test('toggle device power state should fail', async () => {
+    jest.setTimeout(30000);
+    const conn = new ewelink({ email, password });
+    const powerState = await conn.toggleDevice('invalid deviceid');
+    expect(typeof powerState).toBe('object');
+    expect(powerState.msg).toBe('Device does not exist');
+    expect(powerState.error).toBe(500);
+  });
 });
 
 describe('valid credentials, wrong region', () => {

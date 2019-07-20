@@ -54,4 +54,19 @@ describe('env: node script', () => {
     const currentStateVerify = deviceVerify.params.switch;
     expect(newState).toBe(currentStateVerify);
   });
+
+  test('toggle device power state', async () => {
+    jest.setTimeout(30000);
+    const device = await conn.getDevice(deviceId);
+    const currentState = device.params.switch;
+    const newState = currentState === 'on' ? 'off' : 'on';
+    await conn.toggleDevice(deviceId);
+    const deviceVerify = await conn.getDevice(deviceId);
+    const currentStateVerify = deviceVerify.params.switch;
+    expect(newState).toBe(currentStateVerify);
+    await conn.toggleDevice(deviceId);
+    const deviceVerifyAgain = await conn.getDevice(deviceId);
+    const currentStateVerifyAgain = deviceVerifyAgain.params.switch;
+    expect(currentState).toBe(currentStateVerifyAgain);
+  });
 });
