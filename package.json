@@ -1,6 +1,6 @@
 {
   "name": "ewelink-api",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "eWeLink API for Node.js",
   "author": "Martín M.",
   "license": "MIT",
@@ -20,8 +20,7 @@
   ],
   "main": "main.js",
   "scripts": {
-    "demo": "node ./demo/example.js",
-    "test": "jest --testPathIgnorePatterns '(node_modules|.cache)'"
+    "test": "jest --runInBand --verbose --testPathIgnorePatterns '(node_modules|.cache)'"
   },
   "dependencies": {
     "delay": "^4.3.0",
