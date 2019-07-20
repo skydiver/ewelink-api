@@ -1,5 +1,6 @@
 const ewelink = require('../main');
 const { email, password } = require('./_setup/credentials.json');
+const { loginExpectations } = require('./_setup/expectations');
 
 describe('valid credentials, invalid device', () => {
   test('get device power state should fail', async () => {
@@ -17,5 +18,14 @@ describe('valid credentials, invalid device', () => {
     expect(typeof powerState).toBe('object');
     expect(powerState.msg).toBe('Device does not exist');
     expect(powerState.error).toBe(500);
+  });
+});
+
+describe('valid credentials, wrong region', () => {
+  test('should login in the right region', async () => {
+    const conn = new ewelink({ email, password, region: 'eu' });
+    const login = await conn.login();
+    expect(typeof login).toBe('object');
+    expect(login).toMatchObject(loginExpectations);
   });
 });
