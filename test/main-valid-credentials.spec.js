@@ -1,5 +1,5 @@
 const ewelink = require('../main');
-const { email, password } = require('./credentials.json');
+const { email, password } = require('./_setup/credentials.json');
 
 describe('valid credentials, invalid device', () => {
   test('get device power state should fail', async () => {

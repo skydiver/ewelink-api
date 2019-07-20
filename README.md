@@ -13,7 +13,7 @@ Check `demo/` directory for examples.
 
 
 ## Testing
-1. open `test/credentials.json` and update parameters.
+1. open `test/_setup/credentials.json` and update parameters.
 2. in a terminal, `npm run test`
 
 * Tests needs to be performed serially, so if run jest manually, add `--runInBand` parameter.

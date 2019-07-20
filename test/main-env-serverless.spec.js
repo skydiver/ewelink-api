@@ -1,10 +1,10 @@
 const ewelink = require('../main');
-const { email, password, deviceId } = require('./credentials.json');
+const { email, password, deviceId } = require('./_setup/credentials.json');
 const {
   loginExpectations,
   allDevicesExpectations,
   specificDeviceExpectations,
-} = require('./_expectations');
+} = require('./_setup/expectations');
 
 describe('env: serverless', () => {
   let accessToken;

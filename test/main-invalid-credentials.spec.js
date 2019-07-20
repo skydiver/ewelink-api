@@ -1,5 +1,5 @@
 const ewelink = require('../main');
-const { deviceId } = require('./credentials.json');
+const { deviceId } = require('./_setup/credentials.json');
 
 describe('invalid credentials', () => {
   test('no credentials given', async () => {
