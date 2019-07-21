@@ -5,11 +5,10 @@ const { _get } = require('./lib/helpers');
 
 const {
   makeAuthorizationSign,
-  loginPayload,
-  wssLoginPayload,
-  wssUpdatePayload,
   getDeviceChannelCount,
 } = require('./lib/ewelink-helper');
+
+const payloads = require('./lib/payloads');
 
 class eWeLink {
   constructor({ region = 'us', email, password, at, apiKey }) {
@@ -57,7 +56,7 @@ class eWeLink {
   }
 
   async login() {
-    const body = loginPayload({
+    const body = payloads.loginPayload({
       email: this.email,
       password: this.password,
     });
@@ -151,8 +150,12 @@ class eWeLink {
       params.switch = state;
     }
 
-    const payloadLogin = wssLoginPayload({ at: this.at, apiKey: this.apiKey });
-    const payloadUpdate = wssUpdatePayload({
+    const payloadLogin = payloads.wssLoginPayload({
+      at: this.at,
+      apiKey: this.apiKey,
+    });
+
+    const payloadUpdate = payloads.wssUpdatePayload({
       apiKey: this.apiKey,
       deviceId,
       params,
