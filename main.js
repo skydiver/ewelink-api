@@ -91,27 +91,25 @@ class eWeLink {
   }
 
   async getDevices() {
-    const response = await this.makeRequest({
+    return this.makeRequest({
       uri: '/user/device',
       qs: { lang: 'en', getTags: 1 },
     });
-    return response;
   }
 
   async getDevice(deviceId) {
-    const response = await this.makeRequest({
+    return this.makeRequest({
       uri: `/user/device/${deviceId}`,
       qs: { lang: 'en', getTags: 1 },
     });
-    return response;
   }
 
   async getDevicePowerState(deviceId, channel = 1) {
     const device = await this.getDevice(deviceId);
     const error = _get(device, 'error', false);
-    const switchesAmount = getDeviceChannelCount(device.uiid);
     let state = _get(device, 'params.switch', false);
     const switches = _get(device, 'params.switches', false);
+    const switchesAmount = getDeviceChannelCount(device.uiid);
 
     if (error || switchesAmount < channel || (!state && !switches)) {
       if (error && parseInt(error) === 401) {
@@ -130,9 +128,9 @@ class eWeLink {
   async setDevicePowerState(deviceId, state, channel = 1) {
     const device = await this.getDevice(deviceId);
     const error = _get(device, 'error', false);
-    const switchesAmount = getDeviceChannelCount(device.uiid);
     const status = _get(device, 'params.switch', false);
     const switches = _get(device, 'params.switches', false);
+    const switchesAmount = getDeviceChannelCount(device.uiid);
 
     if (error || switchesAmount < channel || (!status && !switches)) {
       if (error && parseInt(error) === 401) {
