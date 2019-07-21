@@ -141,13 +141,19 @@ class eWeLink {
       return { error, msg: 'Device does not exist' };
     }
 
+    let stateToSwitch = state;
+
+    if (state === 'toggle') {
+      stateToSwitch = status === 'on' ? 'off' : 'on';
+    }
+
     const params = {};
 
     if (switches) {
       params.switches = switches;
-      params.switches[channel - 1].switch = state;
+      params.switches[channel - 1].switch = stateToSwitch;
     } else {
-      params.switch = state;
+      params.switch = stateToSwitch;
     }
 
     const payloadLogin = payloads.wssLoginPayload({
@@ -170,16 +176,7 @@ class eWeLink {
   }
 
   async toggleDevice(deviceId, channel = 1) {
-    const powerState = await this.getDevicePowerState(deviceId, channel);
-    const state = _get(powerState, 'state', false);
-
-    if (!state) {
-      return { error: powerState.error, msg: 'Device does not exist' };
-    }
-
-    const newState = state === 'on' ? 'off' : 'on';
-
-    return this.setDevicePowerState(deviceId, newState, channel);
+    return this.setDevicePowerState(deviceId, 'toggle', channel);
   }
 }
 
