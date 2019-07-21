@@ -1,8 +1,6 @@
 const rp = require('request-promise');
-const W3CWebSocket = require('websocket').w3cwebsocket;
-const WebSocketAsPromised = require('websocket-as-promised');
-const delay = require('delay');
 
+const WebSocketRequest = require('./lib/websocket');
 const { _get } = require('./lib/helpers');
 
 const {
@@ -160,15 +158,10 @@ class eWeLink {
       params,
     });
 
-    const wsp = new WebSocketAsPromised(this.getApiWebSocket(), {
-      createWebSocket: url => new W3CWebSocket(url),
-    });
-
-    await wsp.open();
-    await wsp.send(payloadLogin);
-    await delay(1000);
-    await wsp.send(payloadUpdate);
-    await wsp.close();
+    await WebSocketRequest(this.getApiWebSocket(), [
+      payloadLogin,
+      payloadUpdate,
+    ]);
 
     return { status: 'ok', state };
   }
