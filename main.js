@@ -23,14 +23,34 @@ class eWeLink {
     this.apiKey = apiKey;
   }
 
+  /**
+   * Generate eWeLink API URL
+   *
+   * @returns {string}
+   */
   getApiUrl() {
     return `https://${this.region}-api.coolkit.cc:8080/api`;
   }
 
+  /**
+   * Generate eWeLink WebSocket URL
+   *
+   * @returns {string}
+   */
   getApiWebSocket() {
     return `wss://${this.region}-pconnect3.coolkit.cc:8080/api/ws`;
   }
 
+  /**
+   * Generate http requests helpers
+   *
+   * @param method
+   * @param uri
+   * @param body
+   * @param qs
+   *
+   * @returns {Promise<{msg: string, error: *}>}
+   */
   async makeRequest({ method = 'GET', uri, body = {}, qs = {} }) {
     const { at } = this;
 
@@ -55,6 +75,11 @@ class eWeLink {
     return response;
   }
 
+  /**
+   * Helper to login into eWeLink API
+   *
+   * @returns {Promise<{msg: string, error: *}>}
+   */
   async login() {
     const body = payloads.loginPayload({
       email: this.email,
@@ -90,6 +115,11 @@ class eWeLink {
     return response;
   }
 
+  /**
+   * Get specific device information
+   *
+   * @returns {Promise<{msg: string, error: *}>}
+   */
   async getDevices() {
     return this.makeRequest({
       uri: '/user/device',
@@ -97,6 +127,13 @@ class eWeLink {
     });
   }
 
+  /**
+   * Get information about all associated devices to account
+   *
+   * @param deviceId
+   *
+   * @returns {Promise<{msg: string, error: *}>}
+   */
   async getDevice(deviceId) {
     return this.makeRequest({
       uri: `/user/device/${deviceId}`,
@@ -104,6 +141,14 @@ class eWeLink {
     });
   }
 
+  /**
+   * Get current power state for a specific device
+   *
+   * @param deviceId
+   * @param channel
+   *
+   * @returns {Promise<{state: *, status: string}|{msg: string, error: *}>}
+   */
   async getDevicePowerState(deviceId, channel = 1) {
     const device = await this.getDevice(deviceId);
     const error = _get(device, 'error', false);
@@ -125,6 +170,15 @@ class eWeLink {
     return { status: 'ok', state };
   }
 
+  /**
+   * Change power state for a specific device
+   *
+   * @param deviceId
+   * @param state
+   * @param channel
+   *
+   * @returns {Promise<{state: *, status: string}|{msg: string, error: *}>}
+   */
   async setDevicePowerState(deviceId, state, channel = 1) {
     const device = await this.getDevice(deviceId);
     const error = _get(device, 'error', false);
@@ -173,6 +227,14 @@ class eWeLink {
     return { status: 'ok', state };
   }
 
+  /**
+   * Toggle power state for a specific device
+   *
+   * @param deviceId
+   * @param channel
+   *
+   * @returns {Promise<{state: *, status: string}|{msg: string, error: *}>}
+   */
   async toggleDevice(deviceId, channel = 1) {
     return this.setDevicePowerState(deviceId, 'toggle', channel);
   }
