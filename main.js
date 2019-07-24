@@ -116,6 +116,17 @@ class eWeLink {
   }
 
   /**
+   * Check if authentication credentials doesn't exists then perform a login
+   *
+   * @returns {Promise<void>}
+   */
+  async logIfNeeded() {
+    if (!this.at) {
+      await this.login();
+    }
+  }
+
+  /**
    * Get specific device information
    *
    * @returns {Promise<{msg: string, error: *}>}
