@@ -1,17 +1,14 @@
 const rp = require('request-promise');
-const W3CWebSocket = require('websocket').w3cwebsocket;
-const WebSocketAsPromised = require('websocket-as-promised');
-const delay = require('delay');
 
+const WebSocketRequest = require('./lib/websocket');
 const { _get } = require('./lib/helpers');
 
 const {
   makeAuthorizationSign,
-  loginPayload,
-  wssLoginPayload,
-  wssUpdatePayload,
   getDeviceChannelCount,
 } = require('./lib/ewelink-helper');
+
+const payloads = require('./lib/payloads');
 
 class eWeLink {
   constructor({ region = 'us', email, password, at, apiKey }) {
@@ -26,14 +23,34 @@ class eWeLink {
     this.apiKey = apiKey;
   }
 
+  /**
+   * Generate eWeLink API URL
+   *
+   * @returns {string}
+   */
   getApiUrl() {
     return `https://${this.region}-api.coolkit.cc:8080/api`;
   }
 
+  /**
+   * Generate eWeLink WebSocket URL
+   *
+   * @returns {string}
+   */
   getApiWebSocket() {
     return `wss://${this.region}-pconnect3.coolkit.cc:8080/api/ws`;
   }
 
+  /**
+   * Generate http requests helpers
+   *
+   * @param method
+   * @param uri
+   * @param body
+   * @param qs
+   *
+   * @returns {Promise<{msg: string, error: *}>}
+   */
   async makeRequest({ method = 'GET', uri, body = {}, qs = {} }) {
     const { at } = this;
 
@@ -58,8 +75,13 @@ class eWeLink {
     return response;
   }
 
+  /**
+   * Helper to login into eWeLink API
+   *
+   * @returns {Promise<{msg: string, error: *}>}
+   */
   async login() {
-    const body = loginPayload({
+    const body = payloads.loginPayload({
       email: this.email,
       password: this.password,
     });
@@ -93,28 +115,46 @@ class eWeLink {
     return response;
   }
 
+  /**
+   * Get specific device information
+   *
+   * @returns {Promise<{msg: string, error: *}>}
+   */
   async getDevices() {
-    const response = await this.makeRequest({
+    return this.makeRequest({
       uri: '/user/device',
       qs: { lang: 'en', getTags: 1 },
     });
-    return response;
   }
 
+  /**
+   * Get information about all associated devices to account
+   *
+   * @param deviceId
+   *
+   * @returns {Promise<{msg: string, error: *}>}
+   */
   async getDevice(deviceId) {
-    const response = await this.makeRequest({
+    return this.makeRequest({
       uri: `/user/device/${deviceId}`,
       qs: { lang: 'en', getTags: 1 },
     });
-    return response;
   }
 
+  /**
+   * Get current power state for a specific device
+   *
+   * @param deviceId
+   * @param channel
+   *
+   * @returns {Promise<{state: *, status: string}|{msg: string, error: *}>}
+   */
   async getDevicePowerState(deviceId, channel = 1) {
     const device = await this.getDevice(deviceId);
     const error = _get(device, 'error', false);
-    const switchesAmount = getDeviceChannelCount(device.uiid);
     let state = _get(device, 'params.switch', false);
     const switches = _get(device, 'params.switches', false);
+    const switchesAmount = getDeviceChannelCount(device.uiid);
 
     if (error || switchesAmount < channel || (!state && !switches)) {
       if (error && parseInt(error) === 401) {
@@ -130,12 +170,21 @@ class eWeLink {
     return { status: 'ok', state };
   }
 
+  /**
+   * Change power state for a specific device
+   *
+   * @param deviceId
+   * @param state
+   * @param channel
+   *
+   * @returns {Promise<{state: *, status: string}|{msg: string, error: *}>}
+   */
   async setDevicePowerState(deviceId, state, channel = 1) {
     const device = await this.getDevice(deviceId);
     const error = _get(device, 'error', false);
-    const switchesAmount = getDeviceChannelCount(device.uiid);
     const status = _get(device, 'params.switch', false);
     const switches = _get(device, 'params.switches', false);
+    const switchesAmount = getDeviceChannelCount(device.uiid);
 
     if (error || switchesAmount < channel || (!status && !switches)) {
       if (error && parseInt(error) === 401) {
@@ -144,46 +193,50 @@ class eWeLink {
       return { error, msg: 'Device does not exist' };
     }
 
+    let stateToSwitch = state;
+
+    if (state === 'toggle') {
+      stateToSwitch = status === 'on' ? 'off' : 'on';
+    }
+
     const params = {};
 
     if (switches) {
       params.switches = switches;
-      params.switches[channel - 1].switch = state;
+      params.switches[channel - 1].switch = stateToSwitch;
     } else {
-      params.switch = state;
+      params.switch = stateToSwitch;
     }
 
-    const payloadLogin = wssLoginPayload({ at: this.at, apiKey: this.apiKey });
-    const payloadUpdate = wssUpdatePayload({
+    const payloadLogin = payloads.wssLoginPayload({
+      at: this.at,
+      apiKey: this.apiKey,
+    });
+
+    const payloadUpdate = payloads.wssUpdatePayload({
       apiKey: this.apiKey,
       deviceId,
       params,
     });
 
-    const wsp = new WebSocketAsPromised(this.getApiWebSocket(), {
-      createWebSocket: url => new W3CWebSocket(url),
-    });
-
-    await wsp.open();
-    await wsp.send(payloadLogin);
-    await delay(1000);
-    await wsp.send(payloadUpdate);
-    await wsp.close();
+    await WebSocketRequest(this.getApiWebSocket(), [
+      payloadLogin,
+      payloadUpdate,
+    ]);
 
     return { status: 'ok', state };
   }
 
+  /**
+   * Toggle power state for a specific device
+   *
+   * @param deviceId
+   * @param channel
+   *
+   * @returns {Promise<{state: *, status: string}|{msg: string, error: *}>}
+   */
   async toggleDevice(deviceId, channel = 1) {
-    const powerState = await this.getDevicePowerState(deviceId, channel);
-    const state = _get(powerState, 'state', false);
-
-    if (!state) {
-      return { error: powerState.error, msg: 'Device does not exist' };
-    }
-
-    const newState = state === 'on' ? 'off' : 'on';
-
-    return this.setDevicePowerState(deviceId, newState, channel);
+    return this.setDevicePowerState(deviceId, 'toggle', channel);
   }
 }
 
