@@ -10,6 +10,8 @@ const {
 
 const payloads = require('./lib/payloads');
 
+const powerUsage = require('./lib/powerUsage');
+
 class eWeLink {
   constructor({ region = 'us', email, password, at, apiKey }) {
     if (!at && (!email && !password)) {
@@ -39,6 +41,19 @@ class eWeLink {
    */
   getApiWebSocket() {
     return `wss://${this.region}-pconnect3.coolkit.cc:8080/api/ws`;
+  }
+
+  /**
+   * Return required config for websocket requests
+   *
+   * @returns {{at: *, apiUrl: string, apiKey: *}}
+   */
+  getWebSocketConfig() {
+    return {
+      apiUrl: this.getApiWebSocket(),
+      at: this.at,
+      apiKey: this.apiKey,
+    };
   }
 
   /**
@@ -248,6 +263,31 @@ class eWeLink {
    */
   async toggleDevice(deviceId, channel = 1) {
     return this.setDevicePowerState(deviceId, 'toggle', channel);
+  }
+
+  /**
+   * Get device power usage for current month
+   *
+   * @param deviceId
+   *
+   * @returns {Promise<{error: string}|{daily: *, monthly: *}>}
+   */
+  async getDevicePowerUsage(deviceId) {
+    await this.logIfNeeded();
+
+    const response = await powerUsage.deviceRawPowerUsage({
+      ...this.getWebSocketConfig(),
+      deviceId,
+    });
+
+    const error = _get(response, 'error', false);
+    const hundredDaysKwhData = _get(response, 'data.hundredDaysKwhData', false);
+
+    if (error || !hundredDaysKwhData) {
+      return { error: 'No power usage data found.' };
+    }
+
+    return powerUsage.currentMonthPowerUsage({ hundredDaysKwhData });
   }
 }
 
