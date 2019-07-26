@@ -266,6 +266,21 @@ class eWeLink {
   }
 
   /**
+   * Get device raw power usage
+   *
+   * @param deviceId
+   *
+   * @returns {Promise<{error: string}|{response: {hundredDaysKwhData: *}, status: string}>}
+   */
+  async getDeviceRawPowerUsage(deviceId) {
+    await this.logIfNeeded();
+    return powerUsage.deviceRawPowerUsage({
+      ...this.getWebSocketConfig(),
+      deviceId,
+    });
+  }
+
+  /**
    * Get device power usage for current month
    *
    * @param deviceId
@@ -273,12 +288,7 @@ class eWeLink {
    * @returns {Promise<{error: string}|{daily: *, monthly: *}>}
    */
   async getDevicePowerUsage(deviceId) {
-    await this.logIfNeeded();
-
-    const response = await powerUsage.deviceRawPowerUsage({
-      ...this.getWebSocketConfig(),
-      deviceId,
-    });
+    const response = this.getDeviceRawPowerUsage(deviceId);
 
     const error = _get(response, 'error', false);
     const hundredDaysKwhData = _get(response, 'data.hundredDaysKwhData', false);
