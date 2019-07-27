@@ -1,5 +1,5 @@
 const ewelink = require('../main');
-const { deviceId } = require('./_setup/credentials.json');
+const { deviceId, deviceIdWithPower } = require('./_setup/credentials.json');
 
 describe('invalid credentials', () => {
   test('no credentials given', async () => {
@@ -47,5 +47,13 @@ describe('invalid credentials', () => {
     expect(typeof powerState).toBe('object');
     expect(powerState.msg).toBe('Authentication error');
     expect(powerState.error).toBe(401);
+  });
+
+  test('current month power usage should fail', async () => {
+    const conn = new ewelink({ email: 'invalid', password: 'credentials' });
+    const powerUsage = await conn.getDevicePowerUsage(deviceIdWithPower);
+    expect(typeof powerUsage).toBe('object');
+    expect(powerUsage.msg).toBe('Authentication error');
+    expect(powerUsage.error).toBe(401);
   });
 });
