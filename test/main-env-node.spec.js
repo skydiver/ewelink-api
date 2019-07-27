@@ -1,16 +1,9 @@
 const ewelink = require('../main');
-const {
-  email,
-  password,
-  deviceId,
-  deviceIdWithPower,
-} = require('./_setup/credentials.json');
+const { email, password, deviceId } = require('./_setup/credentials.json');
 const {
   loginExpectations,
   allDevicesExpectations,
   specificDeviceExpectations,
-  rawPowerUsageExpectations,
-  currentMonthPowerUsageExpectations,
 } = require('./_setup/expectations');
 
 describe('env: node script', () => {
@@ -75,22 +68,5 @@ describe('env: node script', () => {
     const deviceVerifyAgain = await conn.getDevice(deviceId);
     const currentStateVerifyAgain = deviceVerifyAgain.params.switch;
     expect(currentState).toBe(currentStateVerifyAgain);
-  });
-
-  test('should return raw power usage', async () => {
-    jest.setTimeout(30000);
-    const powerUsage = await conn.getDeviceRawPowerUsage(deviceIdWithPower);
-    expect(typeof powerUsage).toBe('object');
-    expect(powerUsage).toMatchObject(rawPowerUsageExpectations);
-    expect(powerUsage.data.hundredDaysKwhData.length).toBe(600);
-  });
-
-  test('should return current month power usage', async () => {
-    jest.setTimeout(30000);
-    const days = new Date().getDate();
-    const powerUsage = await conn.getDevicePowerUsage(deviceIdWithPower);
-    expect(typeof powerUsage).toBe('object');
-    expect(powerUsage).toMatchObject(currentMonthPowerUsageExpectations);
-    expect(powerUsage.daily.length).toBe(days);
   });
 });

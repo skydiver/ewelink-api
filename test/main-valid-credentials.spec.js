@@ -1,4 +1,7 @@
+const delay = require('delay');
+
 const ewelink = require('../main');
+
 const {
   email,
   password,
@@ -51,6 +54,7 @@ describe('valid credentials, invalid device', () => {
 
   test('raw power on device without electricity monitor should fail', async () => {
     jest.setTimeout(30000);
+    await delay(1000);
     const conn = new ewelink({ email, password });
     const powerUsage = await conn.getDeviceRawPowerUsage(deviceIdWithoutPower);
     expect(typeof powerUsage).toBe('object');
