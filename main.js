@@ -10,6 +10,8 @@ const {
 
 const payloads = require('./lib/payloads');
 
+const powerUsage = require('./lib/powerUsage');
+
 class eWeLink {
   constructor({ region = 'us', email, password, at, apiKey }) {
     if (!at && (!email && !password)) {
@@ -39,6 +41,19 @@ class eWeLink {
    */
   getApiWebSocket() {
     return `wss://${this.region}-pconnect3.coolkit.cc:8080/api/ws`;
+  }
+
+  /**
+   * Return required config for websocket requests
+   *
+   * @returns {{at: *, apiUrl: string, apiKey: *}}
+   */
+  getWebSocketConfig() {
+    return {
+      apiUrl: this.getApiWebSocket(),
+      at: this.at,
+      apiKey: this.apiKey,
+    };
   }
 
   /**
@@ -113,6 +128,17 @@ class eWeLink {
     this.apiKey = _get(response, 'user.apikey', '');
     this.at = _get(response, 'at', '');
     return response;
+  }
+
+  /**
+   * Check if authentication credentials doesn't exists then perform a login
+   *
+   * @returns {Promise<void>}
+   */
+  async logIfNeeded() {
+    if (!this.at) {
+      await this.login();
+    }
   }
 
   /**
@@ -237,6 +263,44 @@ class eWeLink {
    */
   async toggleDevice(deviceId, channel = 1) {
     return this.setDevicePowerState(deviceId, 'toggle', channel);
+  }
+
+  /**
+   * Get device raw power usage
+   *
+   * @param deviceId
+   *
+   * @returns {Promise<{error: string}|{response: {hundredDaysKwhData: *}, status: string}>}
+   */
+  async getDeviceRawPowerUsage(deviceId) {
+    await this.logIfNeeded();
+    return powerUsage.deviceRawPowerUsage({
+      ...this.getWebSocketConfig(),
+      deviceId,
+    });
+  }
+
+  /**
+   * Get device power usage for current month
+   *
+   * @param deviceId
+   *
+   * @returns {Promise<{error: string}|{daily: *, monthly: *}>}
+   */
+  async getDevicePowerUsage(deviceId) {
+    const response = await this.getDeviceRawPowerUsage(deviceId);
+
+    const error = _get(response, 'error', false);
+    const hundredDaysKwhData = _get(response, 'data.hundredDaysKwhData', false);
+
+    if (error) {
+      return response;
+    }
+
+    return {
+      status: 'ok',
+      ...powerUsage.currentMonthPowerUsage({ hundredDaysKwhData }),
+    };
   }
 }
 

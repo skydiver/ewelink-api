@@ -1,5 +1,12 @@
+const delay = require('delay');
+
 const ewelink = require('../main');
-const { email, password } = require('./_setup/credentials.json');
+
+const {
+  email,
+  password,
+  deviceIdWithoutPower,
+} = require('./_setup/credentials.json');
 const { loginExpectations } = require('./_setup/expectations');
 
 describe('valid credentials, invalid device', () => {
@@ -27,6 +34,31 @@ describe('valid credentials, invalid device', () => {
     expect(typeof powerState).toBe('object');
     expect(powerState.msg).toBe('Device does not exist');
     expect(powerState.error).toBe(500);
+  });
+
+  test('raw power usage should fail', async () => {
+    jest.setTimeout(30000);
+    const conn = new ewelink({ email, password });
+    const powerUsage = await conn.getDeviceRawPowerUsage('invalid deviceid');
+    expect(typeof powerUsage).toBe('object');
+    expect(powerUsage.error).toBe('No power usage data found.');
+  });
+
+  test('current month power usage should fail', async () => {
+    jest.setTimeout(30000);
+    const conn = new ewelink({ email, password });
+    const powerUsage = await conn.getDevicePowerUsage('invalid deviceid');
+    expect(typeof powerUsage).toBe('object');
+    expect(powerUsage.error).toBe('No power usage data found.');
+  });
+
+  test('raw power on device without electricity monitor should fail', async () => {
+    jest.setTimeout(30000);
+    await delay(1000);
+    const conn = new ewelink({ email, password });
+    const powerUsage = await conn.getDeviceRawPowerUsage(deviceIdWithoutPower);
+    expect(typeof powerUsage).toBe('object');
+    expect(powerUsage.error).toBe('No power usage data found.');
   });
 });
 

@@ -21,8 +21,23 @@ const specificDeviceExpectations = {
   uiid: expect.any(Number),
 };
 
+const rawPowerUsageExpectations = {
+  status: 'ok',
+  data: {
+    hundredDaysKwhData: expect.any(String),
+  },
+};
+
+const currentMonthPowerUsageExpectations = {
+  status: 'ok',
+  monthly: expect.any(Number),
+  daily: expect.any(Array),
+};
+
 module.exports = {
   loginExpectations,
   allDevicesExpectations,
   specificDeviceExpectations,
+  rawPowerUsageExpectations,
+  currentMonthPowerUsageExpectations,
 };
