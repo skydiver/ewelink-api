@@ -288,16 +288,23 @@ class eWeLink {
    * @returns {Promise<{error: string}|{daily: *, monthly: *}>}
    */
   async getDevicePowerUsage(deviceId) {
-    const response = this.getDeviceRawPowerUsage(deviceId);
+    const response = await this.getDeviceRawPowerUsage(deviceId);
 
     const error = _get(response, 'error', false);
     const hundredDaysKwhData = _get(response, 'data.hundredDaysKwhData', false);
 
-    if (error || !hundredDaysKwhData) {
+    if (error) {
+      return response;
+    }
+
+    if (!hundredDaysKwhData) {
       return { error: 'No power usage data found.' };
     }
 
-    return powerUsage.currentMonthPowerUsage({ hundredDaysKwhData });
+    return {
+      status: 'ok',
+      ...powerUsage.currentMonthPowerUsage({ hundredDaysKwhData }),
+    };
   }
 }
 
