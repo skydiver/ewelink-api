@@ -297,10 +297,6 @@ class eWeLink {
       return response;
     }
 
-    if (!hundredDaysKwhData) {
-      return { error: 'No power usage data found.' };
-    }
-
     return {
       status: 'ok',
       ...powerUsage.currentMonthPowerUsage({ hundredDaysKwhData }),
