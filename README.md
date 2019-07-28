@@ -9,7 +9,7 @@
 
 
 ## Usage
-Check `demo/` directory for examples.
+Check docs at https://ewelink-api.now.sh.
 
 
 ## Testing
