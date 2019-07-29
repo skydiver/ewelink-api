@@ -10,7 +10,7 @@ const {
 
 const payloads = require('./lib/payloads');
 
-const powerUsage = require('./lib/powerUsage');
+const { DeviceRaw, CurrentMonth } = require('./classes/PowerUsage');
 
 class eWeLink {
   constructor({ region = 'us', email, password, at, apiKey }) {
@@ -274,8 +274,11 @@ class eWeLink {
    */
   async getDeviceRawPowerUsage(deviceId) {
     await this.logIfNeeded();
-    return powerUsage.deviceRawPowerUsage({
-      ...this.getWebSocketConfig(),
+
+    return DeviceRaw.get({
+      apiUrl: this.getApiWebSocket(),
+      at: this.at,
+      apiKey: this.apiKey,
       deviceId,
     });
   }
@@ -299,7 +302,7 @@ class eWeLink {
 
     return {
       status: 'ok',
-      ...powerUsage.currentMonthPowerUsage({ hundredDaysKwhData }),
+      ...CurrentMonth.parse({ hundredDaysKwhData }),
     };
   }
 }
