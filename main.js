@@ -1,6 +1,5 @@
 const rp = require('request-promise');
 
-const WebSocketRequest = require('./lib/websocket');
 const { _get } = require('./lib/helpers');
 
 const {
@@ -10,6 +9,7 @@ const {
 
 const payloads = require('./lib/payloads');
 
+const { ChangeState } = require('./classes/PowerState');
 const { DeviceRaw, CurrentMonth } = require('./classes/PowerUsage');
 
 class eWeLink {
@@ -234,23 +234,14 @@ class eWeLink {
       params.switch = stateToSwitch;
     }
 
-    const payloadLogin = payloads.wssLoginPayload({
+    return ChangeState.set({
+      apiUrl: this.getApiWebSocket(),
       at: this.at,
-      apiKey: this.apiKey,
-    });
-
-    const payloadUpdate = payloads.wssUpdatePayload({
       apiKey: this.apiKey,
       deviceId,
       params,
+      state: stateToSwitch,
     });
-
-    await WebSocketRequest(this.getApiWebSocket(), [
-      payloadLogin,
-      payloadUpdate,
-    ]);
-
-    return { status: 'ok', state };
   }
 
   /**

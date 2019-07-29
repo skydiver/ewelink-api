@@ -22,7 +22,7 @@ class DeviceRaw extends WebSocket {
       params: { hundredDaysKwh: 'get' },
     });
 
-    const response = await DeviceRaw.WebSocketRequest(apiUrl, [
+    const response = await this.WebSocketRequest(apiUrl, [
       payloadLogin,
       payloadUpdate,
     ]);
