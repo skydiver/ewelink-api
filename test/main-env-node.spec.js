@@ -136,4 +136,27 @@ describe('env: node script', () => {
       deviceVerifyAgain.params.switches[channel - 1].switch;
     expect(currentState).toBe(currentStateVerifyAgain);
   });
+
+  test('get channel count 1', async () => {
+    const switchesAmount = await conn.getDeviceChannelCount(deviceId);
+    expect(typeof switchesAmount).toBe('object');
+    expect(switchesAmount.status).toBe('ok');
+    expect(switchesAmount.fwVersion).toBe(1);
+  });
+
+  test('get channel count 4', async () => {
+    const switchesAmount = await conn.getDeviceChannelCount(fourChannelsDevice);
+    expect(typeof switchesAmount).toBe('object');
+    expect(switchesAmount.status).toBe('ok');
+    expect(switchesAmount.fwVersion).toBe(4);
+  });
+
+  test('get firmware version', async () => {
+    const device = await conn.getDevice(deviceId);
+    const currentVersion = device.params.fwVersion;
+    const firmwareVersion = await conn.getFirmwareVersion(deviceId);
+    expect(typeof firmwareVersion).toBe('object');
+    expect(firmwareVersion.status).toBe('ok');
+    expect(firmwareVersion.fwVersion).toBe(currentVersion);
+  });
 });
