@@ -44,19 +44,6 @@ class eWeLink {
   }
 
   /**
-   * Return required config for websocket requests
-   *
-   * @returns {{at: *, apiUrl: string, apiKey: *}}
-   */
-  getWebSocketConfig() {
-    return {
-      apiUrl: this.getApiWebSocket(),
-      at: this.at,
-      apiKey: this.apiKey,
-    };
-  }
-
-  /**
    * Generate http requests helpers
    *
    * @param method
