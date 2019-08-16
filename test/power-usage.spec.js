@@ -20,6 +20,10 @@ describe('power usage: node script', () => {
     await conn.login();
   });
 
+  beforeEach(async () => {
+    await delay(1000);
+  });
+
   test('should return raw power usage', async () => {
     jest.setTimeout(30000);
     const powerUsage = await conn.getDeviceRawPowerUsage(deviceIdWithPower);
@@ -30,7 +34,6 @@ describe('power usage: node script', () => {
 
   test('should return current month power usage', async () => {
     jest.setTimeout(30000);
-    await delay(1000);
     const days = new Date().getDate();
     const powerUsage = await conn.getDevicePowerUsage(deviceIdWithPower);
     expect(typeof powerUsage).toBe('object');
@@ -61,7 +64,6 @@ describe('power usage: serverless', () => {
 
   test('should return current month power usage', async () => {
     jest.setTimeout(30000);
-    await delay(1000);
     const days = new Date().getDate();
     const conn = new ewelink({ at: accessToken, apiKey });
     const powerUsage = await conn.getDevicePowerUsage(deviceIdWithPower);
