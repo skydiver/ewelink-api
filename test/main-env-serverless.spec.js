@@ -1,3 +1,5 @@
+const delay = require('delay');
+
 const ewelink = require('../main');
 const { email, password, deviceId } = require('./_setup/credentials.json');
 const {
@@ -46,6 +48,7 @@ describe('env: serverless', () => {
 
   test('set device power state', async () => {
     jest.setTimeout(30000);
+    await delay(3000);
     const conn = new ewelink({ at: accessToken, apiKey });
     const device = await conn.getDevice(deviceId);
     const currentState = device.params.switch;
@@ -61,6 +64,7 @@ describe('env: serverless', () => {
 
   test('toggle device power state', async () => {
     jest.setTimeout(30000);
+    await delay(3000);
     const conn = new ewelink({ at: accessToken, apiKey });
     const device = await conn.getDevice(deviceId);
     const currentState = device.params.switch;

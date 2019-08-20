@@ -10,6 +10,10 @@ const {
 const { loginExpectations } = require('./_setup/expectations');
 
 describe('valid credentials, invalid device', () => {
+  beforeEach(async () => {
+    await delay(1000);
+  });
+
   test('get device power state should fail', async () => {
     const conn = new ewelink({ email, password });
     const powerState = await conn.getDevicePowerState('invalid deviceid');
@@ -54,7 +58,6 @@ describe('valid credentials, invalid device', () => {
 
   test('raw power on device without electricity monitor should fail', async () => {
     jest.setTimeout(30000);
-    await delay(1000);
     const conn = new ewelink({ email, password });
     const powerUsage = await conn.getDeviceRawPowerUsage(deviceIdWithoutPower);
     expect(typeof powerUsage).toBe('object');

@@ -1,3 +1,5 @@
+const delay = require('delay');
+
 const ewelink = require('../main');
 const { email, password, deviceId } = require('./_setup/credentials.json');
 const {
@@ -43,6 +45,7 @@ describe('env: node script', () => {
 
   test('set device power state', async () => {
     jest.setTimeout(30000);
+    await delay(3000);
     const device = await conn.getDevice(deviceId);
     const currentState = device.params.switch;
     const newState = currentState === 'on' ? 'off' : 'on';
@@ -57,6 +60,7 @@ describe('env: node script', () => {
 
   test('toggle device power state', async () => {
     jest.setTimeout(30000);
+    await delay(3000);
     const device = await conn.getDevice(deviceId);
     const currentState = device.params.switch;
     const newState = currentState === 'on' ? 'off' : 'on';
