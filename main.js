@@ -165,9 +165,12 @@ class eWeLink {
   async getDevicePowerState(deviceId, channel = 1) {
     const device = await this.getDevice(deviceId);
     const error = _get(device, 'error', false);
+    const uiid = _get(device, 'extra.extra.uiid', false);
+
     let state = _get(device, 'params.switch', false);
     const switches = _get(device, 'params.switches', false);
-    const switchesAmount = getDeviceChannelCount(device.uiid);
+
+    const switchesAmount = getDeviceChannelCount(uiid);
 
     if (error || switchesAmount < channel || (!state && !switches)) {
       if (error && parseInt(error) === 401) {
@@ -197,7 +200,7 @@ class eWeLink {
     const error = _get(device, 'error', false);
     const uiid = _get(device, 'extra.extra.uiid', false);
 
-    let switchStatus = _get(device, 'params.switch', false);
+    let status = _get(device, 'params.switch', false);
     const switches = _get(device, 'params.switches', false);
 
     const switchesAmount = getDeviceChannelCount(uiid);
@@ -206,7 +209,7 @@ class eWeLink {
       return { error, msg: 'Device channel does not exist' };
     }
 
-    if (error || (!switchStatus && !switches)) {
+    if (error || (!status && !switches)) {
       if (error && parseInt(error) === 401) {
         return device;
       }
@@ -217,11 +220,11 @@ class eWeLink {
     const params = {};
 
     if (switches) {
-      switchStatus = switches[channel - 1].switch;
+      status = switches[channel - 1].switch;
     }
 
     if (state === 'toggle') {
-      stateToSwitch = switchStatus === 'on' ? 'off' : 'on';
+      stateToSwitch = status === 'on' ? 'off' : 'on';
     }
 
     if (switches) {
