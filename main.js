@@ -205,7 +205,7 @@ class eWeLink {
 
     const switchesAmount = getDeviceChannelCount(uiid);
 
-    if (switchesAmount < channel) {
+    if (switchesAmount > 0 && switchesAmount < channel) {
       return { error, msg: 'Device channel does not exist' };
     }
 
