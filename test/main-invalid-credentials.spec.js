@@ -1,7 +1,17 @@
+const delay = require('delay');
+
 const ewelink = require('../main');
-const { deviceId, deviceIdWithPower } = require('./_setup/credentials.json');
+
+const {
+  singleChannelDeviceId,
+  deviceIdWithPower,
+} = require('./_setup/credentials.json');
 
 describe('invalid credentials', () => {
+  beforeEach(async () => {
+    await delay(1000);
+  });
+
   test('no credentials given', async () => {
     const conn = new ewelink({});
     expect(typeof conn).toBe('object');
@@ -26,7 +36,7 @@ describe('invalid credentials', () => {
 
   test('get error response on specific device', async () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
-    const device = await conn.getDevice(deviceId);
+    const device = await conn.getDevice(singleChannelDeviceId);
     expect(typeof device).toBe('object');
     expect(device.msg).toBe('Authentication error');
     expect(device.error).toBe(401);
@@ -34,7 +44,7 @@ describe('invalid credentials', () => {
 
   test('get device power state should fail', async () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
-    const powerState = await conn.getDevicePowerState(deviceId);
+    const powerState = await conn.getDevicePowerState(singleChannelDeviceId);
     expect(typeof powerState).toBe('object');
     expect(powerState.msg).toBe('Authentication error');
     expect(powerState.error).toBe(401);
@@ -43,7 +53,10 @@ describe('invalid credentials', () => {
   test('set device power state should fail', async () => {
     jest.setTimeout(30000);
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
-    const powerState = await conn.setDevicePowerState(deviceId, 'on');
+    const powerState = await conn.setDevicePowerState(
+      singleChannelDeviceId,
+      'on'
+    );
     expect(typeof powerState).toBe('object');
     expect(powerState.msg).toBe('Authentication error');
     expect(powerState.error).toBe(401);

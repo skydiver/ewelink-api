@@ -7,6 +7,7 @@ const {
   password,
   deviceIdWithPower,
 } = require('./_setup/credentials.json');
+
 const {
   rawPowerUsageExpectations,
   currentMonthPowerUsageExpectations,
