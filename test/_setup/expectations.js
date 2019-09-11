@@ -10,7 +10,11 @@ const allDevicesExpectations = {
   apikey: expect.any(String),
   params: expect.any(Object),
   showBrand: expect.any(Boolean),
-  uiid: expect.any(Number),
+  extra: {
+    extra: {
+      uiid: expect.any(Number),
+    },
+  },
 };
 
 const specificDeviceExpectations = {
@@ -18,7 +22,11 @@ const specificDeviceExpectations = {
   deviceid: expect.any(String),
   apikey: expect.any(String),
   online: expect.any(Boolean),
-  uiid: expect.any(Number),
+  extra: {
+    extra: {
+      uiid: expect.any(Number),
+    },
+  },
 };
 
 const rawPowerUsageExpectations = {
