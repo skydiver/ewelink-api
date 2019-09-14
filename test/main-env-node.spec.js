@@ -1,12 +1,14 @@
 const delay = require('delay');
 
 const ewelink = require('../main');
+
 const {
   email,
   password,
   singleChannelDeviceId,
   fourChannelsDevice,
 } = require('./_setup/credentials.json');
+
 const {
   loginExpectations,
   allDevicesExpectations,
@@ -138,23 +140,25 @@ describe('env: node script', () => {
   });
 
   test('get channel count 1', async () => {
-    const switchesAmount = await conn.getDeviceChannelCount(deviceId);
-    expect(typeof switchesAmount).toBe('object');
-    expect(switchesAmount.status).toBe('ok');
-    expect(switchesAmount.fwVersion).toBe(1);
+    const result = await conn.getDeviceChannelCount(singleChannelDeviceId);
+    expect(typeof result).toBe('object');
+    expect(result.status).toBe('ok');
+    expect(result.switchesAmount).toBe(1);
   });
 
   test('get channel count 4', async () => {
-    const switchesAmount = await conn.getDeviceChannelCount(fourChannelsDevice);
-    expect(typeof switchesAmount).toBe('object');
-    expect(switchesAmount.status).toBe('ok');
-    expect(switchesAmount.fwVersion).toBe(4);
+    const result = await conn.getDeviceChannelCount(fourChannelsDevice);
+    expect(typeof result).toBe('object');
+    expect(result.status).toBe('ok');
+    expect(result.switchesAmount).toBe(4);
   });
 
   test('get firmware version', async () => {
-    const device = await conn.getDevice(deviceId);
+    const device = await conn.getDevice(singleChannelDeviceId);
     const currentVersion = device.params.fwVersion;
-    const firmwareVersion = await conn.getFirmwareVersion(deviceId);
+    const firmwareVersion = await conn.getFirmwareVersion(
+      singleChannelDeviceId
+    );
     expect(typeof firmwareVersion).toBe('object');
     expect(firmwareVersion.status).toBe('ok');
     expect(firmwareVersion.fwVersion).toBe(currentVersion);
