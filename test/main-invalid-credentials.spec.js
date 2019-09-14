@@ -5,6 +5,8 @@ const ewelink = require('../main');
 const {
   singleChannelDeviceId,
   deviceIdWithPower,
+  deviceIdWithTempAndHum,
+  fourChannelsDevice,
 } = require('./_setup/credentials.json');
 
 describe('invalid credentials', () => {
@@ -68,5 +70,51 @@ describe('invalid credentials', () => {
     expect(typeof powerUsage).toBe('object');
     expect(powerUsage.msg).toBe('Authentication error');
     expect(powerUsage.error).toBe(401);
+  });
+
+  // test('get device current temperature should fail', async () => {
+  //   const conn = new ewelink({ email: 'invalid', password: 'credentials' });
+  //   const powerState = await conn.getDeviceCurrentTemperature(
+  //     deviceIdWithTempAndHum
+  //   );
+  //   expect(typeof powerState).toBe('object');
+  //   expect(powerUsage.msg).toBe('Authentication error');
+  //   expect(powerUsage.error).toBe(401);
+  // });
+
+  // test('get device current humidity should fail', async () => {
+  //   const conn = new ewelink({ email: 'invalid', password: 'credentials' });
+  //   const powerState = await conn.getDeviceCurrentHumidity(
+  //     deviceIdWithTempAndHum
+  //   );
+  //   expect(typeof powerState).toBe('object');
+  //   expect(powerUsage.msg).toBe('Authentication error');
+  //   expect(powerUsage.error).toBe(401);
+  // });
+
+  test('get channel count 1 should fail', async () => {
+    const conn = new ewelink({ email: 'invalid', password: 'credentials' });
+    const switchesAmount = await conn.getDeviceChannelCount(
+      singleChannelDeviceId
+    );
+    expect(typeof switchesAmount).toBe('object');
+    expect(switchesAmount.msg).toBe('Authentication error');
+    expect(switchesAmount.error).toBe(401);
+  });
+
+  test('get channel count 4 should fail', async () => {
+    const conn = new ewelink({ email: 'invalid', password: 'credentials' });
+    const switchesAmount = await conn.getDeviceChannelCount(fourChannelsDevice);
+    expect(typeof switchesAmount).toBe('object');
+    expect(switchesAmount.msg).toBe('Authentication error');
+    expect(switchesAmount.error).toBe(401);
+  });
+
+  test('get device firmware version should fail', async () => {
+    const conn = new ewelink({ email: 'invalid', password: 'credentials' });
+    const firmware = await conn.getFirmwareVersion(singleChannelDeviceId);
+    expect(typeof firmware).toBe('object');
+    expect(firmware.msg).toBe('Authentication error');
+    expect(firmware.error).toBe(401);
   });
 });

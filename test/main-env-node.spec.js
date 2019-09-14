@@ -1,12 +1,14 @@
 const delay = require('delay');
 
 const ewelink = require('../main');
+
 const {
   email,
   password,
   singleChannelDeviceId,
   fourChannelsDevice,
 } = require('./_setup/credentials.json');
+
 const {
   loginExpectations,
   allDevicesExpectations,
@@ -135,5 +137,28 @@ describe('env: node script', () => {
     const currentStateVerifyAgain =
       deviceVerifyAgain.params.switches[channel - 1].switch;
     expect(currentState).toBe(currentStateVerifyAgain);
+  });
+
+  test('get channel count 1', async () => {
+    const result = await conn.getDeviceChannelCount(singleChannelDeviceId);
+    expect(typeof result).toBe('object');
+    expect(result.status).toBe('ok');
+    expect(result.switchesAmount).toBe(1);
+  });
+
+  test('get channel count 4', async () => {
+    const result = await conn.getDeviceChannelCount(fourChannelsDevice);
+    expect(typeof result).toBe('object');
+    expect(result.status).toBe('ok');
+    expect(result.switchesAmount).toBe(4);
+  });
+
+  test('get firmware version', async () => {
+    const device = await conn.getDevice(singleChannelDeviceId);
+    const currentVersion = device.params.fwVersion;
+    const firmware = await conn.getFirmwareVersion(singleChannelDeviceId);
+    expect(typeof firmware).toBe('object');
+    expect(firmware.status).toBe('ok');
+    expect(firmware.fwVersion).toBe(currentVersion);
   });
 });

@@ -13,6 +13,7 @@ const allDevicesExpectations = {
   extra: {
     extra: {
       uiid: expect.any(Number),
+      model: expect.any(String),
     },
   },
 };
@@ -25,6 +26,7 @@ const specificDeviceExpectations = {
   extra: {
     extra: {
       uiid: expect.any(Number),
+      model: expect.any(String),
     },
   },
 };

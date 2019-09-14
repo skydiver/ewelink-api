@@ -86,6 +86,40 @@ describe('valid credentials, invalid device', () => {
     expect(typeof powerUsage).toBe('object');
     expect(powerUsage.error).toBe('No power usage data found.');
   });
+
+  test('get device current temperature should fail', async () => {
+    const conn = new ewelink({ email, password });
+    const temperature = await conn.getDeviceCurrentTemperature(
+      'invalid deviceid'
+    );
+    expect(typeof temperature).toBe('object');
+    expect(temperature.msg).toBe('Device does not exist');
+    expect(temperature.error).toBe(500);
+  });
+
+  test('get device current humidity should fail', async () => {
+    const conn = new ewelink({ email, password });
+    const humidity = await conn.getDeviceCurrentHumidity('invalid deviceid');
+    expect(typeof humidity).toBe('object');
+    expect(humidity.msg).toBe('Device does not exist');
+    expect(humidity.error).toBe(500);
+  });
+
+  test('get channel count should fail', async () => {
+    const conn = new ewelink({ email, password });
+    const switchesAmount = await conn.getDeviceChannelCount('invalid deviceid');
+    expect(typeof switchesAmount).toBe('object');
+    expect(switchesAmount.msg).toBe('Device does not exist');
+    expect(switchesAmount.error).toBe(500);
+  });
+
+  test('get device firmware version should fail', async () => {
+    const conn = new ewelink({ email, password });
+    const firmwareVersion = await conn.getFirmwareVersion('invalid deviceid');
+    expect(typeof firmwareVersion).toBe('object');
+    expect(firmwareVersion.msg).toBe('Device does not exist');
+    expect(firmwareVersion.error).toBe(500);
+  });
 });
 
 describe('valid credentials, wrong region', () => {

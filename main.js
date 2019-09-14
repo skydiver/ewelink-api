@@ -300,6 +300,97 @@ class eWeLink {
       ...CurrentMonth.parse({ hundredDaysKwhData }),
     };
   }
+
+  /**
+   * Get device current temperature
+   *
+   * @param deviceId
+   *
+   * @returns {Promise<{temperature: *, status: string}|{msg: string, error: *}>}
+   */
+  async getDeviceCurrentTemperature(deviceId) {
+    const device = await this.getDevice(deviceId);
+    const error = _get(device, 'error', false);
+    const model = _get(device, 'extra.extra.model', '');
+    const temperature = _get(device, 'params.currentTemperature', false);
+
+    if (error || model !== 'PSA-BHA-GL' || !temperature) {
+      if (error && parseInt(error) === 401) {
+        return device;
+      }
+      return { error, msg: 'Device does not exist' };
+    }
+
+    return { status: 'ok', temperature };
+  }
+
+  /**
+   * Get device current humidity
+   *
+   * @param deviceId
+   *
+   * @returns {Promise<{humidity: *, status: string}|{msg: string, error: *}>}
+   */
+  async getDeviceCurrentHumidity(deviceId) {
+    const device = await this.getDevice(deviceId);
+    const error = _get(device, 'error', false);
+    const model = _get(device, 'extra.extra.model', '');
+    const humidity = _get(device, 'params.currentHumidity', false);
+
+    if (error || model !== 'PSA-BHA-GL' || !humidity) {
+      if (error && parseInt(error) === 401) {
+        return device;
+      }
+      return { error, msg: 'Device does not exist' };
+    }
+
+    return { status: 'ok', humidity };
+  }
+
+  /**
+   * Get device channel count
+   *
+   * @param deviceId
+   *
+   * @returns {Promise<{switchesAmount: *, status: string}
+   */
+  async getDeviceChannelCount(deviceId) {
+    const device = await this.getDevice(deviceId);
+    const error = _get(device, 'error', false);
+    const uiid = _get(device, 'extra.extra.uiid', false);
+    const switchesAmount = getDeviceChannelCount(uiid);
+
+    if (error) {
+      if (error && parseInt(error) === 401) {
+        return device;
+      }
+      return { error, msg: 'Device does not exist' };
+    }
+
+    return { status: 'ok', switchesAmount };
+  }
+
+  /**
+   * Get device firmware version
+   *
+   * @param deviceId
+   *
+   * @returns {Promise<{fwVersion: *, status: string}|{msg: string, error: *}>}
+   */
+  async getFirmwareVersion(deviceId) {
+    const device = await this.getDevice(deviceId);
+    const error = _get(device, 'error', false);
+    const fwVersion = _get(device, 'params.fwVersion', false);
+
+    if (error || !fwVersion) {
+      if (error && parseInt(error) === 401) {
+        return device;
+      }
+      return { error, msg: 'Device does not exist' };
+    }
+
+    return { status: 'ok', fwVersion };
+  }
 }
 
 module.exports = eWeLink;
