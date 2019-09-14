@@ -37,7 +37,7 @@ describe.skip('current temerature and humidity: node script', () => {
   });
 });
 
-describe('current temerature and humidity: serverless', () => {
+describe.skip('current temerature and humidity: serverless', () => {
   let accessToken;
   let apiKey;
 
