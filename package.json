@@ -21,6 +21,7 @@
   "main": "main.js",
   "scripts": {
     "test": "jest --runInBand --verbose",
+    "coverage": "jest --runInBand --verbose --coverage --coverageDirectory=output/coverage/jest",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
@@ -28,6 +29,10 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       ".cache"
+    ],
+    "coverageReporters": [
+      "text",
+      "html"
     ]
   },
   "dependencies": {
