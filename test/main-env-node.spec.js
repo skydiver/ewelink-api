@@ -156,11 +156,9 @@ describe('env: node script', () => {
   test('get firmware version', async () => {
     const device = await conn.getDevice(singleChannelDeviceId);
     const currentVersion = device.params.fwVersion;
-    const firmwareVersion = await conn.getFirmwareVersion(
-      singleChannelDeviceId
-    );
-    expect(typeof firmwareVersion).toBe('object');
-    expect(firmwareVersion.status).toBe('ok');
-    expect(firmwareVersion.fwVersion).toBe(currentVersion);
+    const firmware = await conn.getFirmwareVersion(singleChannelDeviceId);
+    expect(typeof firmware).toBe('object');
+    expect(firmware.status).toBe('ok');
+    expect(firmware.fwVersion).toBe(currentVersion);
   });
 });
