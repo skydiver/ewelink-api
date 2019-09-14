@@ -95,27 +95,27 @@ describe('env: serverless', () => {
 
   test('get channel count 1', async () => {
     const conn = new ewelink({ at: accessToken });
-    const switchesAmount = await conn.getDeviceChannelCount(deviceId);
-    expect(typeof switchesAmount).toBe('object');
-    expect(switchesAmount.status).toBe('ok');
-    expect(switchesAmount.fwVersion).toBe(1);
+    const result = await conn.getDeviceChannelCount(singleChannelDeviceId);
+    expect(typeof result).toBe('object');
+    expect(result.status).toBe('ok');
+    expect(result.switchesAmount).toBe(1);
   });
 
   test('get channel count 4', async () => {
     const conn = new ewelink({ at: accessToken });
-    const switchesAmount = await conn.getDeviceChannelCount(fourChannelsDevice);
-    expect(typeof switchesAmount).toBe('object');
-    expect(switchesAmount.status).toBe('ok');
-    expect(switchesAmount.fwVersion).toBe(4);
+    const result = await conn.getDeviceChannelCount(fourChannelsDevice);
+    expect(typeof result).toBe('object');
+    expect(result.status).toBe('ok');
+    expect(result.switchesAmount).toBe(4);
   });
 
   test('get device firmware version', async () => {
     const conn = new ewelink({ at: accessToken });
-    const device = await conn.getDevice(deviceId);
+    const device = await conn.getDevice(singleChannelDeviceId);
     const currentVersion = device.params.fwVersion;
-    const firmwareVersion = await conn.getFirmwareVersion(deviceId);
-    expect(typeof firmwareVersion).toBe('object');
-    expect(firmwareVersion.status).toBe('ok');
-    expect(firmwareVersion.state).toBe(currentVersion);
+    const firmware = await conn.getFirmwareVersion(singleChannelDeviceId);
+    expect(typeof firmware).toBe('object');
+    expect(firmware.status).toBe('ok');
+    expect(firmware.fwVersion).toBe(currentVersion);
   });
 });
