@@ -357,7 +357,8 @@ class eWeLink {
   async getDeviceChannelCount(deviceId) {
     const device = await this.getDevice(deviceId);
     const error = _get(device, 'error', false);
-    const switchesAmount = getDeviceChannelCount(device.uiid);
+    const uiid = _get(device, 'extra.extra.uiid', false);
+    const switchesAmount = getDeviceChannelCount(uiid);
 
     if (error) {
       if (error && parseInt(error) === 401) {
