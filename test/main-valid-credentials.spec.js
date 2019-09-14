@@ -109,8 +109,8 @@ describe('valid credentials, invalid device', () => {
     const conn = new ewelink({ email, password });
     const switchesAmount = await conn.getDeviceChannelCount('invalid deviceid');
     expect(typeof switchesAmount).toBe('object');
-    expect(switchesAmount.msg).toBe('Authentication error');
-    expect(switchesAmount.error).toBe(401);
+    expect(switchesAmount.msg).toBe('Device does not exist');
+    expect(switchesAmount.error).toBe(500);
   });
 
   test('get device firmware version should fail', async () => {
