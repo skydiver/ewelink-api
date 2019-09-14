@@ -314,7 +314,7 @@ class eWeLink {
     const model = _get(device, 'extra.extra.model', '');
     const temperature = _get(device, 'params.currentTemperature', false);
 
-    if (error || model != 'PSA-BHA-GL' || !temperature) {
+    if (error || model !== 'PSA-BHA-GL' || !temperature) {
       if (error && parseInt(error) === 401) {
         return device;
       }
@@ -337,7 +337,7 @@ class eWeLink {
     const model = _get(device, 'extra.extra.model', '');
     const humidity = _get(device, 'params.currentHumidity', false);
 
-    if (error || model != 'PSA-BHA-GL' || !humidity) {
+    if (error || model !== 'PSA-BHA-GL' || !humidity) {
       if (error && parseInt(error) === 401) {
         return device;
       }
