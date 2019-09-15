@@ -2,15 +2,9 @@ const rp = require('request-promise');
 
 const { _get } = require('./lib/helpers');
 
-const {
-  makeAuthorizationSign,
-  getDeviceChannelCount,
-} = require('./lib/ewelink-helper');
+const { makeAuthorizationSign } = require('./lib/ewelink-helper');
 
 const payloads = require('./lib/payloads');
-
-const { ChangeState } = require('./classes/PowerState');
-const { DeviceRaw, CurrentMonth } = require('./classes/PowerUsage');
 
 class eWeLink {
   constructor({ region = 'us', email, password, at, apiKey }) {
@@ -127,270 +121,52 @@ class eWeLink {
       await this.login();
     }
   }
-
-  /**
-   * Get specific device information
-   *
-   * @returns {Promise<{msg: string, error: *}>}
-   */
-  async getDevices() {
-    return this.makeRequest({
-      uri: '/user/device',
-      qs: { lang: 'en', getTags: 1 },
-    });
-  }
-
-  /**
-   * Get information about all associated devices to account
-   *
-   * @param deviceId
-   *
-   * @returns {Promise<{msg: string, error: *}>}
-   */
-  async getDevice(deviceId) {
-    return this.makeRequest({
-      uri: `/user/device/${deviceId}`,
-      qs: { lang: 'en', getTags: 1 },
-    });
-  }
-
-  /**
-   * Get current power state for a specific device
-   *
-   * @param deviceId
-   * @param channel
-   *
-   * @returns {Promise<{state: *, status: string}|{msg: string, error: *}>}
-   */
-  async getDevicePowerState(deviceId, channel = 1) {
-    const device = await this.getDevice(deviceId);
-    const error = _get(device, 'error', false);
-    const uiid = _get(device, 'extra.extra.uiid', false);
-
-    let state = _get(device, 'params.switch', false);
-    const switches = _get(device, 'params.switches', false);
-
-    const switchesAmount = getDeviceChannelCount(uiid);
-
-    if (switchesAmount > 0 && switchesAmount < channel) {
-      return { error, msg: 'Device channel does not exist' };
-    }
-
-    if (error || (!state && !switches)) {
-      if (error && parseInt(error) === 401) {
-        return device;
-      }
-      return { error, msg: 'Device does not exist' };
-    }
-
-    if (switches) {
-      state = switches[channel - 1].switch;
-    }
-
-    return { status: 'ok', state };
-  }
-
-  /**
-   * Change power state for a specific device
-   *
-   * @param deviceId
-   * @param state
-   * @param channel
-   *
-   * @returns {Promise<{state: *, status: string}|{msg: string, error: *}>}
-   */
-  async setDevicePowerState(deviceId, state, channel = 1) {
-    const device = await this.getDevice(deviceId);
-    const error = _get(device, 'error', false);
-    const uiid = _get(device, 'extra.extra.uiid', false);
-
-    let status = _get(device, 'params.switch', false);
-    const switches = _get(device, 'params.switches', false);
-
-    const switchesAmount = getDeviceChannelCount(uiid);
-
-    if (switchesAmount > 0 && switchesAmount < channel) {
-      return { error, msg: 'Device channel does not exist' };
-    }
-
-    if (error || (!status && !switches)) {
-      if (error && parseInt(error) === 401) {
-        return device;
-      }
-      return { error, msg: 'Device does not exist' };
-    }
-
-    let stateToSwitch = state;
-    const params = {};
-
-    if (switches) {
-      status = switches[channel - 1].switch;
-    }
-
-    if (state === 'toggle') {
-      stateToSwitch = status === 'on' ? 'off' : 'on';
-    }
-
-    if (switches) {
-      params.switches = switches;
-      params.switches[channel - 1].switch = stateToSwitch;
-    } else {
-      params.switch = stateToSwitch;
-    }
-
-    return ChangeState.set({
-      apiUrl: this.getApiWebSocket(),
-      at: this.at,
-      apiKey: this.apiKey,
-      deviceId,
-      params,
-      state: stateToSwitch,
-    });
-  }
-
-  /**
-   * Toggle power state for a specific device
-   *
-   * @param deviceId
-   * @param channel
-   *
-   * @returns {Promise<{state: *, status: string}|{msg: string, error: *}>}
-   */
-  async toggleDevice(deviceId, channel = 1) {
-    return this.setDevicePowerState(deviceId, 'toggle', channel);
-  }
-
-  /**
-   * Get device raw power usage
-   *
-   * @param deviceId
-   *
-   * @returns {Promise<{error: string}|{response: {hundredDaysKwhData: *}, status: string}>}
-   */
-  async getDeviceRawPowerUsage(deviceId) {
-    await this.logIfNeeded();
-
-    return DeviceRaw.get({
-      apiUrl: this.getApiWebSocket(),
-      at: this.at,
-      apiKey: this.apiKey,
-      deviceId,
-    });
-  }
-
-  /**
-   * Get device power usage for current month
-   *
-   * @param deviceId
-   *
-   * @returns {Promise<{error: string}|{daily: *, monthly: *}>}
-   */
-  async getDevicePowerUsage(deviceId) {
-    const response = await this.getDeviceRawPowerUsage(deviceId);
-
-    const error = _get(response, 'error', false);
-    const hundredDaysKwhData = _get(response, 'data.hundredDaysKwhData', false);
-
-    if (error) {
-      return response;
-    }
-
-    return {
-      status: 'ok',
-      ...CurrentMonth.parse({ hundredDaysKwhData }),
-    };
-  }
-
-  /**
-   * Get device current temperature
-   *
-   * @param deviceId
-   *
-   * @returns {Promise<{temperature: *, status: string}|{msg: string, error: *}>}
-   */
-  async getDeviceCurrentTemperature(deviceId) {
-    const device = await this.getDevice(deviceId);
-    const error = _get(device, 'error', false);
-    const model = _get(device, 'extra.extra.model', '');
-    const temperature = _get(device, 'params.currentTemperature', false);
-
-    if (error || model !== 'PSA-BHA-GL' || !temperature) {
-      if (error && parseInt(error) === 401) {
-        return device;
-      }
-      return { error, msg: 'Device does not exist' };
-    }
-
-    return { status: 'ok', temperature };
-  }
-
-  /**
-   * Get device current humidity
-   *
-   * @param deviceId
-   *
-   * @returns {Promise<{humidity: *, status: string}|{msg: string, error: *}>}
-   */
-  async getDeviceCurrentHumidity(deviceId) {
-    const device = await this.getDevice(deviceId);
-    const error = _get(device, 'error', false);
-    const model = _get(device, 'extra.extra.model', '');
-    const humidity = _get(device, 'params.currentHumidity', false);
-
-    if (error || model !== 'PSA-BHA-GL' || !humidity) {
-      if (error && parseInt(error) === 401) {
-        return device;
-      }
-      return { error, msg: 'Device does not exist' };
-    }
-
-    return { status: 'ok', humidity };
-  }
-
-  /**
-   * Get device channel count
-   *
-   * @param deviceId
-   *
-   * @returns {Promise<{switchesAmount: *, status: string}
-   */
-  async getDeviceChannelCount(deviceId) {
-    const device = await this.getDevice(deviceId);
-    const error = _get(device, 'error', false);
-    const uiid = _get(device, 'extra.extra.uiid', false);
-    const switchesAmount = getDeviceChannelCount(uiid);
-
-    if (error) {
-      if (error && parseInt(error) === 401) {
-        return device;
-      }
-      return { error, msg: 'Device does not exist' };
-    }
-
-    return { status: 'ok', switchesAmount };
-  }
-
-  /**
-   * Get device firmware version
-   *
-   * @param deviceId
-   *
-   * @returns {Promise<{fwVersion: *, status: string}|{msg: string, error: *}>}
-   */
-  async getFirmwareVersion(deviceId) {
-    const device = await this.getDevice(deviceId);
-    const error = _get(device, 'error', false);
-    const fwVersion = _get(device, 'params.fwVersion', false);
-
-    if (error || !fwVersion) {
-      if (error && parseInt(error) === 401) {
-        return device;
-      }
-      return { error, msg: 'Device does not exist' };
-    }
-
-    return { status: 'ok', fwVersion };
-  }
 }
+
+/* LOAD MIXINS: power state */
+const getDevicePowerStateMixin = require('./mixins/powerState/getDevicePowerStateMixin');
+const setDevicePowerState = require('./mixins/powerState/setDevicePowerStateMixin');
+const toggleDeviceMixin = require('./mixins/powerState/toggleDeviceMixin');
+
+/* LOAD MIXINS: power usage */
+const getDevicePowerUsageMixin = require('./mixins/powerUsage/getDevicePowerUsageMixin');
+const getDeviceRawPowerUsageMixin = require('./mixins/powerUsage/getDeviceRawPowerUsageMixin');
+
+/* LOAD MIXINS: temperature & humidity */
+const getDeviceCurrentTemperatureMixin = require('./mixins/temperature/getDeviceCurrentTemperatureMixin');
+const getDeviceCurrentHumidityMixin = require('./mixins/humidity/getDeviceCurrentHumidityMixin');
+
+/* LOAD MIXINS: devices */
+const getDevicesMixin = require('./mixins/devices/getDevicesMixin');
+const getDeviceMixin = require('./mixins/devices/getDeviceMixin');
+const getDeviceChannelCountMixin = require('./mixins/devices/getDeviceChannelCountMixin');
+const getFirmwareVersionMixin = require('./mixins/devices/getFirmwareVersionMixin');
+
+Object.assign(
+  eWeLink.prototype,
+  getDevicePowerStateMixin,
+  setDevicePowerState,
+  toggleDeviceMixin
+);
+
+Object.assign(
+  eWeLink.prototype,
+  getDevicePowerUsageMixin,
+  getDeviceRawPowerUsageMixin
+);
+
+Object.assign(
+  eWeLink.prototype,
+  getDeviceCurrentTemperatureMixin,
+  getDeviceCurrentHumidityMixin
+);
+
+Object.assign(
+  eWeLink.prototype,
+  getDevicesMixin,
+  getDeviceMixin,
+  getDeviceChannelCountMixin,
+  getFirmwareVersionMixin
+);
 
 module.exports = eWeLink;
