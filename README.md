@@ -1,5 +1,12 @@
 # ewelink-api
-> eWeLink API for Node.js
+> eWeLink API for JavaScript
+
+
+## Key features
+* can run on browsers, node scripts or serverless environment
+* set on/off devices
+* get power consumption on devices like Sonoff POW
+* listen for devices events
 
 
 ## Installation
@@ -9,11 +16,4 @@
 
 
 ## Usage
-Check docs at https://ewelink-api.now.sh.
-
-
-## Testing
-1. open `test/_setup/credentials.json` and update parameters.
-2. in a terminal, `npm run test`
-
-* Tests needs to be performed serially, so if run jest manually, add `--runInBand` parameter.
+Check docs at https://ewelink-api.now.sh
