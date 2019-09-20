@@ -21,7 +21,7 @@
   "main": "main.js",
   "scripts": {
     "test": "jest --runInBand --verbose",
-    "coverage": "jest --runInBand --verbose --coverage --coverageDirectory=output/coverage/jest",
+    "coverage": "jest --runInBand --verbose --coverage --coverageDirectory=coverage/jest",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
