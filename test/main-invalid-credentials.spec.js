@@ -72,26 +72,6 @@ describe('invalid credentials', () => {
     expect(powerUsage.error).toBe(401);
   });
 
-  // test('get device current temperature should fail', async () => {
-  //   const conn = new ewelink({ email: 'invalid', password: 'credentials' });
-  //   const powerState = await conn.getDeviceCurrentTemperature(
-  //     deviceIdWithTempAndHum
-  //   );
-  //   expect(typeof powerState).toBe('object');
-  //   expect(powerUsage.msg).toBe('Authentication error');
-  //   expect(powerUsage.error).toBe(401);
-  // });
-
-  // test('get device current humidity should fail', async () => {
-  //   const conn = new ewelink({ email: 'invalid', password: 'credentials' });
-  //   const powerState = await conn.getDeviceCurrentHumidity(
-  //     deviceIdWithTempAndHum
-  //   );
-  //   expect(typeof powerState).toBe('object');
-  //   expect(powerUsage.msg).toBe('Authentication error');
-  //   expect(powerUsage.error).toBe(401);
-  // });
-
   test('get channel count 1 should fail', async () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const switchesAmount = await conn.getDeviceChannelCount(

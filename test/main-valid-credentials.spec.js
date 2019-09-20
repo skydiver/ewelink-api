@@ -87,24 +87,6 @@ describe('valid credentials, invalid device', () => {
     expect(powerUsage.error).toBe('No power usage data found.');
   });
 
-  test('get device current temperature should fail', async () => {
-    const conn = new ewelink({ email, password });
-    const temperature = await conn.getDeviceCurrentTemperature(
-      'invalid deviceid'
-    );
-    expect(typeof temperature).toBe('object');
-    expect(temperature.msg).toBe('Device does not exist');
-    expect(temperature.error).toBe(500);
-  });
-
-  test('get device current humidity should fail', async () => {
-    const conn = new ewelink({ email, password });
-    const humidity = await conn.getDeviceCurrentHumidity('invalid deviceid');
-    expect(typeof humidity).toBe('object');
-    expect(humidity.msg).toBe('Device does not exist');
-    expect(humidity.error).toBe(500);
-  });
-
   test('get channel count should fail', async () => {
     const conn = new ewelink({ email, password });
     const switchesAmount = await conn.getDeviceChannelCount('invalid deviceid');
