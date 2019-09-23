@@ -123,6 +123,47 @@ class eWeLink {
   }
 }
 
+class eWeLinkLan {
+  constructor(devicesCache) {
+    if (!devicesCache) {
+      return { error: 'No cache provided' };
+    }
+    this.devicesCache = devicesCache;
+  }
+
+  getDeviceById(deviceId) {
+    return (
+      this.devicesCache.filter(function(item) {
+        return item.deviceid === deviceId;
+      })[0] || null
+    );
+  }
+
+  async requestLAN(url, deviceId, params) {
+    const device = this.getDeviceById(deviceId);
+    const selfApikey = device.apikey;
+    const deviceKey = device.devicekey;
+    return await this._requestLAN(url, selfApikey, deviceId, deviceKey, params);
+  }
+
+  async _requestLAN(url, selfApikey, deviceId, deviceKey, params) {
+    const body = payloads.lanUpdatePayload(
+      selfApikey,
+      deviceId,
+      deviceKey,
+      params
+    );
+
+    const response = await rp({
+      method: 'POST',
+      uri: url,
+      body,
+      json: true,
+    });
+    return response;
+  }
+}
+
 /* LOAD MIXINS: power state */
 const getDevicePowerStateMixin = require('./mixins/powerState/getDevicePowerStateMixin');
 const setDevicePowerState = require('./mixins/powerState/setDevicePowerStateMixin');
@@ -174,4 +215,7 @@ Object.assign(
 
 Object.assign(eWeLink.prototype, openWebSocketMixin);
 
-module.exports = eWeLink;
+module.exports = {
+  eWeLink,
+  eWeLinkLan,
+};
