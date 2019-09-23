@@ -15,6 +15,7 @@ const setDevicePowerState = {
    */
   async setDevicePowerState(deviceId, state, channel = 1) {
     const device = await this.getDevice(deviceId);
+    const deviceApiKey = _get(device, 'apikey', false);
     const error = _get(device, 'error', false);
     const uiid = _get(device, 'extra.extra.uiid', false);
 
@@ -52,14 +53,21 @@ const setDevicePowerState = {
       params.switch = stateToSwitch;
     }
 
-    return ChangeState.set({
+    const actionParams = {
       apiUrl: this.getApiWebSocket(),
       at: this.at,
       apiKey: this.apiKey,
       deviceId,
       params,
       state: stateToSwitch,
-    });
+    };
+
+    if (this.apiKey !== deviceApiKey) {
+      actionParams.apiKey = deviceApiKey;
+      actionParams.selfApikey = this.apiKey;
+    }
+
+    return ChangeState.set(actionParams);
   },
 };
 
