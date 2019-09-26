@@ -52,6 +52,16 @@ const setDevicePowerState = {
       params.switch = stateToSwitch;
     }
 
+    if (this.devicesCache) {
+      const url = this.getZeroConfigUrl(device);
+
+      return ChangeState.setZeroConf({
+        url,
+        device,
+        params,
+        state: stateToSwitch,
+      });
+    }
     return ChangeState.set({
       apiUrl: this.getApiWebSocket(),
       at: this.at,

@@ -1,14 +1,19 @@
 const rp = require('request-promise');
-
 const { _get } = require('./lib/helpers');
-
 const { makeAuthorizationSign } = require('./lib/ewelink-helper');
-
 const payloads = require('./lib/payloads');
 
 class eWeLink {
-  constructor({ region = 'us', email, password, at, apiKey }) {
-    if (!at && (!email && !password)) {
+  constructor({
+    region = 'us',
+    email,
+    password,
+    at,
+    apiKey,
+    devicesCache,
+    arpTable,
+  }) {
+    if (!devicesCache && !arpTable && (!at && (!email && !password))) {
       return { error: 'No credentials provided' };
     }
 
@@ -17,6 +22,8 @@ class eWeLink {
     this.password = password;
     this.at = at;
     this.apiKey = apiKey;
+    this.devicesCache = devicesCache;
+    this.arpTable = arpTable;
   }
 
   /**
@@ -37,6 +44,20 @@ class eWeLink {
     return `wss://${this.region}-pconnect3.coolkit.cc:8080/api/ws`;
   }
 
+  getLocalIp(device) {
+    const mac = device.extra.extra.staMac;
+    const arpItem =
+      this.arpTable.filter(function(item) {
+        return item.mac.toLowerCase() === mac.toLowerCase();
+      })[0] || null;
+    return arpItem.ip;
+  }
+
+  getZeroConfigUrl(device) {
+    const ip = this.getLocalIp(device);
+    return `http://${ip}:8081/zeroconf/switches`;
+  }
+
   /**
    * Generate http requests helpers
    *
@@ -50,9 +71,7 @@ class eWeLink {
   async makeRequest({ method = 'GET', uri, body = {}, qs = {} }) {
     const { at } = this;
 
-    if (!at) {
-      await this.login();
-    }
+    this.logIfNeeded();
 
     const response = await rp({
       method,
@@ -123,47 +142,6 @@ class eWeLink {
   }
 }
 
-class eWeLinkLan {
-  constructor(devicesCache) {
-    if (!devicesCache) {
-      return { error: 'No cache provided' };
-    }
-    this.devicesCache = devicesCache;
-  }
-
-  getDeviceById(deviceId) {
-    return (
-      this.devicesCache.filter(function(item) {
-        return item.deviceid === deviceId;
-      })[0] || null
-    );
-  }
-
-  async requestLAN(url, deviceId, params) {
-    const device = this.getDeviceById(deviceId);
-    const selfApikey = device.apikey;
-    const deviceKey = device.devicekey;
-    return await this._requestLAN(url, selfApikey, deviceId, deviceKey, params);
-  }
-
-  async _requestLAN(url, selfApikey, deviceId, deviceKey, params) {
-    const body = payloads.lanUpdatePayload(
-      selfApikey,
-      deviceId,
-      deviceKey,
-      params
-    );
-
-    const response = await rp({
-      method: 'POST',
-      uri: url,
-      body,
-      json: true,
-    });
-    return response;
-  }
-}
-
 /* LOAD MIXINS: power state */
 const getDevicePowerStateMixin = require('./mixins/powerState/getDevicePowerStateMixin');
 const setDevicePowerState = require('./mixins/powerState/setDevicePowerStateMixin');
@@ -217,5 +195,4 @@ Object.assign(eWeLink.prototype, openWebSocketMixin);
 
 module.exports = {
   eWeLink,
-  eWeLinkLan,
 };

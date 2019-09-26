@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\classes",
+    "\\lib",
+    "\\lib\\payloads",
+    "\\mixins",
+    "\\mixins\\powerState",
+    "\\mixins\\temperature",
+    "\\mixins\\websocket"
+  ],
+  "SelectedNode": "\\lib\\payloads\\lanUpdatePayload.js",
+  "PreviewInSolutionExplorer": false
+}
