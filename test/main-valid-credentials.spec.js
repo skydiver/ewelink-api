@@ -68,7 +68,8 @@ describe('valid credentials, invalid device', () => {
     const conn = new ewelink({ email, password });
     const powerUsage = await conn.getDeviceRawPowerUsage('invalid deviceid');
     expect(typeof powerUsage).toBe('object');
-    expect(powerUsage.error).toBe('No power usage data found.');
+    expect(powerUsage.msg).toBe('Forbidden');
+    expect(powerUsage.error).toBe(403);
   });
 
   test('current month power usage on invalid device should fail', async () => {
@@ -76,7 +77,8 @@ describe('valid credentials, invalid device', () => {
     const conn = new ewelink({ email, password });
     const powerUsage = await conn.getDevicePowerUsage('invalid deviceid');
     expect(typeof powerUsage).toBe('object');
-    expect(powerUsage.error).toBe('No power usage data found.');
+    expect(powerUsage.msg).toBe('Forbidden');
+    expect(powerUsage.error).toBe(403);
   });
 
   test('raw power on device without electricity monitor should fail', async () => {
