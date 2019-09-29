@@ -64,7 +64,6 @@ const setDevicePowerState = {
 
     if (this.apiKey !== deviceApiKey) {
       actionParams.apiKey = deviceApiKey;
-      actionParams.selfApikey = this.apiKey;
     }
 
     return ChangeState.set(actionParams);

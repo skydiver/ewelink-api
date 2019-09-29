@@ -3,20 +3,11 @@ const payloads = require('../../lib/payloads');
 const { _get } = require('../../lib/helpers');
 
 class ChangeState extends WebSocket {
-  static async set({
-    apiUrl,
-    at,
-    apiKey,
-    selfApikey,
-    deviceId,
-    params,
-    state,
-  }) {
+  static async set({ apiUrl, at, apiKey, deviceId, params, state }) {
     const payloadLogin = payloads.wssLoginPayload({ at, apiKey });
 
     const payloadUpdate = payloads.wssUpdatePayload({
       apiKey,
-      selfApikey,
       deviceId,
       params,
     });
@@ -26,7 +17,7 @@ class ChangeState extends WebSocket {
       payloadUpdate,
     ]);
 
-    const error = response[1] ? _get(response[1], 'error', false) : 0;
+    const error = _get(response[1], 'error', false);
 
     if (error === 403) {
       return { error, msg: response[1].reason };
