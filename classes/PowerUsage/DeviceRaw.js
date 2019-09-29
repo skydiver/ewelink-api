@@ -27,9 +27,10 @@ class DeviceRaw extends WebSocket {
       payloadUpdate,
     ]);
 
-    const error = _get(response, 'error', false);
-    if (error) {
-      return response;
+    const error = _get(response[1], 'error', false);
+
+    if (error === 403) {
+      return { error, msg: response[1].reason };
     }
 
     const hundredDaysKwhData = _get(

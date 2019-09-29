@@ -1,6 +1,6 @@
 {
   "name": "ewelink-api",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "eWeLink API for Node.js",
   "author": "Martín M.",
   "license": "MIT",
@@ -21,7 +21,7 @@
   "main": "main.js",
   "scripts": {
     "test": "jest --runInBand --verbose",
-    "coverage": "jest --runInBand --verbose --coverage --coverageDirectory=output/coverage/jest",
+    "coverage": "jest --runInBand --verbose --coverage --coverageDirectory=coverage/jest",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },

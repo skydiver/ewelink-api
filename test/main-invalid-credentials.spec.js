@@ -5,7 +5,6 @@ const ewelink = require('../main');
 const {
   singleChannelDeviceId,
   deviceIdWithPower,
-  deviceIdWithTempAndHum,
   fourChannelsDevice,
 } = require('./_setup/credentials.json');
 
@@ -68,29 +67,9 @@ describe('invalid credentials', () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const powerUsage = await conn.getDevicePowerUsage(deviceIdWithPower);
     expect(typeof powerUsage).toBe('object');
-    expect(powerUsage.msg).toBe('Authentication error');
-    expect(powerUsage.error).toBe(401);
+    expect(powerUsage.msg).toBe('Forbidden');
+    expect(powerUsage.error).toBe(403);
   });
-
-  // test('get device current temperature should fail', async () => {
-  //   const conn = new ewelink({ email: 'invalid', password: 'credentials' });
-  //   const powerState = await conn.getDeviceCurrentTemperature(
-  //     deviceIdWithTempAndHum
-  //   );
-  //   expect(typeof powerState).toBe('object');
-  //   expect(powerUsage.msg).toBe('Authentication error');
-  //   expect(powerUsage.error).toBe(401);
-  // });
-
-  // test('get device current humidity should fail', async () => {
-  //   const conn = new ewelink({ email: 'invalid', password: 'credentials' });
-  //   const powerState = await conn.getDeviceCurrentHumidity(
-  //     deviceIdWithTempAndHum
-  //   );
-  //   expect(typeof powerState).toBe('object');
-  //   expect(powerUsage.msg).toBe('Authentication error');
-  //   expect(powerUsage.error).toBe(401);
-  // });
 
   test('get channel count 1 should fail', async () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });

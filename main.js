@@ -133,8 +133,7 @@ const getDevicePowerUsageMixin = require('./mixins/powerUsage/getDevicePowerUsag
 const getDeviceRawPowerUsageMixin = require('./mixins/powerUsage/getDeviceRawPowerUsageMixin');
 
 /* LOAD MIXINS: temperature & humidity */
-const getDeviceCurrentTemperatureMixin = require('./mixins/temperature/getDeviceCurrentTemperatureMixin');
-const getDeviceCurrentHumidityMixin = require('./mixins/humidity/getDeviceCurrentHumidityMixin');
+const getTHMixin = require('./mixins/temphumd/getTHMixin');
 
 /* LOAD MIXINS: devices */
 const getDevicesMixin = require('./mixins/devices/getDevicesMixin');
@@ -158,11 +157,7 @@ Object.assign(
   getDeviceRawPowerUsageMixin
 );
 
-Object.assign(
-  eWeLink.prototype,
-  getDeviceCurrentTemperatureMixin,
-  getDeviceCurrentHumidityMixin
-);
+Object.assign(eWeLink.prototype, getTHMixin);
 
 Object.assign(
   eWeLink.prototype,
