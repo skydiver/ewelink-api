@@ -4,6 +4,7 @@
   "description": "eWeLink API for Node.js",
   "author": "Martín M.",
   "license": "MIT",
+  "typings": "./index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/skydiver/ewelink-api.git"
