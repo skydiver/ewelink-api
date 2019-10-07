@@ -5,6 +5,7 @@ const ewelink = require('../main');
 const {
   email,
   password,
+  deviceIdWithoutTempAndHum,
   deviceIdWithTempAndHum: thDevice,
 } = require('./_setup/credentials.json');
 
@@ -98,7 +99,9 @@ describe('current temperature and humidity: invalid device', () => {
     const conn = new ewelink({ email, password });
     const temperature = await conn.getDeviceCurrentTemperature('invalid');
     expect(typeof temperature).toBe('object');
-    expect(temperature.msg).toBe('Device does not exist');
+    expect(temperature.msg).toBe(
+      "TypeError: Cannot read property 'apikey' of null"
+    );
     expect(temperature.error).toBe(500);
   });
 
@@ -106,7 +109,31 @@ describe('current temperature and humidity: invalid device', () => {
     const conn = new ewelink({ email, password });
     const humidity = await conn.getDeviceCurrentHumidity('invalid');
     expect(typeof humidity).toBe('object');
-    expect(humidity.msg).toBe('Device does not exist');
+    expect(humidity.msg).toBe(
+      "TypeError: Cannot read property 'apikey' of null"
+    );
+    expect(humidity.error).toBe(500);
+  });
+});
+
+describe('current temperature and humidity: device without sensor', () => {
+  test('get device current temperature should fail', async () => {
+    const conn = new ewelink({ email, password });
+    const temperature = await conn.getDeviceCurrentTemperature(
+      deviceIdWithoutTempAndHum
+    );
+    expect(typeof temperature).toBe('object');
+    expect(temperature.msg).toBe("Can't read sensor data from device");
+    expect(temperature.error).toBe(500);
+  });
+
+  test('get device current humidity should fail', async () => {
+    const conn = new ewelink({ email, password });
+    const humidity = await conn.getDeviceCurrentHumidity(
+      deviceIdWithoutTempAndHum
+    );
+    expect(typeof humidity).toBe('object');
+    expect(humidity.msg).toBe("Can't read sensor data from device");
     expect(humidity.error).toBe(500);
   });
 });
