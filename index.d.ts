@@ -29,7 +29,7 @@ declare module 'ewelink-api' {
     /**
      * Change specified device power state.
      */
-    setDevicePowerState(deviceId: string, channel?: number): Promise<DeviceState>
+    setDevicePowerState(deviceId: string, state?: string, channel?: number): Promise<DeviceState>
     /**
      * Switch specified device current power state.
      */
