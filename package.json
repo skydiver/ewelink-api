@@ -1,6 +1,6 @@
 {
   "name": "ewelink-api",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "eWeLink API for Node.js",
   "author": "Martín M.",
   "license": "MIT",
