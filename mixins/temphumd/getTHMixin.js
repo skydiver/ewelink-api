@@ -13,11 +13,12 @@ const getTHMixin = {
     const temperature = _get(device, 'params.currentTemperature', false);
     const humidity = _get(device, 'params.currentHumidity', false);
 
-    if (error || !temperature || !humidity) {
-      if (error && parseInt(error) === 401) {
-        return device;
-      }
-      return { error, msg: 'Device does not exist' };
+    if (error) {
+      return device;
+    }
+
+    if (!temperature || !humidity) {
+      return { error: 500, msg: "Can't read sensor data from device" };
     }
 
     const data = { status: 'ok', temperature, humidity };
