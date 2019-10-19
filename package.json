@@ -36,8 +36,7 @@
     ]
   },
   "dependencies": {
-    "@network-utils/arp-lookup": "^1.0.4",
-    "net-ping": "^1.2.3",
+    "arpping": "^0.2.0",
     "delay": "^4.3.0",
     "nonce": "^1.0.4",
     "random": "^2.1.1",
