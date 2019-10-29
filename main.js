@@ -156,7 +156,7 @@ const getDeviceMixin = require('./mixins/devices/getDeviceMixin');
 const getDeviceChannelCountMixin = require('./mixins/devices/getDeviceChannelCountMixin');
 
 /* LOAD MIXINS: firmware */
-const getFirmwareVersionMixin = require('./mixins/devices/getFirmwareVersionMixin');
+const getFirmwareVersionMixin = require('./mixins/firmware/getFirmwareVersionMixin');
 const checkDeviceUpdateMixin = require('./mixins/firmware/checkDeviceUpdateMixin');
 
 /* LOAD MIXINS: websocket */
