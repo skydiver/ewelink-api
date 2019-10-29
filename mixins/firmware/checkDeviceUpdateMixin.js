@@ -1,4 +1,5 @@
 const { _get } = require('../../lib/helpers');
+const payloads = require('../../lib/payloads');
 
 const checkDeviceUpdateMixin = {
   /**
@@ -17,20 +18,17 @@ const checkDeviceUpdateMixin = {
       return device;
     }
 
-    const model = _get(device, 'extra.extra.model', false);
-    const fwVersion = _get(device, 'params.fwVersion', false);
+    const deviceInfoList = payloads.firmwareUpdate([device]);
 
-    if (!model || !fwVersion) {
-      return { error: 500, msg: "Can't get model or firmware version" };
+    if (error) {
+      return deviceInfoList;
     }
 
     const update = await this.makeRequest({
       method: 'POST',
       url: this.getOtaUrl(),
       uri: '/app',
-      body: {
-        deviceInfoList: [{ model, version: fwVersion, deviceid: deviceId }],
-      },
+      body: { deviceInfoList },
     });
 
     const isUpdate = _get(update, 'upgradeInfoList.0.version', false);
