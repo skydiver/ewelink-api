@@ -158,6 +158,7 @@ const getDeviceChannelCountMixin = require('./mixins/devices/getDeviceChannelCou
 /* LOAD MIXINS: firmware */
 const getFirmwareVersionMixin = require('./mixins/firmware/getFirmwareVersionMixin');
 const checkDeviceUpdateMixin = require('./mixins/firmware/checkDeviceUpdateMixin');
+const checkDevicesUpdatesMixin = require('./mixins/firmware/checkDevicesUpdatesMixin');
 
 /* LOAD MIXINS: websocket */
 const openWebSocketMixin = require('./mixins/websocket/openWebSocketMixin');
@@ -187,7 +188,8 @@ Object.assign(
 Object.assign(
   eWeLink.prototype,
   getFirmwareVersionMixin,
-  checkDeviceUpdateMixin
+  checkDeviceUpdateMixin,
+  checkDevicesUpdatesMixin
 );
 
 Object.assign(eWeLink.prototype, openWebSocketMixin);
