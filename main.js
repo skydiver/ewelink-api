@@ -126,16 +126,6 @@ class eWeLink {
     return response;
   }
 
-  /**
-   * Check if authentication credentials doesn't exists then perform a login
-   *
-   * @returns {Promise<void>}
-   */
-  async logIfNeeded() {
-    if (!this.at) {
-      await this.login();
-    }
-  }
 }
 
 /* LOAD MIXINS: power state */
