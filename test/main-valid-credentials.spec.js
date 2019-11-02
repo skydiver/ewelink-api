@@ -96,14 +96,6 @@ describe('valid credentials, invalid device', () => {
     expect(switchesAmount.msg).toBe('Device does not exist');
     expect(switchesAmount.error).toBe(500);
   });
-
-  test('get device firmware version should fail', async () => {
-    const conn = new ewelink({ email, password });
-    const firmwareVersion = await conn.getFirmwareVersion('invalid deviceid');
-    expect(typeof firmwareVersion).toBe('object');
-    expect(firmwareVersion.msg).toBe('Device does not exist');
-    expect(firmwareVersion.error).toBe(500);
-  });
 });
 
 describe('valid credentials, wrong region', () => {

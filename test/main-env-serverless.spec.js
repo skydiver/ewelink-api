@@ -108,14 +108,4 @@ describe('env: serverless', () => {
     expect(result.status).toBe('ok');
     expect(result.switchesAmount).toBe(4);
   });
-
-  test('get device firmware version', async () => {
-    const conn = new ewelink({ at: accessToken });
-    const device = await conn.getDevice(singleChannelDeviceId);
-    const currentVersion = device.params.fwVersion;
-    const firmware = await conn.getFirmwareVersion(singleChannelDeviceId);
-    expect(typeof firmware).toBe('object');
-    expect(firmware.status).toBe('ok');
-    expect(firmware.fwVersion).toBe(currentVersion);
-  });
 });
