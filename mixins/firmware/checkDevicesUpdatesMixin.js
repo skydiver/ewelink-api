@@ -34,11 +34,16 @@ const checkDevicesUpdatesMixin = {
       const upd = _get(device, 'version', false);
 
       if (!upd) {
-        return { status: 'ok', msg: 'No update available' };
+        return {
+          status: 'ok',
+          deviceId: device.deviceid,
+          msg: 'No update available',
+        };
       }
 
       return {
         status: 'ok',
+        deviceId: device.deviceid,
         msg: 'Update available',
         version: upd,
       };
