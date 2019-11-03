@@ -29,6 +29,14 @@ class eWeLink {
   }
 
   /**
+   * Generate eWeLink OTA API URL
+   * @returns {string}
+   */
+  getOtaUrl() {
+    return `https://${this.region}-ota.coolkit.cc:8080/otaother`;
+  }
+
+  /**
    * Generate eWeLink WebSocket URL
    *
    * @returns {string}
@@ -41,22 +49,29 @@ class eWeLink {
    * Generate http requests helpers
    *
    * @param method
+   * @param url
    * @param uri
    * @param body
    * @param qs
    *
    * @returns {Promise<{msg: string, error: *}>}
    */
-  async makeRequest({ method = 'GET', uri, body = {}, qs = {} }) {
+  async makeRequest({ method = 'GET', url, uri, body = {}, qs = {} }) {
     const { at } = this;
 
     if (!at) {
       await this.login();
     }
 
+    let apiUrl = this.getApiUrl();
+
+    if (url) {
+      apiUrl = url;
+    }
+
     const response = await rp({
       method,
-      uri: `${this.getApiUrl()}${uri}`,
+      uri: `${apiUrl}${uri}`,
       headers: { Authorization: `Bearer ${this.at}` },
       body,
       qs,
@@ -111,16 +126,6 @@ class eWeLink {
     return response;
   }
 
-  /**
-   * Check if authentication credentials doesn't exists then perform a login
-   *
-   * @returns {Promise<void>}
-   */
-  async logIfNeeded() {
-    if (!this.at) {
-      await this.login();
-    }
-  }
 }
 
 /* LOAD MIXINS: power state */
@@ -139,7 +144,11 @@ const getTHMixin = require('./mixins/temphumd/getTHMixin');
 const getDevicesMixin = require('./mixins/devices/getDevicesMixin');
 const getDeviceMixin = require('./mixins/devices/getDeviceMixin');
 const getDeviceChannelCountMixin = require('./mixins/devices/getDeviceChannelCountMixin');
-const getFirmwareVersionMixin = require('./mixins/devices/getFirmwareVersionMixin');
+
+/* LOAD MIXINS: firmware */
+const getFirmwareVersionMixin = require('./mixins/firmware/getFirmwareVersionMixin');
+const checkDeviceUpdateMixin = require('./mixins/firmware/checkDeviceUpdateMixin');
+const checkDevicesUpdatesMixin = require('./mixins/firmware/checkDevicesUpdatesMixin');
 
 /* LOAD MIXINS: websocket */
 const openWebSocketMixin = require('./mixins/websocket/openWebSocketMixin');
@@ -163,8 +172,14 @@ Object.assign(
   eWeLink.prototype,
   getDevicesMixin,
   getDeviceMixin,
-  getDeviceChannelCountMixin,
-  getFirmwareVersionMixin
+  getDeviceChannelCountMixin
+);
+
+Object.assign(
+  eWeLink.prototype,
+  getFirmwareVersionMixin,
+  checkDeviceUpdateMixin,
+  checkDevicesUpdatesMixin
 );
 
 Object.assign(eWeLink.prototype, openWebSocketMixin);

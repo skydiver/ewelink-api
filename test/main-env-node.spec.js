@@ -152,13 +152,4 @@ describe('env: node script', () => {
     expect(result.status).toBe('ok');
     expect(result.switchesAmount).toBe(4);
   });
-
-  test('get firmware version', async () => {
-    const device = await conn.getDevice(singleChannelDeviceId);
-    const currentVersion = device.params.fwVersion;
-    const firmware = await conn.getFirmwareVersion(singleChannelDeviceId);
-    expect(typeof firmware).toBe('object');
-    expect(firmware.status).toBe('ok');
-    expect(firmware.fwVersion).toBe(currentVersion);
-  });
 });

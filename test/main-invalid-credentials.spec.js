@@ -88,12 +88,4 @@ describe('invalid credentials', () => {
     expect(switchesAmount.msg).toBe('Authentication error');
     expect(switchesAmount.error).toBe(401);
   });
-
-  test('get device firmware version should fail', async () => {
-    const conn = new ewelink({ email: 'invalid', password: 'credentials' });
-    const firmware = await conn.getFirmwareVersion(singleChannelDeviceId);
-    expect(typeof firmware).toBe('object');
-    expect(firmware.msg).toBe('Authentication error');
-    expect(firmware.error).toBe(401);
-  });
 });

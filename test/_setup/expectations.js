@@ -44,10 +44,17 @@ const currentMonthPowerUsageExpectations = {
   daily: expect.any(Array),
 };
 
+const firmwareExpectations = {
+  status: expect.any(String),
+  deviceId: expect.any(String),
+  msg: expect.any(String),
+};
+
 module.exports = {
   loginExpectations,
   allDevicesExpectations,
   specificDeviceExpectations,
   rawPowerUsageExpectations,
   currentMonthPowerUsageExpectations,
+  firmwareExpectations,
 };
