@@ -14,7 +14,7 @@ const setDevicePowerState = {
    * @returns {Promise<{state: *, status: string}|{msg: string, error: *}>}
    */
   async setDevicePowerState(deviceId, state, channel = 1) {
-    const device = await this.getDevice(deviceId);
+    const device = await this.getDeviceAlt(deviceId)
     const deviceApiKey = _get(device, 'apikey', false);
     const error = _get(device, 'error', false);
     const uiid = _get(device, 'extra.extra.uiid', false);
