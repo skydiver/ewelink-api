@@ -12,6 +12,11 @@ const getDeviceMixin = {
       qs: { lang: 'en', getTags: 1 },
     });
   },
+
+  async getDeviceAlt(deviceId) {
+    const devices = await this.getDevices();
+    return devices.devicelist.find(dev => dev.deviceid === deviceId);
+  },
 };
 
 module.exports = getDeviceMixin;
