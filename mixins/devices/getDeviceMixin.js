@@ -7,13 +7,6 @@ const getDeviceMixin = {
    * @returns {Promise<{msg: string, error: *}>}
    */
   async getDevice(deviceId) {
-    return this.makeRequest({
-      uri: `/user/device/${deviceId}`,
-      qs: { lang: 'en', getTags: 1 },
-    });
-  },
-
-  async getDeviceAlt(deviceId) {
     const devices = await this.getDevices();
     return devices.devicelist.find(dev => dev.deviceid === deviceId);
   },
