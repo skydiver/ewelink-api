@@ -15,7 +15,6 @@ const getDeviceMixin = {
     // });
 
     const devices = await this.getDevices();
-    const devicelist = _get(devices, 'devicelist', false);
 
     const error = _get(devices, 'error', false);
 
@@ -23,11 +22,11 @@ const getDeviceMixin = {
       return { error: 401, msg: 'Authentication error' };
     }
 
-    if (error || !devicelist) {
+    if (error || !devices) {
       return devices;
     }
 
-    const device = devicelist.find(dev => dev.deviceid === deviceId);
+    const device = devices.find(dev => dev.deviceid === deviceId);
 
     if (!device) {
       return { error: 500, msg: 'Device does not exist' };
