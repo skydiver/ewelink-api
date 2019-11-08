@@ -3,9 +3,10 @@ const payloads = require('../../lib/payloads');
 
 const checkDevicesUpdatesMixin = {
   async checkDevicesUpdates() {
-    const devices = await this.getDevices();
+    const devicesRaw = await this.getDevices();
 
-    const error = _get(devices, 'error', false);
+    const error = _get(devicesRaw, 'error', false);
+    const devices = _get(devicesRaw, 'devicelist', false);
 
     if (error) {
       return devices;
