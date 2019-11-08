@@ -10,7 +10,7 @@ const {
 
 const { firmwareExpectations } = require('./_setup/expectations');
 
-describe('firmware: get version methods', () => {
+describe.skip('firmware: get version methods', () => {
   let connection;
 
   beforeAll(() => {
@@ -55,7 +55,7 @@ describe('firmware: get version methods', () => {
   });
 });
 
-describe('firmware: check updates methods', () => {
+describe.skip('firmware: check updates methods', () => {
   let connection;
 
   beforeAll(() => {
