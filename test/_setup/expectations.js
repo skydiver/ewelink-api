@@ -50,6 +50,11 @@ const firmwareExpectations = {
   msg: expect.any(String),
 };
 
+const regionExpectations = {
+  email: expect.any(String),
+  region: expect.any(String),
+};
+
 module.exports = {
   loginExpectations,
   allDevicesExpectations,
@@ -57,4 +62,5 @@ module.exports = {
   rawPowerUsageExpectations,
   currentMonthPowerUsageExpectations,
   firmwareExpectations,
+  regionExpectations,
 };
