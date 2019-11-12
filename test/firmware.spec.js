@@ -62,7 +62,7 @@ describe('firmware: check updates methods', () => {
     connection = new ewelink({ email, password });
   });
 
-  test('outdated device firmware should return available version', async () => {
+  test.skip('outdated device firmware should return available version', async () => {
     const status = await connection.checkDeviceUpdate(outdatedFirmwareDevice);
     expect(typeof status).toBe('object');
     expect(typeof status).toBe('object');
