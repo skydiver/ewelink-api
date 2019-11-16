@@ -99,9 +99,7 @@ describe('current temperature and humidity: invalid device', () => {
     const conn = new ewelink({ email, password });
     const temperature = await conn.getDeviceCurrentTemperature('invalid');
     expect(typeof temperature).toBe('object');
-    expect(temperature.msg).toBe(
-      "TypeError: Cannot read property 'apikey' of null"
-    );
+    expect(temperature.msg).toBe('Device does not exist');
     expect(temperature.error).toBe(500);
   });
 
@@ -109,9 +107,7 @@ describe('current temperature and humidity: invalid device', () => {
     const conn = new ewelink({ email, password });
     const humidity = await conn.getDeviceCurrentHumidity('invalid');
     expect(typeof humidity).toBe('object');
-    expect(humidity.msg).toBe(
-      "TypeError: Cannot read property 'apikey' of null"
-    );
+    expect(humidity.msg).toBe('Device does not exist');
     expect(humidity.error).toBe(500);
   });
 });
