@@ -20,7 +20,9 @@ const checkDeviceUpdateMixin = {
 
     const deviceInfoList = payloads.firmwareUpdate([device]);
 
-    if (error) {
+    const deviceInfoListError = _get(deviceInfoList, 'error', false);
+
+    if (deviceInfoListError) {
       return deviceInfoList;
     }
 

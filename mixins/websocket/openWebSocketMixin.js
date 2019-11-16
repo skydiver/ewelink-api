@@ -13,7 +13,7 @@ const openWebSocketMixin = {
    * @returns {Promise<WebSocketAsPromised>}
    */
   async openWebSocket(callback) {
-    const payloadLogin = await payloads.wssLoginPayload({
+    const payloadLogin = payloads.wssLoginPayload({
       at: this.at,
       apiKey: this.apiKey,
     });
