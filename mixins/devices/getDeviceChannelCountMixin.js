@@ -17,7 +17,7 @@ const getDeviceChannelCountMixin = {
     const switchesAmount = getDeviceChannelCount(uiid);
 
     if (error) {
-      if (error && parseInt(error) === 401) {
+      if (error === 401) {
         return device;
       }
       return { error, msg: 'Device does not exist' };
