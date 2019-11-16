@@ -14,7 +14,7 @@ const getFirmwareVersionMixin = {
     const fwVersion = _get(device, 'params.fwVersion', false);
 
     if (error || !fwVersion) {
-      if (error && parseInt(error) === 401) {
+      if (error === 401) {
         return device;
       }
       return { error, msg: 'Device does not exist' };
