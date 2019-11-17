@@ -69,7 +69,6 @@ describe('env: node script', () => {
 
   test('set single channel device power state', async () => {
     jest.setTimeout(30000);
-    await delay(3000);
     const device = await conn.getDevice(singleChannelDeviceId);
     const currentState = device.params.switch;
     const newState = currentState === 'on' ? 'off' : 'on';
@@ -87,7 +86,6 @@ describe('env: node script', () => {
 
   test('set multi channel device power state', async () => {
     jest.setTimeout(30000);
-    await delay(3000);
     const channel = 3;
     const device = await conn.getDevice(fourChannelsDevice);
     const currentState = device.params.switches[channel - 1].switch;
@@ -107,7 +105,6 @@ describe('env: node script', () => {
 
   test('toggle single channel device power state', async () => {
     jest.setTimeout(30000);
-    await delay(3000);
     const device = await conn.getDevice(singleChannelDeviceId);
     const currentState = device.params.switch;
     const newState = currentState === 'on' ? 'off' : 'on';
@@ -123,7 +120,6 @@ describe('env: node script', () => {
 
   test('toggle multi channel device power state', async () => {
     jest.setTimeout(30000);
-    await delay(3000);
     const channel = 3;
     const device = await conn.getDevice(fourChannelsDevice);
     const currentState = device.params.switches[channel - 1].switch;

@@ -59,7 +59,6 @@ describe('env: serverless', () => {
 
   test('set device power state', async () => {
     jest.setTimeout(30000);
-    await delay(3000);
     const conn = new ewelink({ at: accessToken, apiKey });
     const device = await conn.getDevice(singleChannelDeviceId);
     const currentState = device.params.switch;
@@ -78,7 +77,6 @@ describe('env: serverless', () => {
 
   test('toggle device power state', async () => {
     jest.setTimeout(30000);
-    await delay(3000);
     const conn = new ewelink({ at: accessToken, apiKey });
     const device = await conn.getDevice(singleChannelDeviceId);
     const currentState = device.params.switch;
