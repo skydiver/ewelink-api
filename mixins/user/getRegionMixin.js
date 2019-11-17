@@ -1,6 +1,6 @@
 const { _get } = require('../../lib/helpers');
 
-const regionMixin = {
+const getRegionMixin = {
   async getRegion() {
     if (!this.email || !this.password) {
       return {
@@ -24,4 +24,4 @@ const regionMixin = {
   },
 };
 
-module.exports = regionMixin;
+module.exports = getRegionMixin;
