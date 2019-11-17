@@ -9,10 +9,10 @@ const openWebSocketMixin = {
    * and execute callback function with server message as argument
    *
    * @param callback
-   *
+   * @param heartbeat
    * @returns {Promise<WebSocketAsPromised>}
    */
-  async openWebSocket(callback) {
+  async openWebSocket(callback, ...{ heartbeat = 120000 }) {
     const payloadLogin = payloads.wssLoginPayload({
       at: this.at,
       apiKey: this.apiKey,
@@ -33,6 +33,10 @@ const openWebSocketMixin = {
 
     await wsp.open();
     await wsp.send(payloadLogin);
+
+    setInterval(async () => {
+      await wsp.send('ping');
+    }, heartbeat);
 
     return wsp;
   },
