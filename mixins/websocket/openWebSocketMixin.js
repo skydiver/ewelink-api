@@ -23,8 +23,12 @@ const openWebSocketMixin = {
     });
 
     wsp.onMessage.addListener(message => {
-      const data = JSON.parse(message);
-      callback(data);
+      try {
+        const data = JSON.parse(message);
+        callback(data);
+      } catch (error) {
+        callback(message);
+      }
     });
 
     await wsp.open();
