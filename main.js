@@ -85,7 +85,7 @@ class eWeLink {
 
 /* LOAD MIXINS: user */
 const getCredentialsMixin = require('./mixins/user/getCredentialsMixin');
-const regionMixin = require('./mixins/user/regionMixin');
+const regionMixin = require('./mixins/user/getRegionMixin');
 
 /* LOAD MIXINS: power state */
 const getDevicePowerStateMixin = require('./mixins/powerState/getDevicePowerStateMixin');
