@@ -85,7 +85,7 @@ class eWeLink {
 
 /* LOAD MIXINS: user */
 const getCredentialsMixin = require('./mixins/user/getCredentialsMixin');
-const regionMixin = require('./mixins/user/getRegionMixin');
+const getRegionMixin = require('./mixins/user/getRegionMixin');
 
 /* LOAD MIXINS: power state */
 const getDevicePowerStateMixin = require('./mixins/powerState/getDevicePowerStateMixin');
@@ -112,7 +112,7 @@ const checkDevicesUpdatesMixin = require('./mixins/firmware/checkDevicesUpdatesM
 /* LOAD MIXINS: websocket */
 const openWebSocketMixin = require('./mixins/websocket/openWebSocketMixin');
 
-Object.assign(eWeLink.prototype, getCredentialsMixin, regionMixin);
+Object.assign(eWeLink.prototype, getCredentialsMixin, getRegionMixin);
 
 Object.assign(
   eWeLink.prototype,
