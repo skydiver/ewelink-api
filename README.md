@@ -66,4 +66,4 @@ const devices = await connection.getDevices();
 console.log(devices);
 ```
 
-If you don't know your region, use getRegion method
+> If you don't know your region, use getRegion method
