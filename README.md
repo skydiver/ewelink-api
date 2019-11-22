@@ -193,3 +193,82 @@ So, instead of using email and password on every api call, you can login the fir
 ```
 If you don't know your region, use [getRegion](#getregion) method
 
+## Available Methods
+Here is the list of available methods.
+
+Remember to instantiate the class before usage.
+
+Also, take a look at the provided demos for [node script](#node-script) and [serverless](#serverless).
+
+### Login
+Login into eWeLink API and get auth credentials.
+
+This method is useful on serverless context, where you need to obtain auth credentials to make individual requests.
+
+Usage:
+```js
+  const auth = await connection.login();
+
+  console.log('access token: ', auth.at);
+  console.log('api key: ', auth.user.apikey);
+  console.log('region: ', auth.region);
+```
+*\* Remember to instantiate class before use*
+
+### openWebSocket
+Opens a socket connection to eWeLink and listen for realtime events.
+
+Usage
+The **openWebSocket** method requires a callback function as an argument.
+
+Once an event is received, the callback function will be executed with the server message as argument.
+```js
+// instantiate class
+const connection = new ewelink({
+  email: '<your ewelink email>',
+  password: '<your ewelink password>',
+  region: '<your ewelink region>',
+});
+
+// login into eWeLink
+await connection.login();
+
+// call openWebSocket method with a callback as argument
+const socket = await connection.openWebSocket(async data => {
+  // data is the message from eWeLink
+  console.log(data)
+});
+```
+Response example
+If everything went well, the first message will have the following format:
+```json
+{
+  error: 0,
+  apikey: '12345678-9012-3456-7890-123456789012',
+  config: {
+    hb: 1,
+    hbInterval: 12345
+  },
+  sequence: '1234567890123'
+}
+```
+When a device changes a similar message will be returned:
+```json
+{
+  action: 'update',
+  deviceid: '1234567890',
+  apikey: '12345678-9012-3456-7890-123456789012',
+  userAgent: 'device',
+  sequence: '1234567890123'
+  ts: 0,
+  params: {
+    switch: 'on'
+  },
+  from: 'device',
+  seq: '11'
+}
+```
+Notes
+- Because of the nature of a socket connection, the script will keep running until the connection gets closed.
+- openWebSocket will return the socket instance
+- if you need to manually kill the connection, just run socket.close() (where socket is the variable used).
