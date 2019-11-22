@@ -37,11 +37,11 @@ eWeLink API for JavaScript is a module who let you interact directly with eWeLin
 
 ## Getting Started
 
-### Installation
+### Install master branch
 ```sh
  npm install ewelink-api
 ```
-Install a specific branch, eg release 1.10.0:
+### Install a specific branch, eg release 1.10.0:
 ```sh
  npm i skydiver/ewelink-api#release_1.10.0
 ```
@@ -49,7 +49,7 @@ Install a specific branch, eg release 1.10.0:
 ## Quickstart
 Here is a basic node script to start working with the module:
 
-Default region of this library is us. If your are in a different one, you must specify region parameter or error 400/401 will be returned.
+> Default region of this library is '**us**'. If your are in a different one, you must specify region parameter or error 400/401 will be returned.
 
 ```
 const ewelink = require('ewelink-api');
@@ -66,4 +66,33 @@ const devices = await connection.getDevices();
 console.log(devices);
 ```
 
+> If you don't know your region, use getRegion method AFTER Class Instantiation.
+
+## Class Instantiation
+> Default region of this library is us. If your are in a different one, you must specify region parameter or error 400/401 will be returned.
+
+Using email and password
+```
+  const connection = new ewelink({
+    email: '<your ewelink email>',
+    password: '<your ewelink password>',
+    region: '<your ewelink region>',
+  });
+```
+Using access token
+```
+  const connection = new ewelink({
+    at: '<valid access token>',
+    region: '<your ewelink region>',
+  });
+```
+Using access token and api key
+```js
+  const connection = new ewelink({
+    at: '<valid access token>',
+    apiKey: '<valid api key>',
+    region: '<your ewelink region>',
+  });
+```
 > If you don't know your region, use getRegion method
+
