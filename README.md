@@ -196,9 +196,9 @@ If you don't know your region, use [getRegion](#getregion) method
 ## Available Methods
 Here is the list of available methods.
 
-Remember to instantiate the class before usage.
-
 Also, take a look at the provided demos for [node script](#node-script) and [serverless](#serverless).
+
+*\* Remember to instantiate class before use*
 
 ### Login
 Login into eWeLink API and get auth credentials.
@@ -213,7 +213,6 @@ Usage:
   console.log('api key: ', auth.user.apikey);
   console.log('region: ', auth.region);
 ```
-*\* Remember to instantiate class before use*
 
 ### openWebSocket
 Opens a socket connection to eWeLink and listen for realtime events.
@@ -241,7 +240,7 @@ const socket = await connection.openWebSocket(async data => {
 ```
 Response example
 If everything went well, the first message will have the following format:
-```json
+```js
 {
   error: 0,
   apikey: '12345678-9012-3456-7890-123456789012',
@@ -253,7 +252,7 @@ If everything went well, the first message will have the following format:
 }
 ```
 When a device changes a similar message will be returned:
-```json
+```js
 {
   action: 'update',
   deviceid: '1234567890',
@@ -272,3 +271,133 @@ Notes
 - Because of the nature of a socket connection, the script will keep running until the connection gets closed.
 - openWebSocket will return the socket instance
 - if you need to manually kill the connection, just run socket.close() (where socket is the variable used).
+
+### getDevice
+Return information for specified device.
+
+Usage
+```js
+  /* get specific device information */
+  const device = await connection.getDevice('<your device id>');
+  console.log(device);
+* Remember to instantiate class before use
+```
+
+### getDevices
+Returns a list of devices associated to logged account.
+
+Usage
+```js
+/* get all devices */
+  const devices = await connection.getDevices();
+  console.log(devices);
+* Remember to instantiate class before use
+```
+
+### getDevicePowerState
+Query for specified device power status.
+
+Usage
+```js
+const status = await connection.getDevicePowerState('<your device id>');
+  console.log(status);
+  // multi-channel devices like Sonoff 4CH
+  const status = await connection.getDevicePowerState('<your device id>', <channel>);
+  console.log(status);
+```
+
+Response example
+```js
+  {
+    status: 'ok',
+    state: 'off'
+  }
+```
+
+### setDevicePowerState
+Change specified device power state.
+
+Usage
+```js
+  const status = await connection.setDevicePowerState('<your device id>', 'on');
+  console.log(status);
+  // multi-channel devices like Sonoff 4CH
+  const status = await connection.setDevicePowerState('<your device id>', 'toggle', <channel>);
+  console.log(status);
+```
+Possible states: on, off, toggle.
+
+Response example
+```js
+  {
+    status: 'ok',
+    state: 'on'
+  }
+```
+
+### toggleDevice
+Switch specified device current power state.
+
+Usage
+```js
+  const status = await connection.toggleDevice('<your device id>');
+  console.log(status);
+  // multi-channel devices like Sonoff 4CH
+  const status = await connection.toggleDevice('<your device id>', <channel>);
+  console.log(status);
+```
+
+Response example
+```js
+{
+    status: 'ok',
+    state: 'off'
+  }
+```
+
+### getDevicePowerUsage
+Returns current month power usage on device who supports electricity records, like Sonoff POW.
+
+Usage
+```js
+  const usage = await connection.getDevicePowerUsage('<your device id>');
+  console.log(usage);
+```
+
+Response example
+```js
+{
+  status: 'ok',
+  monthly: 109.78,
+  daily:
+    [
+      { day: 26, usage: 4.19 },
+      { day: 25, usage: 2.11 },
+      { day: 24, usage: 3.74 },
+      { day: 23, usage: 8.23 },
+      { day: 22, usage: 3.16 },
+      { day: 21, usage: 3.95 },
+      { day: 20, usage: 3.38 },
+      { day: 19, usage: 4.56 },
+      { day: 18, usage: 1.51 },
+      { day: 17, usage: 2.4 },
+      { day: 16, usage: 1.5 },
+      { day: 15, usage: 7.28 },
+      { day: 14, usage: 7.44 },
+      { day: 13, usage: 3.21 },
+      { day: 12, usage: 5.5 },
+      { day: 11, usage: 4.43 },
+      { day: 10, usage: 3.15 },
+      { day: 9, usage: 1.33 },
+      { day: 8, usage: 2.9 },
+      { day: 7, usage: 6.03 },
+      { day: 6, usage: 7.48 },
+      { day: 5, usage: 5.94 },
+      { day: 4, usage: 3.64 },
+      { day: 3, usage: 2.39 },
+      { day: 2, usage: 3.10 },
+      { day: 1, usage: 7.23 }
+  ]
+}
+```
+
