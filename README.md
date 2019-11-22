@@ -1,7 +1,6 @@
 # ewelink-api
 > eWeLink API for JavaScript
 
-
 ## Key features
 * can run on browsers, node scripts or serverless environment
 * set on/off devices
@@ -10,33 +9,35 @@
 
 
 ## Contents
-* [Introduction] (#introduction)
-* [Quickstart] (#quickstart)
-* [Class Instantiation] (#class-instantiation)
-* [Demos] (#demos)
-* [node script] (#node-script)
-* [serverless] (#serverless)
-* [Available Methods] (#available-methods)
-  * [login] (#login)
-  * [openWebSocket] (#openwebsocket)
-  * [getDevice] (#getdevice)
-  * [getDevices] (#getdevices)
-  * [getDevicePowerState] (#getdevicepowerstate)
-  * [setDevicePowerState] (#setdevicepowerstate)
-  * [toggleDevice] (#toggleDevice)
-  * [getDevicePowerUsage] (#getdevicepowerusage)
-  * [getDeviceCurrentTH] (#getdevicecurrentth)
-  * [getDeviceCurrentTemperature] (#getdevicecurrenttemperature)
-  * [getDeviceCurrentHumidity] (#getdevicecurrenthumidity)
-  * [getDeviceChannelCount] (#getdevicechannelcount)
-  * [getRegion] (#getregion)
-  * [getFirmwareVersion] (#getfirmwareversion)
-* [Testing] (#testing)
+* [Introduction](#introduction)
+* [Quickstart](#quickstart)
+* [Class Instantiation](#class-instantiation)
+* [Demos](#demos)
+* [node script](#node-script)
+* [serverless](#serverless)
+* [Available Methods](#available-methods)
+  * [login](#login)
+  * [openWebSocket](#openwebsocket)
+  * [getDevice](#getdevice)
+  * [getDevices](#getdevices)
+  * [getDevicePowerState](#getdevicepowerstate)
+  * [setDevicePowerState](#setdevicepowerstate)
+  * [toggleDevice](#toggleDevice)
+  * [getDevicePowerUsage](#getdevicepowerusage)
+  * [getDeviceCurrentTH](#getdevicecurrentth)
+  * [getDeviceCurrentTemperature](#getdevicecurrenttemperature)
+  * [getDeviceCurrentHumidity](#getdevicecurrenthumidity)
+  * [getDeviceChannelCount](#getdevicechannelcount)
+  * [getRegion](#getregion)
+  * [getFirmwareVersion](#getfirmwareversion)
+* [Testing](#testing)
 
+## Introduction
+eWeLink API for JavaScript is a module who let you interact directly with eWeLink API using your regular credentials.
 
+## Getting Started
 
-
-## Installation
+### Installation
 ```sh
  npm install ewelink-api
 ```
@@ -44,9 +45,6 @@ Install a specific branch, eg release 1.10.0:
 ```sh
  npm i skydiver/ewelink-api#release_1.10.0
 ```
-
-## Getting Started
-eWeLink API for JavaScript is a module who let you interact directly with eWeLink API using your regular credentials.
 
 ## Quickstart
 Here is a basic node script to start working with the module:
