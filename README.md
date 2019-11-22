@@ -16,7 +16,8 @@
 * [node script](#node-script)
 * [serverless](#serverless)
 * [Available Methods](#available-methods)
-  * [login](#login)
+  * [getCredentials](#getcredentials)
+  * [login](#login) **DEPRECATED, please use GetCredentials**
   * [openWebSocket](#openwebsocket)
   * [getDevice](#getdevice)
   * [getDevices](#getdevices)
@@ -28,8 +29,7 @@
   * [getDeviceCurrentTemperature](#getdevicecurrenttemperature)
   * [getDeviceCurrentHumidity](#getdevicecurrenthumidity)
   * [getDeviceChannelCount](#getdevicechannelcount)
-  * [getRegion](#getregion) **DEPRECATED, please use GetCredentials**
-  * [GetCredentials](#getcredentials)
+  * [getRegion](#getregion)
   * [getFirmwareVersion](#getfirmwareversion)
 * [Testing](#testing)
 
@@ -134,8 +134,8 @@ So, instead of using email and password on every api call, you can login the fir
 
 > Default region of this library is '**us**'. If your are in a different one, you must specify region parameter or error 400/401 will be returned.
 
-```js
 /* first request: get access token and api key */
+```js
 (async () => {
 
   const connection = new ewelink({
@@ -152,9 +152,8 @@ So, instead of using email and password on every api call, you can login the fir
 
 })();
 ```
-
-```js
 /* second request: use access token to request devices */
+```js
 (async () => {
 
   const newConnection = new ewelink({
@@ -167,9 +166,8 @@ So, instead of using email and password on every api call, you can login the fir
 
 })();
 ```
-
-```js
 /* third request: use access token to request specific device info */
+```js
 (async () => {
 
   const thirdConnection = new ewelink({
@@ -179,11 +177,10 @@ So, instead of using email and password on every api call, you can login the fir
 
   const device = await thirdConnection.getDevice('<your device id>');
   console.log(device);
-```
-
-```js
 })();
+```
 /* fourth request: use access token and api key to toggle specific device info */
+```js
 (async () => {
 
   const anotherNewConnection = new ewelink({
@@ -192,7 +189,6 @@ So, instead of using email and password on every api call, you can login the fir
   });
 
   await anotherNewConnection.toggleDevice('<your device id>');
-
 })();
 ```
 If you don't know your region, use [getRegion](#getregion) method
