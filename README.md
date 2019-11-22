@@ -51,7 +51,7 @@ Here is a basic node script to start working with the module:
 
 > Default region of this library is '**us**'. If your are in a different one, you must specify region parameter or error 400/401 will be returned.
 
-```
+```js
 const ewelink = require('ewelink-api');
 
 /* instantiate class */
@@ -72,7 +72,7 @@ console.log(devices);
 > Default region of this library is us. If your are in a different one, you must specify region parameter or error 400/401 will be returned.
 
 Using email and password
-```
+```js
   const connection = new ewelink({
     email: '<your ewelink email>',
     password: '<your ewelink password>',
@@ -80,7 +80,7 @@ Using email and password
   });
 ```
 Using access token
-```
+```js
   const connection = new ewelink({
     at: '<valid access token>',
     region: '<your ewelink region>',
@@ -94,5 +94,6 @@ Using access token and api key
     region: '<your ewelink region>',
   });
 ```
-> If you don't know your region, use getRegion method
+> If you don't know your region, use [getRegion](#getregion) method
 
+### getRegion
