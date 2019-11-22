@@ -17,7 +17,7 @@
 * [serverless](#serverless)
 * [Available Methods](#available-methods)
   * [getCredentials](#getcredentials)
-  * [login](#login) **DEPRECATED, please use GetCredentials**
+  * [login](#login) **DEPRECATED** please use [getCredentials](#getcredentials)
   * [openWebSocket](#openwebsocket)
   * [getDevice](#getdevice)
   * [getDevices](#getdevices)
@@ -401,3 +401,98 @@ Response example
 }
 ```
 
+### getDeviceCurrentTH
+Return current temperature and humidity for specified device.
+
+Usage
+```js
+  const temphumd = await connection.getDeviceCurrentTH('<your device id>');
+  console.log(temphumd);
+```
+
+Response example
+```js
+  {
+    status: 'ok',
+    temperature: '20',
+    humidity: '76'
+  }
+ ```
+ 
+### getDeviceCurrentTemperature
+Return current temperature for specified device.
+
+Usage
+```js
+  const temperature = await connection.getDeviceCurrentTemperature('<your device id>');
+  console.log(temperature);
+```
+
+Response example
+```js
+  {
+    status: 'ok',
+    temperature: '20'
+  }
+```
+
+### getDeviceCurrentHumidity
+Return current humidity for specified device.
+
+Usage
+```js
+  const humidity = await connection.getDeviceCurrentHumidity('<your device id>');
+  console.log(humidity);
+```
+  
+Response example
+```js
+  {
+    status: 'ok',
+    humidity: '76'
+  }
+```
+
+### getDeviceChannelCount
+Return total channels for specified device.
+
+Usage
+```js
+  const channels = await connection.getDeviceChannelCount('<your device id>');
+  console.log(channels);
+```
+
+### getRegion
+Return logged user region.
+
+This method only works if class is initialized using email and password.
+
+Usage
+```js
+  const region = await connection.getRegion();
+  console.log(region);
+```
+
+Response example
+```js
+{
+    email: 'user@email.com',
+    region: 'us'
+  }
+```
+
+### getFirmwareVersion
+Return firmware version for specified device.
+
+Usage
+```js
+  const firmware = await connection.getFirmwareVersion('<your device id>');
+  console.log(firmware);
+```
+
+## Testing
+Open test/_setup/credentials.json and update parameters.
+
+In a terminal, npm run test or npm run coverage.
+
+> tests needs to be performed serially, so if run jest manually, add --runInBand parameter.
