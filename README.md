@@ -10,10 +10,13 @@
 
 
 ## Installation
-``` sh
+```
  npm install ewelink-api
 ```
+Install a specific branch, eg release 1.10.0:
+```
+npm i skydiver/ewelink-api#release_1.10.0
+```
 
-
-## Usage
-Check docs at https://ewelink-api.now.sh
+## Getting Started
+eWeLink API for JavaScript is a module who let you interact directly with eWeLink API using your regular credentials.
