@@ -28,7 +28,8 @@
   * [getDeviceCurrentTemperature](#getdevicecurrenttemperature)
   * [getDeviceCurrentHumidity](#getdevicecurrenthumidity)
   * [getDeviceChannelCount](#getdevicechannelcount)
-  * [getRegion](#getregion)
+  * [getRegion](#getregion) **DEPRECATED, please use GetCredentials**
+  * [GetCredentials](#getcredentials)
   * [getFirmwareVersion](#getfirmwareversion)
 * [Testing](#testing)
 
@@ -96,4 +97,9 @@ Using access token and api key
 ```
 > If you don't know your region, use [getRegion](#getregion) method
 
-### getRegion
+## Demos
+### node script
+
+
+### serverless
+
