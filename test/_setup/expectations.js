@@ -1,4 +1,4 @@
-const loginExpectations = {
+const credentialsExpectations = {
   at: expect.any(String),
   user: { email: expect.any(String) },
   region: expect.any(String),
@@ -56,7 +56,7 @@ const regionExpectations = {
 };
 
 module.exports = {
-  loginExpectations,
+  credentialsExpectations: credentialsExpectations,
   allDevicesExpectations,
   specificDeviceExpectations,
   rawPowerUsageExpectations,

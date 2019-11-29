@@ -1,7 +1,7 @@
 const rp = require('request-promise');
 
 const { _get } = require('../../lib/helpers');
-const { loginPayload } = require('../../lib/payloads');
+const { credentialsPayload } = require('../../lib/payloads');
 const { makeAuthorizationSign } = require('../../lib/ewelink-helper');
 
 const getCredentialsMixin = {
@@ -11,7 +11,7 @@ const getCredentialsMixin = {
    * @returns {Promise<{msg: string, error: *}>}
    */
   async getCredentials() {
-    const body = loginPayload({
+    const body = credentialsPayload({
       email: this.email,
       password: this.password,
     });

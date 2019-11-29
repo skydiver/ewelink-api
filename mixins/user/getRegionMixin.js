@@ -9,17 +9,17 @@ const getRegionMixin = {
       };
     }
 
-    const login = await this.getCredentials();
+    const credentials = await this.getCredentials();
 
-    const error = _get(login, 'error', false);
+    const error = _get(credentials, 'error', false);
 
     if (error) {
-      return login;
+      return credentials;
     }
 
     return {
-      email: login.user.email,
-      region: login.region,
+      email: credentials.user.email,
+      region: credentials.region,
     };
   },
 };

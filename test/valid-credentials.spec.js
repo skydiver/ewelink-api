@@ -9,7 +9,7 @@ const {
   fourChannelsDevice,
 } = require('./_setup/credentials.json');
 
-const { loginExpectations } = require('./_setup/expectations');
+const { credentialsExpectations } = require('./_setup/expectations');
 
 describe('valid credentials, invalid device', () => {
   beforeEach(async () => {
@@ -103,6 +103,6 @@ describe('valid credentials, wrong region', () => {
     const conn = new ewelink({ email, password, region: 'eu' });
     const credentials = await conn.getCredentials();
     expect(typeof credentials).toBe('object');
-    expect(credentials).toMatchObject(loginExpectations);
+    expect(credentials).toMatchObject(credentialsExpectations);
   });
 });

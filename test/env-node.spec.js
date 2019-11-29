@@ -10,7 +10,7 @@ const {
 } = require('./_setup/credentials.json');
 
 const {
-  loginExpectations,
+  credentialsExpectations,
   allDevicesExpectations,
   specificDeviceExpectations,
 } = require('./_setup/expectations');
@@ -29,7 +29,7 @@ describe('env: node script', () => {
   test('get ewelink credentials', async () => {
     const credentials = await conn.getCredentials();
     expect(typeof credentials).toBe('object');
-    expect(credentials).toMatchObject(loginExpectations);
+    expect(credentials).toMatchObject(credentialsExpectations);
   });
 
   test('get all devices', async () => {

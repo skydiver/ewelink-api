@@ -10,7 +10,7 @@ const {
 } = require('./_setup/credentials.json');
 
 const {
-  loginExpectations,
+  credentialsExpectations,
   allDevicesExpectations,
   specificDeviceExpectations,
 } = require('./_setup/expectations');
@@ -29,7 +29,7 @@ describe('env: serverless', () => {
     accessToken = credentials.at;
     apiKey = credentials.user.apikey;
     expect(typeof credentials).toBe('object');
-    expect(credentials).toMatchObject(loginExpectations);
+    expect(credentials).toMatchObject(credentialsExpectations);
   });
 
   test('get all devices', async () => {
