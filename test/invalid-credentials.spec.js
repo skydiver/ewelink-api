@@ -19,12 +19,12 @@ describe('invalid credentials', () => {
     expect(conn.error).toBe('No credentials provided');
   });
 
-  test('get error response on api login', async () => {
+  test('get error response on ewelink credentials', async () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
-    const login = await conn.login();
-    expect(typeof login).toBe('object');
-    expect(login.msg).toBe('Authentication error');
-    expect(login.error).toBe(400);
+    const credentials = await conn.getCredentials();
+    expect(typeof credentials).toBe('object');
+    expect(credentials.msg).toBe('Authentication error');
+    expect(credentials.error).toBe(400);
   });
 
   test('get error response on all devices', async () => {

@@ -26,10 +26,10 @@ describe('env: node script', () => {
     await delay(1000);
   });
 
-  test('login into ewelink', async () => {
-    const login = await conn.login();
-    expect(typeof login).toBe('object');
-    expect(login).toMatchObject(loginExpectations);
+  test('get ewelink credentials', async () => {
+    const credentials = await conn.getCredentials();
+    expect(typeof credentials).toBe('object');
+    expect(credentials).toMatchObject(loginExpectations);
   });
 
   test('get all devices', async () => {

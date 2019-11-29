@@ -23,13 +23,13 @@ describe('env: serverless', () => {
     await delay(1000);
   });
 
-  test('login into ewelink', async () => {
+  test('get ewelink credentials', async () => {
     const conn = new ewelink({ email, password });
-    const login = await conn.login();
-    accessToken = login.at;
-    apiKey = login.user.apikey;
-    expect(typeof login).toBe('object');
-    expect(login).toMatchObject(loginExpectations);
+    const credentials = await conn.getCredentials();
+    accessToken = credentials.at;
+    apiKey = credentials.user.apikey;
+    expect(typeof credentials).toBe('object');
+    expect(credentials).toMatchObject(loginExpectations);
   });
 
   test('get all devices', async () => {

@@ -15,7 +15,7 @@ describe('current temperature and humidity: node script', () => {
 
   beforeAll(async () => {
     conn = new ewelink({ email, password });
-    await conn.login();
+    await conn.getCredentials();
   });
 
   beforeEach(async () => {
@@ -57,9 +57,9 @@ describe('current temperature and humidity: serverless', () => {
 
   beforeAll(async () => {
     const conn = new ewelink({ email, password });
-    const login = await conn.login();
-    accessToken = login.at;
-    apiKey = login.user.apikey;
+    const credentials = await conn.getCredentials();
+    accessToken = credentials.at;
+    apiKey = credentials.user.apikey;
   });
 
   beforeEach(async () => {

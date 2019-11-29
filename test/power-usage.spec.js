@@ -18,7 +18,7 @@ describe('power usage: node script', () => {
 
   beforeAll(async () => {
     conn = new ewelink({ email, password });
-    await conn.login();
+    await conn.getCredentials();
   });
 
   beforeEach(async () => {
@@ -49,9 +49,9 @@ describe('power usage: serverless', () => {
 
   beforeAll(async () => {
     const conn = new ewelink({ email, password });
-    const login = await conn.login();
-    accessToken = login.at;
-    apiKey = login.user.apikey;
+    const credentials = await conn.getCredentials();
+    accessToken = credentials.at;
+    apiKey = credentials.user.apikey;
   });
 
   test('should return raw power usage', async () => {

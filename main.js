@@ -56,7 +56,7 @@ class eWeLink {
     const { at } = this;
 
     if (!at) {
-      await this.login();
+      await this.getCredentials();
     }
 
     let apiUrl = this.getApiUrl();

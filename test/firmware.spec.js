@@ -27,8 +27,8 @@ describe.skip('firmware: get version methods', () => {
   });
 
   test('get device firmware version should be right message', async () => {
-    const login = await connection.login();
-    const accessToken = login.at;
+    const credentials = await connection.getCredentials();
+    const accessToken = credentials.at;
     const conn = new ewelink({ at: accessToken });
     const device = await conn.getDevice(singleChannelDeviceId);
     const currentVersion = device.params.fwVersion;

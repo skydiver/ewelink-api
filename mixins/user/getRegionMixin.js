@@ -9,7 +9,7 @@ const getRegionMixin = {
       };
     }
 
-    const login = await this.login();
+    const login = await this.getCredentials();
 
     const error = _get(login, 'error', false);
 
