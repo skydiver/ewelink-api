@@ -10,7 +10,7 @@ const {
 } = require('./_setup/credentials.json');
 
 const {
-  loginExpectations,
+  credentialsExpectations,
   allDevicesExpectations,
   specificDeviceExpectations,
 } = require('./_setup/expectations');
@@ -23,13 +23,13 @@ describe('env: serverless', () => {
     await delay(1000);
   });
 
-  test('login into ewelink', async () => {
+  test('get ewelink credentials', async () => {
     const conn = new ewelink({ email, password });
-    const login = await conn.login();
-    accessToken = login.at;
-    apiKey = login.user.apikey;
-    expect(typeof login).toBe('object');
-    expect(login).toMatchObject(loginExpectations);
+    const credentials = await conn.getCredentials();
+    accessToken = credentials.at;
+    apiKey = credentials.user.apikey;
+    expect(typeof credentials).toBe('object');
+    expect(credentials).toMatchObject(credentialsExpectations);
   });
 
   test('get all devices', async () => {
@@ -59,7 +59,6 @@ describe('env: serverless', () => {
 
   test('set device power state', async () => {
     jest.setTimeout(30000);
-    await delay(3000);
     const conn = new ewelink({ at: accessToken, apiKey });
     const device = await conn.getDevice(singleChannelDeviceId);
     const currentState = device.params.switch;
@@ -78,7 +77,6 @@ describe('env: serverless', () => {
 
   test('toggle device power state', async () => {
     jest.setTimeout(30000);
-    await delay(3000);
     const conn = new ewelink({ at: accessToken, apiKey });
     const device = await conn.getDevice(singleChannelDeviceId);
     const currentState = device.params.switch;

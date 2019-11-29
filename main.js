@@ -2,10 +2,6 @@ const rp = require('request-promise');
 
 const { _get } = require('./lib/helpers');
 
-const { makeAuthorizationSign } = require('./lib/ewelink-helper');
-
-const payloads = require('./lib/payloads');
-
 class eWeLink {
   constructor({ region = 'us', email, password, at, apiKey }) {
     if (!at && (!email && !password)) {
@@ -60,7 +56,7 @@ class eWeLink {
     const { at } = this;
 
     if (!at) {
-      await this.login();
+      await this.getCredentials();
     }
 
     let apiUrl = this.getApiUrl();
@@ -85,48 +81,11 @@ class eWeLink {
 
     return response;
   }
-
-  /**
-   * Helper to login into eWeLink API
-   *
-   * @returns {Promise<{msg: string, error: *}>}
-   */
-  async login() {
-    const body = payloads.loginPayload({
-      email: this.email,
-      password: this.password,
-    });
-
-    let response = await rp({
-      method: 'POST',
-      uri: `${this.getApiUrl()}/user/login`,
-      headers: { Authorization: `Sign ${makeAuthorizationSign(body)}` },
-      body,
-      json: true,
-    });
-
-    const error = _get(response, 'error', false);
-    const region = _get(response, 'region', false);
-
-    if (error && [400, 401, 404].indexOf(parseInt(error)) !== -1) {
-      return { error, msg: 'Authentication error' };
-    }
-
-    if (error && parseInt(error) === 301 && region) {
-      if (this.region !== region) {
-        this.region = region;
-        response = await this.login();
-        return response;
-      }
-      return { error, msg: 'Region does not exist' };
-    }
-
-    this.apiKey = _get(response, 'user.apikey', '');
-    this.at = _get(response, 'at', '');
-    return response;
-  }
-
 }
+
+/* LOAD MIXINS: user */
+const getCredentialsMixin = require('./mixins/user/getCredentialsMixin');
+const getRegionMixin = require('./mixins/user/getRegionMixin');
 
 /* LOAD MIXINS: power state */
 const getDevicePowerStateMixin = require('./mixins/powerState/getDevicePowerStateMixin');
@@ -150,11 +109,10 @@ const getFirmwareVersionMixin = require('./mixins/firmware/getFirmwareVersionMix
 const checkDeviceUpdateMixin = require('./mixins/firmware/checkDeviceUpdateMixin');
 const checkDevicesUpdatesMixin = require('./mixins/firmware/checkDevicesUpdatesMixin');
 
-/* LOAD MIXINS: user */
-const regionMixin = require('./mixins/user/regionMixin');
-
 /* LOAD MIXINS: websocket */
 const openWebSocketMixin = require('./mixins/websocket/openWebSocketMixin');
+
+Object.assign(eWeLink.prototype, getCredentialsMixin, getRegionMixin);
 
 Object.assign(
   eWeLink.prototype,
@@ -184,8 +142,6 @@ Object.assign(
   checkDeviceUpdateMixin,
   checkDevicesUpdatesMixin
 );
-
-Object.assign(eWeLink.prototype, regionMixin);
 
 Object.assign(eWeLink.prototype, openWebSocketMixin);
 
