@@ -2,34 +2,19 @@ const fs = require('fs');
 const arpping = require('arpping')({});
 
 class Zeroconf {
-  constructor(config = {}) {
-    const { ip, arpTableFile } = config;
-    this.localIp = ip;
-    this.defaultArpTableFile = arpTableFile || './arp-table.json';
-  }
-
-  /**
-   * Initialize internal ARP table if needed
-   * @returns {Promise<void>}
-   */
-  async initialize() {
-    if (!this.arpTable) {
-      await this.getArpTable();
-    }
-  }
-
   /**
    * Build the ARP table
+   * @param ip
    * @returns {Promise<unknown>}
    */
-  getArpTable() {
+  static getArpTable(ip = null) {
     return new Promise((resolve, reject) => {
-      arpping.discover(this.localIp, (err, hosts) => {
+      arpping.discover(ip, (err, hosts) => {
         if (err) {
-          reject(err);
+          return reject(err);
         }
-        this.fixMacAddresses(hosts);
-        resolve(this.arpTable);
+        const arpTable = Zeroconf.fixMacAddresses(hosts);
+        return resolve(arpTable);
       });
     });
   }
@@ -38,8 +23,8 @@ class Zeroconf {
    * Sometime arp command returns mac addresses without leading zeroes.
    * @param hosts
    */
-  fixMacAddresses(hosts) {
-    this.arpTable = hosts.map(host => {
+  static fixMacAddresses(hosts) {
+    return hosts.map(host => {
       const octets = host.mac.split(':');
 
       const fixedMac = octets.map(octet => {
@@ -58,12 +43,14 @@ class Zeroconf {
 
   /**
    * Save ARP table to local file
+   * @param config
    * @returns {Promise<void>}
    */
-  async saveArpTable() {
-    await this.initialize();
-    const fileName = this.defaultArpTableFile;
-    const jsonContent = JSON.stringify(this.arpTable, null, 2);
+  static async saveArpTable(config = {}) {
+    const ip = config.ip || null;
+    const fileName = config.fileName || './arp-table.json';
+    const arpTable = await Zeroconf.getArpTable(ip);
+    const jsonContent = JSON.stringify(arpTable, null, 2);
     await fs.writeFile(fileName, jsonContent, 'utf8', function(err) {
       if (err) {
         return err;
