@@ -64,13 +64,23 @@ class Zeroconf {
   }
 
   /**
-   * Load local ARP table file into memory
-   * @returns {Promise<void>}
+   * Read ARP table file
+   * @param fileName
+   * @returns {Promise<any>}
    */
-  async loadArpTable() {
-    const fileName = this.defaultArpTableFile;
+  static async loadArpTable(fileName = './arp-table.json') {
     const jsonContent = await fs.readFileSync(fileName);
-    this.arpTable = JSON.parse(jsonContent);
+    return JSON.parse(jsonContent);
+  }
+
+  /**
+   * Read devices cache file
+   * @param fileName
+   * @returns {Promise<any>}
+   */
+  static async loadCachedDevices(fileName = './devices-cache.json') {
+    const jsonContent = await fs.readFileSync(fileName);
+    return JSON.parse(jsonContent);
   }
 }
 
