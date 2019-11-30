@@ -1,7 +1,7 @@
 const fs = require('fs');
 const arpping = require('arpping')({});
 
-class arpTableSolver {
+class Zeroconf {
   constructor(config = {}) {
     const { ip, arpTableFile } = config;
     this.localIp = ip;
@@ -74,4 +74,4 @@ class arpTableSolver {
   }
 }
 
-module.exports = arpTableSolver;
+module.exports = Zeroconf;
