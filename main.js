@@ -3,8 +3,16 @@ const rp = require('request-promise');
 const { _get } = require('./lib/helpers');
 
 class eWeLink {
-  constructor({ region = 'us', email, password, at, apiKey }) {
-    if (!at && (!email && !password)) {
+  constructor({
+    region = 'us',
+    email,
+    password,
+    at,
+    apiKey,
+    devicesCache,
+    arpTable,
+  }) {
+    if (!devicesCache && !arpTable && !at && (!email && !password)) {
       return { error: 'No credentials provided' };
     }
 
@@ -13,6 +21,8 @@ class eWeLink {
     this.password = password;
     this.at = at;
     this.apiKey = apiKey;
+    this.devicesCache = devicesCache;
+    this.arpTable = arpTable;
   }
 
   /**
@@ -39,6 +49,16 @@ class eWeLink {
    */
   getApiWebSocket() {
     return `wss://${this.region}-pconnect3.coolkit.cc:8080/api/ws`;
+  }
+
+  /**
+   * Generate Zeroconf URL
+   * @param device
+   * @returns {string}
+   */
+  getZeroconfUrl(device) {
+    const ip = this.getLocalIp(device);
+    return `http://${ip}:8081/zeroconf/switches`;
   }
 
   /**
@@ -103,6 +123,8 @@ const getTHMixin = require('./mixins/temphumd/getTHMixin');
 const getDevicesMixin = require('./mixins/devices/getDevicesMixin');
 const getDeviceMixin = require('./mixins/devices/getDeviceMixin');
 const getDeviceChannelCountMixin = require('./mixins/devices/getDeviceChannelCountMixin');
+const getLocalIpMixin = require('./mixins/devices/getLocalIpMixin');
+const saveDevicesCacheMixin = require('./mixins/devices/saveDevicesCacheMixin');
 
 /* LOAD MIXINS: firmware */
 const getFirmwareVersionMixin = require('./mixins/firmware/getFirmwareVersionMixin');
@@ -133,7 +155,9 @@ Object.assign(
   eWeLink.prototype,
   getDevicesMixin,
   getDeviceMixin,
-  getDeviceChannelCountMixin
+  getDeviceChannelCountMixin,
+  getLocalIpMixin,
+  saveDevicesCacheMixin
 );
 
 Object.assign(

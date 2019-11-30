@@ -5,7 +5,7 @@ const getLocalIpMixin = {
    * @param device
    * @returns {Promise<string>}
    */
-  async getLocalIp(device) {
+  getLocalIp(device) {
     const mac = device.extra.extra.staMac;
     const arpItem = this.arpTable.find(
       item => item.mac.toLowerCase() === mac.toLowerCase()
