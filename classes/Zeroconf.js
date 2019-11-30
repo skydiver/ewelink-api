@@ -28,9 +28,31 @@ class Zeroconf {
         if (err) {
           reject(err);
         }
-        this.arpTable = hosts;
-        resolve(hosts);
+        this.fixMacAddresses(hosts);
+        resolve(this.arpTable);
       });
+    });
+  }
+
+  /**
+   * Sometime arp command returns mac addresses without leading zeroes.
+   * @param hosts
+   */
+  fixMacAddresses(hosts) {
+    this.arpTable = hosts.map(host => {
+      const octets = host.mac.split(':');
+
+      const fixedMac = octets.map(octet => {
+        if (octet.length === 1) {
+          return `0${octet}`;
+        }
+        return octet;
+      });
+
+      return {
+        ip: host.ip,
+        mac: fixedMac.join(':'),
+      };
     });
   }
 
