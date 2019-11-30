@@ -35,20 +35,6 @@ class Zeroconf {
   }
 
   /**
-   * Get IP address from a given MAC
-   * @param mac
-   * @returns {Promise<{error: string}|NodePath<Node>|*|number|bigint>}
-   */
-  async getIp(mac) {
-    await this.initialize();
-    const found = this.arpTable.find(item => item.mac.toLowerCase() === mac);
-    if (!found) {
-      return { error: 'No ip address found' };
-    }
-    return found;
-  }
-
-  /**
    * Save ARP table to local file
    * @returns {Promise<void>}
    */
