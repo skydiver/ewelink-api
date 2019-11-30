@@ -5,10 +5,13 @@ const payloads = require('../../lib/payloads');
 const { _get } = require('../../lib/helpers');
 
 class ChangeStateZeroconf extends WebSocket {
-  static async set({ url, device, params, state }) {
+  static async set({ url, device, params, switches, state }) {
     const selfApikey = device.apikey;
     const deviceId = device.deviceid;
     const deviceKey = device.devicekey;
+
+    const endpoint = switches ? 'switches' : 'switch';
+    const localUrl = `${url}/${endpoint}`;
 
     const body = payloads.zeroConfUpdatePayload(
       selfApikey,
@@ -19,7 +22,7 @@ class ChangeStateZeroconf extends WebSocket {
 
     const response = await rp({
       method: 'POST',
-      uri: url,
+      uri: localUrl,
       body,
       json: true,
     });

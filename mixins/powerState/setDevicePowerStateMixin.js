@@ -57,11 +57,11 @@ const setDevicePowerState = {
     }
 
     if (this.devicesCache) {
-      const url = this.getZeroconfUrl(device);
       return ChangeStateZeroconf.set({
-        url,
+        url: this.getZeroconfUrl(device),
         device,
         params,
+        switches,
         state: stateToSwitch,
       });
     }

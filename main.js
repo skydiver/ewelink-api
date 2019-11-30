@@ -58,7 +58,7 @@ class eWeLink {
    */
   getZeroconfUrl(device) {
     const ip = this.getLocalIp(device);
-    return `http://${ip}:8081/zeroconf/switches`;
+    return `http://${ip}:8081/zeroconf`;
   }
 
   /**
