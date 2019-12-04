@@ -44,18 +44,19 @@ class Zeroconf {
   /**
    * Save ARP table to local file
    * @param config
-   * @returns {Promise<void>}
+   * @returns {Promise<{error: string}|{file: {request: string; resolved: string} | any | string | string, status: string}>}
    */
   static async saveArpTable(config = {}) {
     const ip = config.ip || null;
-    const fileName = config.fileName || './arp-table.json';
+    const fileName = config.file || './arp-table.json';
     const arpTable = await Zeroconf.getArpTable(ip);
     const jsonContent = JSON.stringify(arpTable, null, 2);
-    await fs.writeFile(fileName, jsonContent, 'utf8', function(err) {
-      if (err) {
-        return err;
-      }
-    });
+    try {
+      fs.writeFileSync(fileName, jsonContent, 'utf8');
+      return { status: 'ok', file: fileName };
+    } catch (e) {
+      return { error: e.toString() };
+    }
   }
 
   /**
@@ -71,11 +72,15 @@ class Zeroconf {
   /**
    * Read devices cache file
    * @param fileName
-   * @returns {Promise<any>}
+   * @returns {Promise<{error: string}>}
    */
   static async loadCachedDevices(fileName = './devices-cache.json') {
-    const jsonContent = await fs.readFileSync(fileName);
-    return JSON.parse(jsonContent);
+    try {
+      const jsonContent = await fs.readFileSync(fileName);
+      return JSON.parse(jsonContent);
+    } catch (e) {
+      return { error: e.toString() };
+    }
   }
 }
 
