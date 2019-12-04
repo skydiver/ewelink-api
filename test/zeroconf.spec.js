@@ -97,3 +97,24 @@ describe('zeroconf: load devices to cache file', () => {
     expect(devicesCache.error).toContain('ENOENT: no such file or directory');
   });
 });
+
+describe('zeroconf: load arp table file', () => {
+  test('can load arp table file', async () => {
+    const arpTable = await Zeroconf.loadArpTable(
+      './test/_setup/arp-table.json'
+    );
+    expect(typeof arpTable).toBe('object');
+    expect(arpTable[0]).toMatchObject({
+      ip: expect.any(String),
+      mac: expect.any(String),
+    });
+  });
+
+  test('error trying to load invalidcached devices file', async () => {
+    const arpTable = await Zeroconf.loadArpTable(
+      '/tmp/non-existent-folder/arp-table.json'
+    );
+    expect(typeof arpTable).toBe('object');
+    expect(arpTable.error).toContain('ENOENT: no such file or directory');
+  });
+});
