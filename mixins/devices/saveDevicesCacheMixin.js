@@ -24,7 +24,7 @@ const saveDevicesCacheMixin = {
       return { status: 'ok', file: fileName };
     } catch (e) {
       console.log('An error occured while writing JSON Object to File.');
-      return e.toString();
+      return { error: e.toString() };
     }
   },
 };

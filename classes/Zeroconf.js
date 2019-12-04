@@ -49,9 +49,9 @@ class Zeroconf {
   static async saveArpTable(config = {}) {
     const ip = config.ip || null;
     const fileName = config.file || './arp-table.json';
-    const arpTable = await Zeroconf.getArpTable(ip);
-    const jsonContent = JSON.stringify(arpTable, null, 2);
     try {
+      const arpTable = await Zeroconf.getArpTable(ip);
+      const jsonContent = JSON.stringify(arpTable, null, 2);
       fs.writeFileSync(fileName, jsonContent, 'utf8');
       return { status: 'ok', file: fileName };
     } catch (e) {
@@ -62,11 +62,15 @@ class Zeroconf {
   /**
    * Read ARP table file
    * @param fileName
-   * @returns {Promise<any>}
+   * @returns {Promise<{error: string}|any>}
    */
   static async loadArpTable(fileName = './arp-table.json') {
-    const jsonContent = await fs.readFileSync(fileName);
-    return JSON.parse(jsonContent);
+    try {
+      const jsonContent = await fs.readFileSync(fileName);
+      return JSON.parse(jsonContent);
+    } catch (e) {
+      return { error: e.toString() };
+    }
   }
 
   /**
