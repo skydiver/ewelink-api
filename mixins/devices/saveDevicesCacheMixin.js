@@ -12,12 +12,6 @@ const saveDevicesCacheMixin = {
 
     const error = _get(devices, 'error', false);
 
-    if (error === 406) {
-      const errorResponse = { error: 401, msg: 'Authentication error' };
-      console.log(errorResponse);
-      return errorResponse;
-    }
-
     if (error || !devices) {
       console.log(devices);
       return devices;
@@ -27,6 +21,7 @@ const saveDevicesCacheMixin = {
 
     try {
       fs.writeFileSync(fileName, jsonContent, 'utf8');
+      return { status: 'ok', file: fileName };
     } catch (e) {
       console.log('An error occured while writing JSON Object to File.');
       return e.toString();
