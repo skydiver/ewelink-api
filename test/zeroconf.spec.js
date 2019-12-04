@@ -1,7 +1,13 @@
 const ewelink = require('../main');
 const Zeroconf = require('../classes/Zeroconf');
 
-const { email, password, region } = require('./_setup/credentials.json');
+const {
+  email,
+  password,
+  region,
+  localIp,
+  localIpInvalid,
+} = require('./_setup/credentials.json');
 
 const { allDevicesExpectations } = require('./_setup/expectations');
 
@@ -21,7 +27,8 @@ describe('zeroconf: save devices to cache file', () => {
     const file = '/tmp/non-existent-folder/devices-cache.json';
     const conn = new ewelink({ region, email, password });
     const result = await conn.saveDevicesCache(file);
-    expect(result).toContain('ENOENT: no such file or directory');
+    expect(typeof result).toBe('object');
+    expect(result.error).toContain('ENOENT: no such file or directory');
   });
 
   test('invalid credentials trying to create cached devices file', async () => {
@@ -31,6 +38,42 @@ describe('zeroconf: save devices to cache file', () => {
     expect(typeof result).toBe('object');
     expect(result.msg).toBe('Authentication error');
     expect(result.error).toBe(401);
+  });
+});
+
+describe('zeroconf: save arp table to file', () => {
+  test('can save arp table file', async () => {
+    jest.setTimeout(30000);
+    const file = './test/_setup/arp-table.json';
+    const arpTable = await Zeroconf.saveArpTable({
+      ip: localIp,
+      file,
+    });
+    expect(typeof arpTable).toBe('object');
+    expect(arpTable.status).toBe('ok');
+    expect(arpTable.file).toBe(file);
+  });
+
+  test('error saving arp table file', async () => {
+    jest.setTimeout(30000);
+    const file = '/tmp/non-existent-folder/arp-table.json';
+    const arpTable = await Zeroconf.saveArpTable({
+      ip: localIp,
+      file,
+    });
+    expect(typeof arpTable).toBe('object');
+    expect(arpTable.error).toContain('ENOENT: no such file or directory');
+  });
+
+  test('error saving arp table file with invalid local network', async () => {
+    jest.setTimeout(30000);
+    const file = './test/_setup/arp-table.json';
+    const arpTable = await Zeroconf.saveArpTable({
+      ip: localIpInvalid,
+      file,
+    });
+    expect(typeof arpTable).toBe('object');
+    expect(arpTable.error).toBe('Error: range must not be empty');
   });
 });
 
