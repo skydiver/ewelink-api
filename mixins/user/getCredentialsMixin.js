@@ -44,16 +44,6 @@ const getCredentialsMixin = {
     this.at = _get(response, 'at', '');
     return response;
   },
-
-  /**
-   * DEPRECATED: keept for backward compatibility
-   * Will be removed on version 2.0
-   *
-   * @returns {Promise<{msg: string, error: *}>}
-   */
-  async login() {
-    return this.getCredentials();
-  },
 };
 
 module.exports = getCredentialsMixin;
