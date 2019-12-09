@@ -7,7 +7,7 @@ const {
   region,
   localIp,
   localIpInvalid,
-} = require('./_setup/credentials.json');
+} = require('./_setup/credentials.js');
 
 const { allDevicesExpectations } = require('./_setup/expectations');
 

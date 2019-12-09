@@ -7,7 +7,7 @@ const {
   password,
   singleChannelDeviceId,
   fourChannelsDevice,
-} = require('./_setup/credentials.json');
+} = require('./_setup/credentials.js');
 
 const {
   credentialsExpectations,
