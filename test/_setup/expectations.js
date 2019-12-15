@@ -56,7 +56,7 @@ const regionExpectations = {
 };
 
 module.exports = {
-  credentialsExpectations: credentialsExpectations,
+  credentialsExpectations,
   allDevicesExpectations,
   specificDeviceExpectations,
   rawPowerUsageExpectations,

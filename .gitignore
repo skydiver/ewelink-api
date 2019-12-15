@@ -94,3 +94,5 @@ typings/
 
 demo.js
 arp-table.json
+devices-cache.json
+test/_setup/credentials.js

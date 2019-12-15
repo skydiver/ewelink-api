@@ -1,6 +1,6 @@
 const ewelink = require('../main');
 
-const { email, password, region } = require('./_setup/credentials.json');
+const { email, password, region } = require('./_setup/credentials.js');
 
 const { regionExpectations } = require('./_setup/expectations');
 

@@ -1,7 +1,10 @@
 const { _get } = require('../../lib/helpers');
 
 const { getDeviceChannelCount } = require('../../lib/ewelink-helper');
-const { ChangeState } = require('../../classes/PowerState');
+const {
+  ChangeState,
+  ChangeStateZeroconf,
+} = require('../../classes/PowerState');
 
 const setDevicePowerState = {
   /**
@@ -51,6 +54,16 @@ const setDevicePowerState = {
       params.switches[channel - 1].switch = stateToSwitch;
     } else {
       params.switch = stateToSwitch;
+    }
+
+    if (this.devicesCache) {
+      return ChangeStateZeroconf.set({
+        url: this.getZeroconfUrl(device),
+        device,
+        params,
+        switches,
+        state: stateToSwitch,
+      });
     }
 
     const actionParams = {

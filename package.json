@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "arpping": "github:skydiver/arpping",
+    "crypto-js": "^3.1.9-1",
     "delay": "^4.3.0",
     "nonce": "^1.0.4",
     "random": "^2.1.1",
