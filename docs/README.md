@@ -22,4 +22,5 @@
   * [getDeviceChannelCount](available-methods/getdevicechannelcount.md)
   * [getRegion](available-methods/getregion.md)
   * [getFirmwareVersion](available-methods/getfirmwareversion.md)
+* [Zeroconf (LAN mode)](zeroconf.md)
 * [Testing](testing.md)
