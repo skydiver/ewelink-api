@@ -7,13 +7,14 @@
 * set on/off devices
 * get power consumption on devices like Sonoff POW
 * listen for devices events
+* using zeroconf (LAN mode), no internet connection required
 
 
 ## Installation
-``` sh
+```sh
  npm install ewelink-api
 ```
 
 
 ## Usage
-Check docs at https://ewelink-api.now.sh
+Check library documentation and examples at https://github.com/skydiver/ewelink-api/docs
