@@ -8,7 +8,6 @@
   * [serverless](demos/serverless.md)
 * [Available Methods](available-methods/README.md)
   * [getCredentials](available-methods/getcredentials.md)
-  * [login](available-methods/login.md)
   * [openWebSocket](available-methods/openwebsocket.md)
   * [getDevice](available-methods/getdevice.md)
   * [getDevices](available-methods/getdevices.md)
@@ -22,5 +21,7 @@
   * [getDeviceChannelCount](available-methods/getdevicechannelcount.md)
   * [getRegion](available-methods/getregion.md)
   * [getFirmwareVersion](available-methods/getfirmwareversion.md)
+  * [saveDevicesCache](available-methods/savedevicescache.md)
+  * [login](available-methods/login.md) <sup>_*deprecated_</sup>
 * [Zeroconf (LAN mode)](zeroconf.md)
 * [Testing](testing.md)

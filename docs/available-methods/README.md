@@ -3,7 +3,6 @@
 Here is the list of available methods.
 
 * [getCredentials](getcredentials.md)
-* [login](login.md)
 * [openWebSocket](openwebsocket.md)
 * [getDevice](getdevice.md)
 * [getDevices](getdevices.md)
@@ -17,6 +16,8 @@ Here is the list of available methods.
 * [getDeviceChannelCount](getdevicechannelcount.md)
 * [getRegion](getregion.md)
 * [getFirmwareVersion](getfirmwareversion.md)
+* [saveDevicesCache](savedevicescache.md)
+* [login](login.md) <sup>_*deprecated_</sup>
 
 Remember to instantiate class before usage.
 
