@@ -1,7 +1,5 @@
 # Zeroconf (LAN mode)
 
-⚠️⚠️⚠️ ARTICLE UNDER CONSTRUCTION ⚠️⚠️⚠️
-
 > Zeroconf only works if you're connected to the same network of the device you wanna control.
 
 
