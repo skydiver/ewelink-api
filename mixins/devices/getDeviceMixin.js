@@ -9,6 +9,10 @@ const getDeviceMixin = {
    * @returns {Promise<{msg: string, error: *}>}
    */
   async getDevice(deviceId) {
+    if (this.devicesCache) {
+      return this.devicesCache.find(dev => dev.deviceid === deviceId) || null;
+    }
+
     const devices = await this.getDevices();
 
     const error = _get(devices, 'error', false);
