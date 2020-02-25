@@ -27,4 +27,4 @@ const ewelink = require('ewelink-api');
 })();
 ```
 
-> If you don't know your region, use [getRegion](/docs/available-methods/getregion) method
+> If you don't know your region, use [getRegion](/docs/available-methods/getregion.md) method
