@@ -16,7 +16,7 @@ const setDevicePowerState = {
    *
    * @returns {Promise<{state: *, status: string}|{msg: string, error: *}>}
    */
-  async setDevicePowerState(deviceId, state, channel = 1, extraParams = {}) {
+  async setDevicePowerState(deviceId, state, channel = 1, customParams = {}) {
     const device = await this.getDevice(deviceId);
     const deviceApiKey = _get(device, 'apikey', false);
     const error = _get(device, 'error', false);
@@ -58,9 +58,8 @@ const setDevicePowerState = {
 
     if (state === 'custom') {
       delete params.switch;
+      Object.assign(params, customParams);
     }
-
-    Object.assign(params, extraParams);
 
     if (this.devicesCache) {
       return ChangeStateZeroconf.set({

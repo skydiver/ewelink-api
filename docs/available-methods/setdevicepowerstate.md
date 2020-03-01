@@ -16,7 +16,7 @@ Change specified device power state.
 ```
 
 ```js
-  // custom params, e.g. when setting brightness or color temperature on LED bulb
+  // custom params, e.g. when setting LED bulb brightness or color temperature
   // (to find out the correct params, open a websocket connection, log the data,
   // make a change in the app and observe the sent payload)
   const status = await connection.setDevicePowerState('<your device id>', 'custom', <channel>, {
