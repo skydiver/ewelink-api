@@ -1,6 +1,4 @@
-const {
-    _get
-} = require('../../lib/helpers');
+const { _get } = require('../../lib/helpers');
 
 const {
     getDeviceChannelCount
@@ -44,20 +42,14 @@ const setDevicePowerState = {
             const switchesAmount = getDeviceChannelCount(uiid);
 
             if (switchesAmount > 0 && switchesAmount < channel) {
-                return {
-                    error,
-                    msg: 'Device channel does not exist'
-                };
+                return { error, msg: 'Device channel does not exist' };
             }
 
             if (error || (!status && !switches)) {
                 if (error && parseInt(error) === 401) {
                     return device;
                 }
-                return {
-                    error,
-                    msg: 'Device does not exist'
-                };
+                return { error, msg: 'Device does not exist' };
             }
 
             let stateToSwitch = state;
@@ -84,7 +76,7 @@ const setDevicePowerState = {
                 device,
                 params,
                 switches,
-                state: typeof stateToSwitch != 'undefined' ? stateToSwitch : '',
+                state: stateToSwitch || '',
             });
         }
 
@@ -94,7 +86,7 @@ const setDevicePowerState = {
             apiKey: this.apiKey,
             deviceId,
             params,
-            state: typeof stateToSwitch != 'undefined' ? stateToSwitch : '',
+            state: stateToSwitch || '',
         };
 
         if (this.apiKey !== deviceApiKey) {
