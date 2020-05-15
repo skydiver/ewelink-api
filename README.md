@@ -17,4 +17,4 @@
 
 
 ## Usage
-Check library documentation and examples at https://github.com/skydiver/ewelink-api/docs
+Check library documentation and examples at https://github.com/skydiver/ewelink-api/tree/master/docs
