@@ -1,4 +1,4 @@
-const { makeFakeIMEI } = require('../../lib/ewelink-helper');
+const { APP_ID } = require('../../lib/constants');
 const { _get } = require('../../lib/helpers');
 
 const getDevicesMixin = {
@@ -15,15 +15,10 @@ const getDevicesMixin = {
       uri: '/user/device',
       qs: {
         lang: 'en',
-        getTags: 1,
-        version: 6,
+        appid: APP_ID,
         ts,
-        appid: 'YzfeftUVcZ6twZw1OoVKPRFYTrGEg01Q',
-        imei: makeFakeIMEI(),
-        os: 'android',
-        model: '',
-        romVersion: '',
-        appVersion: '3.12.0',
+        version: 8,
+        getTags: 1,
       },
     });
 
