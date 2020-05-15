@@ -12,7 +12,7 @@ class eWeLink {
     devicesCache,
     arpTable,
   }) {
-    if (!devicesCache && !arpTable && !at && (!email && !password)) {
+    if (!devicesCache && !arpTable && !at && !email && !password) {
       return { error: 'No credentials provided' };
     }
 
