@@ -2,7 +2,7 @@ const { _get } = require('../../lib/helpers');
 
 const { CurrentMonth } = require('../../classes/PowerUsage');
 
-const getDevicePowerUsageMixin = {
+module.exports = {
   /**
    * Get device power usage for current month
    *
@@ -11,7 +11,7 @@ const getDevicePowerUsageMixin = {
    * @returns {Promise<{error: string}|{daily: *, monthly: *}>}
    */
   async getDevicePowerUsage(deviceId) {
-    const response = await this.getDeviceRawPowerUsage(deviceId);
+    const response = await this.getDevicePowerUsageRaw(deviceId);
 
     const error = _get(response, 'error', false);
     const hundredDaysKwhData = _get(response, 'data.hundredDaysKwhData', false);
@@ -26,5 +26,3 @@ const getDevicePowerUsageMixin = {
     };
   },
 };
-
-module.exports = getDevicePowerUsageMixin;

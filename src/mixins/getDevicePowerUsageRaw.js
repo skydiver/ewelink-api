@@ -2,7 +2,7 @@ const { _get } = require('../../lib/helpers');
 
 const { DeviceRaw } = require('../../classes/PowerUsage');
 
-const getDeviceRawPowerUsageMixin = {
+module.exports = {
   /**
    * Get device raw power usage
    *
@@ -10,7 +10,7 @@ const getDeviceRawPowerUsageMixin = {
    *
    * @returns {Promise<{error: string}|{response: {hundredDaysKwhData: *}, status: string}>}
    */
-  async getDeviceRawPowerUsage(deviceId) {
+  async getDevicePowerUsageRaw(deviceId) {
     const device = await this.getDevice(deviceId);
     const deviceApiKey = _get(device, 'apikey', false);
 
@@ -28,5 +28,3 @@ const getDeviceRawPowerUsageMixin = {
     return DeviceRaw.get(actionParams);
   },
 };
-
-module.exports = getDeviceRawPowerUsageMixin;

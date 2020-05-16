@@ -5,6 +5,8 @@ const { getDevice } = require('./getDevice');
 const { getDeviceChannelCount } = require('./getDeviceChannelCount');
 const { getDeviceCurrentTH } = require('./getDeviceCurrentTH');
 const { getDeviceIP } = require('./getDeviceIP');
+const { getDevicePowerUsage } = require('./getDevicePowerUsage');
+const { getDevicePowerUsageRaw } = require('./getDevicePowerUsageRaw');
 const { getDevices } = require('./getDevices');
 const { getFirmwareVersion } = require('./getFirmwareVersion');
 const { getRegion } = require('./getRegion');
@@ -18,6 +20,8 @@ const mixins = {
   getDeviceChannelCount,
   getDeviceCurrentTH,
   getDeviceIP,
+  getDevicePowerUsage,
+  getDevicePowerUsageRaw,
   getDevices,
   getFirmwareVersion,
   getRegion,

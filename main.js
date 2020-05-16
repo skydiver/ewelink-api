@@ -105,15 +105,10 @@ class eWeLink {
   }
 }
 
-
 /* LOAD MIXINS: power state */
 const getDevicePowerStateMixin = require('./mixins/powerState/getDevicePowerStateMixin');
 const setDevicePowerState = require('./mixins/powerState/setDevicePowerStateMixin');
 const toggleDeviceMixin = require('./mixins/powerState/toggleDeviceMixin');
-
-/* LOAD MIXINS: power usage */
-const getDevicePowerUsageMixin = require('./mixins/powerUsage/getDevicePowerUsageMixin');
-const getDeviceRawPowerUsageMixin = require('./mixins/powerUsage/getDeviceRawPowerUsageMixin');
 
 /* LOAD MIXINS: websocket */
 const openWebSocketMixin = require('./mixins/websocket/openWebSocketMixin');
@@ -123,12 +118,6 @@ Object.assign(
   getDevicePowerStateMixin,
   setDevicePowerState,
   toggleDeviceMixin
-);
-
-Object.assign(
-  eWeLink.prototype,
-  getDevicePowerUsageMixin,
-  getDeviceRawPowerUsageMixin
 );
 
 Object.assign(eWeLink.prototype, openWebSocketMixin);
