@@ -1,6 +1,7 @@
 const delay = require('delay');
 
 const ewelink = require('../main');
+const errors = require('../lib/errors');
 
 const {
   email,
@@ -99,16 +100,16 @@ describe('current temperature and humidity: invalid device', () => {
     const conn = new ewelink({ email, password });
     const temperature = await conn.getDeviceCurrentTemperature('invalid');
     expect(typeof temperature).toBe('object');
-    expect(temperature.msg).toBe('Device does not exist');
-    expect(temperature.error).toBe(500);
+    expect(temperature.msg).toBe(errors['404']);
+    expect(temperature.error).toBe(404);
   });
 
   test('get device current humidity should fail', async () => {
     const conn = new ewelink({ email, password });
     const humidity = await conn.getDeviceCurrentHumidity('invalid');
     expect(typeof humidity).toBe('object');
-    expect(humidity.msg).toBe('Device does not exist');
-    expect(humidity.error).toBe(500);
+    expect(humidity.msg).toBe(errors['404']);
+    expect(humidity.error).toBe(404);
   });
 });
 
@@ -139,15 +140,15 @@ describe('current temperature and humidity: invalid credentials', () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const result = await conn.getDeviceCurrentTemperature(thDevice);
     expect(typeof result).toBe('object');
-    expect(result.msg).toBe('Authentication error');
-    expect(result.error).toBe(401);
+    expect(result.msg).toBe(errors['406']);
+    expect(result.error).toBe(406);
   });
 
   test('get device current humidity should fail', async () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const result = await conn.getDeviceCurrentHumidity(thDevice);
     expect(typeof result).toBe('object');
-    expect(result.msg).toBe('Authentication error');
-    expect(result.error).toBe(401);
+    expect(result.msg).toBe(errors['406']);
+    expect(result.error).toBe(406);
   });
 });
