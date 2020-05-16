@@ -3,10 +3,9 @@ const { timestamp } = require('../helpers/utilities');
 
 const zeroConfUpdatePayload = (selfApikey, deviceId, deviceKey, params) => {
   const encryptedData = encryptationData(JSON.stringify(params), deviceKey);
-  const sequence = Math.floor(timestamp * 1000);
 
   return {
-    sequence: sequence.toString(),
+    sequence: Math.floor(timestamp * 1000),
     deviceid: deviceId,
     selfApikey,
     iv: encryptedData.iv,
