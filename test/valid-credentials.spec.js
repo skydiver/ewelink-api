@@ -21,7 +21,7 @@ describe('valid credentials, invalid device', () => {
     const powerState = await conn.getDevicePowerState('invalid deviceid');
     expect(typeof powerState).toBe('object');
     expect(powerState.msg).toBe('Device does not exist');
-    expect(powerState.error).toBe(500);
+    expect(powerState.error).toBe(404);
   });
 
   test('get power state on wrong device channel should fail', async () => {
@@ -29,7 +29,7 @@ describe('valid credentials, invalid device', () => {
     const powerState = await conn.getDevicePowerState(fourChannelsDevice, 8);
     expect(typeof powerState).toBe('object');
     expect(powerState.msg).toBe('Device channel does not exist');
-    expect(powerState.error).toBe(false);
+    expect(powerState.error).toBe(404);
   });
 
   test('set power state on invalid device should fail', async () => {
@@ -38,7 +38,7 @@ describe('valid credentials, invalid device', () => {
     const powerState = await conn.setDevicePowerState('invalid deviceid', 'on');
     expect(typeof powerState).toBe('object');
     expect(powerState.msg).toBe('Device does not exist');
-    expect(powerState.error).toBe(500);
+    expect(powerState.error).toBe(404);
   });
 
   test('set power state on wrong device channel should fail', async () => {
@@ -60,7 +60,7 @@ describe('valid credentials, invalid device', () => {
     const powerState = await conn.toggleDevice('invalid deviceid');
     expect(typeof powerState).toBe('object');
     expect(powerState.msg).toBe('Device does not exist');
-    expect(powerState.error).toBe(500);
+    expect(powerState.error).toBe(404);
   });
 
   test('raw power usage on invalid device should fail', async () => {
@@ -92,7 +92,7 @@ describe('valid credentials, invalid device', () => {
     const switchesAmount = await conn.getDeviceChannelCount('invalid deviceid');
     expect(typeof switchesAmount).toBe('object');
     expect(switchesAmount.msg).toBe('Device does not exist');
-    expect(switchesAmount.error).toBe(500);
+    expect(switchesAmount.error).toBe(404);
   });
 });
 

@@ -1,5 +1,5 @@
 const { _get } = require('../../lib/helpers');
-
+const errors = require('../../lib/errors');
 const { getDeviceChannelCount } = require('../../lib/ewelink-helper');
 
 const getDevicePowerStateMixin = {
@@ -22,14 +22,11 @@ const getDevicePowerStateMixin = {
     const switchesAmount = getDeviceChannelCount(uiid);
 
     if (switchesAmount > 0 && switchesAmount < channel) {
-      return { error, msg: 'Device channel does not exist' };
+      return { error: 404, msg: errors.ch404 };
     }
 
     if (error || (!state && !switches)) {
-      if (error && parseInt(error) === 401) {
-        return device;
-      }
-      return { error, msg: 'Device does not exist' };
+      return { error, msg: errors[error] };
     }
 
     if (switches) {
