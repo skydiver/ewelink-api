@@ -10,7 +10,7 @@ const {
 
 const { firmwareExpectations } = require('./_setup/expectations');
 
-describe.skip('firmware: get version methods', () => {
+describe('firmware: get version methods', () => {
   let connection;
 
   beforeAll(() => {
@@ -55,14 +55,14 @@ describe.skip('firmware: get version methods', () => {
   });
 });
 
-describe.skip('firmware: check updates methods', () => {
+describe('firmware: check updates methods', () => {
   let connection;
 
   beforeAll(() => {
     connection = new ewelink({ email, password });
   });
 
-  test.skip('outdated device firmware should return available version', async () => {
+  test('outdated device firmware should return available version', async () => {
     const status = await connection.checkDeviceUpdate(outdatedFirmwareDevice);
     expect(typeof status).toBe('object');
     expect(typeof status).toBe('object');
