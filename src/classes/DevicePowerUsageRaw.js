@@ -1,4 +1,4 @@
-const WebSocket = require('../../classes/WebSocket');
+const WebSocket = require('./WebSocket');
 const payloads = require('../../lib/payloads');
 const { _get } = require('../../lib/helpers');
 const errors = require('../../lib/errors');
