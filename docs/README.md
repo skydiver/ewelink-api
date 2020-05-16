@@ -22,6 +22,5 @@
   * [getRegion](available-methods/getregion.md)
   * [getFirmwareVersion](available-methods/getfirmwareversion.md)
   * [saveDevicesCache](available-methods/savedevicescache.md)
-  * [login](available-methods/login.md) <sup>_*deprecated_</sup>
 * [Zeroconf (LAN mode)](zeroconf.md)
 * [Testing](testing.md)
