@@ -1,6 +1,6 @@
 const { _get } = require('../../lib/helpers');
 
-const { DeviceRaw } = require('../../classes/PowerUsage');
+const DevicePowerUsageRaw = require('../classes/DevicePowerUsageRaw');
 
 module.exports = {
   /**
@@ -25,6 +25,6 @@ module.exports = {
       actionParams.apiKey = deviceApiKey;
     }
 
-    return DeviceRaw.get(actionParams);
+    return DevicePowerUsageRaw.get(actionParams);
   },
 };

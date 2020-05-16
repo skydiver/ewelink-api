@@ -1,9 +1,9 @@
-const WebSocket = require('../WebSocket');
+const WebSocket = require('../../classes/WebSocket');
 const payloads = require('../../lib/payloads');
 const { _get } = require('../../lib/helpers');
 const errors = require('../../lib/errors');
 
-class DeviceRaw extends WebSocket {
+class DevicePowerUsageRaw extends WebSocket {
   /**
    * Get specific device power usage (raw data)
    *
@@ -51,4 +51,4 @@ class DeviceRaw extends WebSocket {
   }
 }
 
-module.exports = DeviceRaw;
+module.exports = DevicePowerUsageRaw;

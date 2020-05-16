@@ -1,6 +1,6 @@
 const { _get } = require('../../lib/helpers');
 
-const { CurrentMonth } = require('../../classes/PowerUsage');
+const parsePowerUsage = require('../helpers/parsePowerUsage');
 
 module.exports = {
   /**
@@ -22,7 +22,7 @@ module.exports = {
 
     return {
       status: 'ok',
-      ...CurrentMonth.parse({ hundredDaysKwhData }),
+      ...parsePowerUsage({ hundredDaysKwhData }),
     };
   },
 };
