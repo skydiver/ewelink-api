@@ -40,7 +40,6 @@
     "arpping": "github:skydiver/arpping",
     "crypto-js": "^4.0.0",
     "delay": "^4.3.0",
-    "nonce": "^1.0.4",
     "random": "^2.2.0",
     "request": "^2.88.2",
     "request-promise": "^4.2.5",
