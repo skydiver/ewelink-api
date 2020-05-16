@@ -1,11 +1,15 @@
+const nonce = require('nonce')();
+
+const { APP_ID } = require('../../lib/constants');
 const { _get } = require('../../lib/helpers');
 const errors = require('../../lib/errors');
-const { getDeviceChannelCount } = require('../../lib/ewelink-helper');
 
 const {
-  ChangeState,
-  ChangeStateZeroconf,
-} = require('../../classes/PowerState');
+  makeTimestamp,
+  getDeviceChannelCount,
+} = require('../../lib/ewelink-helper');
+
+const { ChangeStateZeroconf } = require('../../classes/PowerState');
 
 const setDevicePowerState = {
   /**
@@ -64,20 +68,26 @@ const setDevicePowerState = {
       });
     }
 
-    const actionParams = {
-      apiUrl: this.getApiWebSocket(),
-      at: this.at,
-      apiKey: this.apiKey,
-      deviceId,
-      params,
-      state: stateToSwitch,
-    };
+    const response = await this.makeRequest({
+      method: 'POST',
+      uri: `/user/device/status`,
+      body: {
+        deviceid: deviceId,
+        params,
+        appid: APP_ID,
+        nonce: `${nonce()}`,
+        ts: makeTimestamp,
+        version: 8,
+      },
+    });
 
-    if (this.apiKey !== deviceApiKey) {
-      actionParams.apiKey = deviceApiKey;
+    const responseError = _get(response, 'error', false);
+
+    if (responseError) {
+      return { error: responseError, msg: errors[responseError] };
     }
 
-    return ChangeState.set(actionParams);
+    return { status: 'ok', state };
   },
 };
 
