@@ -1,23 +1,20 @@
 const { APP_ID } = require('../../lib/constants');
-const { _get } = require('../../lib/helpers');
+const { _get, timestamp } = require('../../lib/helpers');
 const errors = require('../../lib/errors');
 
-const getDevicesMixin = {
+module.exports = {
   /**
    * Get all devices information
    *
    * @returns {Promise<{msg: string, error: number}|*>}
    */
   async getDevices() {
-    const timeStamp = new Date() / 1000;
-    const ts = Math.floor(timeStamp);
-
     const response = await this.makeRequest({
       uri: '/user/device',
       qs: {
         lang: 'en',
         appid: APP_ID,
-        ts,
+        ts: timestamp,
         version: 8,
         getTags: 1,
       },
@@ -37,5 +34,3 @@ const getDevicesMixin = {
     return devicelist;
   },
 };
-
-module.exports = getDevicesMixin;

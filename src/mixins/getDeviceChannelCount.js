@@ -3,7 +3,7 @@ const errors = require('../../lib/errors');
 
 const { getDeviceChannelCount } = require('../../lib/ewelink-helper');
 
-const getDeviceChannelCountMixin = {
+module.exports = {
   /**
    * Get device channel count
    *
@@ -24,5 +24,3 @@ const getDeviceChannelCountMixin = {
     return { status: 'ok', switchesAmount };
   },
 };
-
-module.exports = getDeviceChannelCountMixin;

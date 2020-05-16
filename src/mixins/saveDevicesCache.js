@@ -2,7 +2,7 @@ const fs = require('fs');
 
 const { _get } = require('../../lib/helpers');
 
-const saveDevicesCacheMixin = {
+module.exports = {
   /**
    * Save devices cache file (useful for using zeroconf)
    * @returns {Promise<string|{msg: string, error: number}|*|Device[]|{msg: string, error: number}>}
@@ -28,5 +28,3 @@ const saveDevicesCacheMixin = {
     }
   },
 };
-
-module.exports = saveDevicesCacheMixin;

@@ -58,7 +58,7 @@ class eWeLink {
    * @returns {string}
    */
   getZeroconfUrl(device) {
-    const ip = this.getLocalIp(device);
+    const ip = this.getDeviceIP(device);
     return `http://${ip}:8081/zeroconf`;
   }
 
@@ -121,13 +121,6 @@ const getDeviceRawPowerUsageMixin = require('./mixins/powerUsage/getDeviceRawPow
 /* LOAD MIXINS: temperature & humidity */
 const getTHMixin = require('./mixins/temphumd/getTHMixin');
 
-/* LOAD MIXINS: devices */
-const getDevicesMixin = require('./mixins/devices/getDevicesMixin');
-const getDeviceMixin = require('./mixins/devices/getDeviceMixin');
-const getDeviceChannelCountMixin = require('./mixins/devices/getDeviceChannelCountMixin');
-const getLocalIpMixin = require('./mixins/devices/getLocalIpMixin');
-const saveDevicesCacheMixin = require('./mixins/devices/saveDevicesCacheMixin');
-
 /* LOAD MIXINS: firmware */
 const getFirmwareVersionMixin = require('./mixins/firmware/getFirmwareVersionMixin');
 const checkDeviceUpdateMixin = require('./mixins/firmware/checkDeviceUpdateMixin');
@@ -155,20 +148,15 @@ Object.assign(eWeLink.prototype, getTHMixin);
 
 Object.assign(
   eWeLink.prototype,
-  getDevicesMixin,
-  getDeviceMixin,
-  getDeviceChannelCountMixin,
-  getLocalIpMixin,
-  saveDevicesCacheMixin
-);
-
-Object.assign(
-  eWeLink.prototype,
   getFirmwareVersionMixin,
   checkDeviceUpdateMixin,
   checkDevicesUpdatesMixin
 );
 
 Object.assign(eWeLink.prototype, openWebSocketMixin);
+
+const mixins = require('./src/mixins');
+
+Object.assign(eWeLink.prototype, mixins);
 
 module.exports = eWeLink;

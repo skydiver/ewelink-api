@@ -1,11 +1,8 @@
-const nonce = require('nonce')();
-
 const { APP_ID } = require('../../lib/constants');
-const { makeTimestamp } = require('../../lib/ewelink-helper');
-const { _get } = require('../../lib/helpers');
+const { nonce, timestamp, _get } = require('../../lib/helpers');
 const errors = require('../../lib/errors');
 
-const getDeviceMixin = {
+module.exports = {
   /**
    * Get information for a specific device
    *
@@ -22,8 +19,8 @@ const getDeviceMixin = {
       qs: {
         deviceid: deviceId,
         appid: APP_ID,
-        nonce: `${nonce()}`,
-        ts: makeTimestamp,
+        nonce,
+        ts: timestamp,
         version: 8,
       },
     });
@@ -37,5 +34,3 @@ const getDeviceMixin = {
     return device;
   },
 };
-
-module.exports = getDeviceMixin;
