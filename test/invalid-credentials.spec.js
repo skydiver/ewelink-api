@@ -67,8 +67,7 @@ describe('invalid credentials', () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const powerUsage = await conn.getDevicePowerUsage(deviceIdWithPower);
     expect(typeof powerUsage).toBe('object');
-    expect(powerUsage.msg).toBe('Forbidden');
-    expect(powerUsage.error).toBe(403);
+    expect(powerUsage.error).toBe('No power usage data found.');
   });
 
   test('get channel count 1 should fail', async () => {

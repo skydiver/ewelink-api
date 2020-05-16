@@ -4,7 +4,7 @@ describe('check eWeLink helpers', () => {
   test('make authorization sign should return right string', async () => {
     const auth = ewelinkHelpers.makeAuthorizationSign({ data: 'string' });
     expect(auth.length).toBe(44);
-    expect(auth).toBe('WtmdvaPxqhi3pd8ck1R/bvzfRzHgxDTwgnuOib33xx4=');
+    expect(auth).toBe('7Aaa/8EuRScACNrZTATW2WKIY7lcRnjgWHTiBl8G0TQ=');
   });
 
   test('getDeviceChannelCount method should return right value', async () => {
