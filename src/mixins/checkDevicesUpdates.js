@@ -1,5 +1,5 @@
 const { _get } = require('../../lib/helpers');
-const parseFirmwareUpdates = require('../helpers/parseFirmwareUpdates');
+const parseFirmwareUpdates = require('../parsers/parseFirmwareUpdates');
 
 module.exports = {
   async checkDevicesUpdates() {

@@ -1,6 +1,5 @@
 const { _get } = require('../../lib/helpers');
-
-const parsePowerUsage = require('../helpers/parsePowerUsage');
+const parsePowerUsage = require('../parsers/parsePowerUsage');
 
 module.exports = {
   /**
