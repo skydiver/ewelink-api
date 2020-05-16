@@ -11,6 +11,7 @@ const { getDevicePowerUsageRaw } = require('./getDevicePowerUsageRaw');
 const { getDevices } = require('./getDevices');
 const { getFirmwareVersion } = require('./getFirmwareVersion');
 const { getRegion } = require('./getRegion');
+const { openWebSocket } = require('./openWebSocket');
 const { saveDevicesCache } = require('./saveDevicesCache');
 const { setDevicePowerState } = require('./setDevicePowerState');
 const { toggleDevice } = require('./toggleDevice');
@@ -29,6 +30,7 @@ const mixins = {
   getDevices,
   getFirmwareVersion,
   getRegion,
+  openWebSocket,
   saveDevicesCache,
   setDevicePowerState,
   toggleDevice,

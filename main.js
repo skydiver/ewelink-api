@@ -1,5 +1,6 @@
 const rp = require('request-promise');
 
+const mixins = require('./src/mixins');
 const { _get } = require('./lib/helpers');
 const errors = require('./lib/errors');
 
@@ -104,13 +105,6 @@ class eWeLink {
     return response;
   }
 }
-
-/* LOAD MIXINS: websocket */
-const openWebSocketMixin = require('./mixins/websocket/openWebSocketMixin');
-
-Object.assign(eWeLink.prototype, openWebSocketMixin);
-
-const mixins = require('./src/mixins');
 
 Object.assign(eWeLink.prototype, mixins);
 

@@ -3,7 +3,7 @@ const WebSocketAsPromised = require('websocket-as-promised');
 
 const payloads = require('../../lib/payloads');
 
-const openWebSocketMixin = {
+module.exports = {
   /**
    * Open a socket connection to eWeLink
    * and execute callback function with server message as argument
@@ -41,5 +41,3 @@ const openWebSocketMixin = {
     return wsp;
   },
 };
-
-module.exports = openWebSocketMixin;
