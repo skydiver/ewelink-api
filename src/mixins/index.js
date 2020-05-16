@@ -5,12 +5,15 @@ const { getDevice } = require('./getDevice');
 const { getDeviceChannelCount } = require('./getDeviceChannelCount');
 const { getDeviceCurrentTH } = require('./getDeviceCurrentTH');
 const { getDeviceIP } = require('./getDeviceIP');
+const { getDevicePowerState } = require('./getDevicePowerState');
 const { getDevicePowerUsage } = require('./getDevicePowerUsage');
 const { getDevicePowerUsageRaw } = require('./getDevicePowerUsageRaw');
 const { getDevices } = require('./getDevices');
 const { getFirmwareVersion } = require('./getFirmwareVersion');
 const { getRegion } = require('./getRegion');
 const { saveDevicesCache } = require('./saveDevicesCache');
+const { setDevicePowerState } = require('./setDevicePowerState');
+const { toggleDevice } = require('./toggleDevice');
 
 const mixins = {
   checkDevicesUpdates,
@@ -20,12 +23,15 @@ const mixins = {
   getDeviceChannelCount,
   getDeviceCurrentTH,
   getDeviceIP,
+  getDevicePowerState,
   getDevicePowerUsage,
   getDevicePowerUsageRaw,
   getDevices,
   getFirmwareVersion,
   getRegion,
   saveDevicesCache,
+  setDevicePowerState,
+  toggleDevice,
 };
 
 module.exports = mixins;

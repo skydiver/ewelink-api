@@ -2,7 +2,7 @@ const { _get } = require('../../lib/helpers');
 const errors = require('../../lib/errors');
 const { getDeviceChannelCount } = require('../../lib/ewelink-helper');
 
-const getDevicePowerStateMixin = {
+module.exports = {
   /**
    * Get current power state for a specific device
    *
@@ -36,5 +36,3 @@ const getDevicePowerStateMixin = {
     return { status: 'ok', state };
   },
 };
-
-module.exports = getDevicePowerStateMixin;

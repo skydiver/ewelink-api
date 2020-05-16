@@ -11,7 +11,7 @@ const {
 
 const { ChangeStateZeroconf } = require('../../classes/PowerState');
 
-const setDevicePowerState = {
+module.exports = {
   /**
    * Change power state for a specific device
    *
@@ -23,7 +23,6 @@ const setDevicePowerState = {
    */
   async setDevicePowerState(deviceId, state, channel = 1) {
     const device = await this.getDevice(deviceId);
-    const deviceApiKey = _get(device, 'apikey', false);
     const error = _get(device, 'error', false);
     const uiid = _get(device, 'extra.extra.uiid', false);
 
@@ -90,5 +89,3 @@ const setDevicePowerState = {
     return { status: 'ok', state };
   },
 };
-
-module.exports = setDevicePowerState;

@@ -1,4 +1,4 @@
-const toggleDeviceMixin = {
+module.exports = {
   /**
    * Toggle power state for a specific device
    *
@@ -11,5 +11,3 @@ const toggleDeviceMixin = {
     return this.setDevicePowerState(deviceId, 'toggle', channel);
   },
 };
-
-module.exports = toggleDeviceMixin;
