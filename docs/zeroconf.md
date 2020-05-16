@@ -35,7 +35,7 @@ A file named `devices-cache.json` will be created.
 ## 2. Generate arp table cache file
 
 ```js
-const Zeroconf = require('ewelink-api/classes/Zeroconf');
+const Zeroconf = require('ewelink-api/src/classes/Zeroconf');
 
 await Zeroconf.saveArpTable({
   ip: '<your network addres, ex: 192.168.5.1>'
@@ -49,7 +49,7 @@ A file named `arp-table.json` will be created.
 
 ```js
 const ewelink = require('ewelink-api');
-const Zeroconf = require('ewelink-api/classes/Zeroconf');
+const Zeroconf = require('ewelink-api/src/classes/Zeroconf');
 
 /* load cache files */
 const devicesCache = await Zeroconf.loadCachedDevices();
