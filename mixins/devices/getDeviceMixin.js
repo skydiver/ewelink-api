@@ -3,6 +3,7 @@ const nonce = require('nonce')();
 const { APP_ID } = require('../../lib/constants');
 const { makeTimestamp } = require('../../lib/ewelink-helper');
 const { _get } = require('../../lib/helpers');
+const errors = require('../../lib/errors');
 
 const getDeviceMixin = {
   /**
@@ -29,8 +30,8 @@ const getDeviceMixin = {
 
     const error = _get(device, 'error', false);
 
-    if (error === 404) {
-      return { error, msg: 'Device does not exist' };
+    if (error) {
+      return { error, msg: errors[error] };
     }
 
     return device;

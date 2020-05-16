@@ -1,4 +1,5 @@
 const { _get } = require('../../lib/helpers');
+const errors = require('../../lib/errors');
 
 const { getDeviceChannelCount } = require('../../lib/ewelink-helper');
 
@@ -17,10 +18,7 @@ const getDeviceChannelCountMixin = {
     const switchesAmount = getDeviceChannelCount(uiid);
 
     if (error) {
-      if (error === 401) {
-        return device;
-      }
-      return { error, msg: 'Device does not exist' };
+      return { error, msg: errors[error] };
     }
 
     return { status: 'ok', switchesAmount };
