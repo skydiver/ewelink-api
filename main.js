@@ -1,7 +1,7 @@
 const rp = require('request-promise');
 
 const mixins = require('./src/mixins');
-const { _get } = require('./lib/helpers');
+const { _get } = require('./src/helpers/utilities');
 const errors = require('./src/data/errors');
 
 class eWeLink {

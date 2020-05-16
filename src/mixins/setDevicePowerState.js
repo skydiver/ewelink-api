@@ -1,5 +1,5 @@
 const { APP_ID } = require('../data/constants');
-const { _get, timestamp, nonce } = require('../../lib/helpers');
+const { _get, timestamp, nonce } = require('../helpers/utilities');
 const errors = require('../data/errors');
 
 const { getDeviceChannelCount } = require('../helpers/ewelink');

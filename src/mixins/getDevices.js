@@ -1,5 +1,5 @@
 const { APP_ID } = require('../data/constants');
-const { _get, timestamp } = require('../../lib/helpers');
+const { _get, timestamp } = require('../helpers/utilities');
 const errors = require('../data/errors');
 
 module.exports = {

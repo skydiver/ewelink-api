@@ -1,6 +1,6 @@
 const rp = require('request-promise');
 
-const { _get } = require('../../lib/helpers');
+const { _get } = require('../helpers/utilities');
 const { credentialsPayload } = require('../../lib/payloads');
 const { makeAuthorizationSign } = require('../helpers/ewelink');
 const errors = require('../data/errors');

@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const { _get } = require('../../lib/helpers');
+const { _get } = require('../helpers/utilities');
 
 module.exports = {
   /**

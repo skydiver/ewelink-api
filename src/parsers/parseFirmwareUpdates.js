@@ -1,4 +1,4 @@
-const { _get } = require('../../lib/helpers');
+const { _get } = require('../helpers/utilities');
 const errors = require('../data/errors');
 
 const parseFirmwareUpdates = devicesList =>

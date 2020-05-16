@@ -1,6 +1,6 @@
 const WebSocket = require('./WebSocket');
 const payloads = require('../../lib/payloads');
-const { _get } = require('../../lib/helpers');
+const { _get } = require('../helpers/utilities');
 const errors = require('../data/errors');
 
 class DevicePowerUsageRaw extends WebSocket {
