@@ -3,7 +3,7 @@ const { checkDeviceUpdate } = require('./checkDeviceUpdate');
 const { getCredentials } = require('./getCredentials');
 const { getDevice } = require('./getDevice');
 const { getDeviceChannelCount } = require('./getDeviceChannelCount');
-const { getDeviceCurrentTH } = require('./getDeviceCurrentTH');
+const getDeviceCurrentTH = require('./getDeviceCurrentTH');
 const { getDeviceIP } = require('./getDeviceIP');
 const { getDevicePowerState } = require('./getDevicePowerState');
 const { getDevicePowerUsage } = require('./getDevicePowerUsage');
@@ -22,7 +22,7 @@ const mixins = {
   getCredentials,
   getDevice,
   getDeviceChannelCount,
-  getDeviceCurrentTH,
+  ...getDeviceCurrentTH,
   getDeviceIP,
   getDevicePowerState,
   getDevicePowerUsage,
