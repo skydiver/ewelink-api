@@ -1,6 +1,6 @@
 const ewelink = require('../main');
 const Zeroconf = require('../src/classes/Zeroconf');
-const errors = require('../lib/errors');
+const errors = require('../src/data/errors');
 
 const {
   email,

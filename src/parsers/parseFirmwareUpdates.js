@@ -1,5 +1,5 @@
 const { _get } = require('../../lib/helpers');
-const errors = require('../../lib/errors');
+const errors = require('../data/errors');
 
 const parseFirmwareUpdates = devicesList =>
   devicesList.map(device => {

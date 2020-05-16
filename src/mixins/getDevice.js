@@ -1,6 +1,6 @@
-const { APP_ID } = require('../../lib/constants');
+const { APP_ID } = require('../data/constants');
 const { nonce, timestamp, _get } = require('../../lib/helpers');
-const errors = require('../../lib/errors');
+const errors = require('../data/errors');
 
 module.exports = {
   /**

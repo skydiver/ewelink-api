@@ -2,7 +2,7 @@ const rp = require('request-promise');
 
 const mixins = require('./src/mixins');
 const { _get } = require('./lib/helpers');
-const errors = require('./lib/errors');
+const errors = require('./src/data/errors');
 
 class eWeLink {
   constructor({

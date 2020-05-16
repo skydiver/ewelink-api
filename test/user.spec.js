@@ -1,5 +1,5 @@
 const ewelink = require('../main');
-const errors = require('../lib/errors');
+const errors = require('../src/data/errors');
 
 const { email, password, region } = require('./_setup/credentials.js');
 

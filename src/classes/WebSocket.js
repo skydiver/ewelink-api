@@ -2,7 +2,7 @@ const W3CWebSocket = require('websocket').w3cwebsocket;
 const WebSocketAsPromised = require('websocket-as-promised');
 const delay = require('delay');
 
-const errors = require('../../lib/errors');
+const errors = require('../data/errors');
 
 class WebSocket {
   /**
