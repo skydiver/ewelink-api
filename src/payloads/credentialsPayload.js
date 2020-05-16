@@ -1,5 +1,5 @@
-const { APP_ID } = require('../../src/data/constants');
-const { timestamp, nonce } = require('../../src/helpers/utilities');
+const { APP_ID } = require('../data/constants');
+const { timestamp, nonce } = require('../helpers/utilities');
 
 const credentialsPayload = ({ email, password }) => ({
   appid: APP_ID,

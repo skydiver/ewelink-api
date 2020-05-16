@@ -1,7 +1,7 @@
 const rp = require('request-promise');
 
 const WebSocket = require('./WebSocket');
-const payloads = require('../../lib/payloads');
+const zeroConfUpdatePayload = require('../payloads/zeroConfUpdatePayload');
 const { _get } = require('../helpers/utilities');
 
 class ChangeStateZeroconf extends WebSocket {
@@ -13,12 +13,7 @@ class ChangeStateZeroconf extends WebSocket {
     const endpoint = switches ? 'switches' : 'switch';
     const localUrl = `${url}/${endpoint}`;
 
-    const body = payloads.zeroConfUpdatePayload(
-      selfApikey,
-      deviceId,
-      deviceKey,
-      params
-    );
+    const body = zeroConfUpdatePayload(selfApikey, deviceId, deviceKey, params);
 
     const response = await rp({
       method: 'POST',

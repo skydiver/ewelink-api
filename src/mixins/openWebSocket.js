@@ -1,7 +1,7 @@
 const W3CWebSocket = require('websocket').w3cwebsocket;
 const WebSocketAsPromised = require('websocket-as-promised');
 
-const payloads = require('../../lib/payloads');
+const wssLoginPayload = require('../payloads/wssLoginPayload');
 
 module.exports = {
   /**
@@ -13,7 +13,7 @@ module.exports = {
    * @returns {Promise<WebSocketAsPromised>}
    */
   async openWebSocket(callback, ...{ heartbeat = 120000 }) {
-    const payloadLogin = payloads.wssLoginPayload({
+    const payloadLogin = wssLoginPayload({
       at: this.at,
       apiKey: this.apiKey,
     });

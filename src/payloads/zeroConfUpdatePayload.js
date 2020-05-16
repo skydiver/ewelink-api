@@ -1,5 +1,5 @@
-const { encryptationData } = require('../../src/helpers/ewelink');
-const { timestamp } = require('../../src/helpers/utilities');
+const { encryptationData } = require('../helpers/ewelink');
+const { timestamp } = require('../helpers/utilities');
 
 const zeroConfUpdatePayload = (selfApikey, deviceId, deviceKey, params) => {
   const encryptedData = encryptationData(JSON.stringify(params), deviceKey);

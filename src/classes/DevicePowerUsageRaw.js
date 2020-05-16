@@ -1,5 +1,6 @@
 const WebSocket = require('./WebSocket');
-const payloads = require('../../lib/payloads');
+const wssLoginPayload = require('../payloads/wssLoginPayload');
+const wssUpdatePayload = require('../payloads/wssUpdatePayload');
 const { _get } = require('../helpers/utilities');
 const errors = require('../data/errors');
 
@@ -15,9 +16,9 @@ class DevicePowerUsageRaw extends WebSocket {
    * @returns {Promise<{error: string}|{data: {hundredDaysKwhData: *}, status: string}>}
    */
   static async get({ apiUrl, at, apiKey, deviceId }) {
-    const payloadLogin = payloads.wssLoginPayload({ at, apiKey });
+    const payloadLogin = wssLoginPayload({ at, apiKey });
 
-    const payloadUpdate = payloads.wssUpdatePayload({
+    const payloadUpdate = wssUpdatePayload({
       apiKey,
       deviceId,
       params: { hundredDaysKwh: 'get' },
