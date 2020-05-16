@@ -1,7 +1,7 @@
 const { _get } = require('../../lib/helpers');
 const errors = require('../../lib/errors');
 
-const getTHMixin = {
+module.exports = {
   /**
    * Get device current temperature & humidity
    * @param deviceId
@@ -53,5 +53,3 @@ const getTHMixin = {
     return this.getDeviceCurrentTH(deviceId, 'humd');
   },
 };
-
-module.exports = getTHMixin;

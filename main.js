@@ -118,9 +118,6 @@ const toggleDeviceMixin = require('./mixins/powerState/toggleDeviceMixin');
 const getDevicePowerUsageMixin = require('./mixins/powerUsage/getDevicePowerUsageMixin');
 const getDeviceRawPowerUsageMixin = require('./mixins/powerUsage/getDeviceRawPowerUsageMixin');
 
-/* LOAD MIXINS: temperature & humidity */
-const getTHMixin = require('./mixins/temphumd/getTHMixin');
-
 /* LOAD MIXINS: websocket */
 const openWebSocketMixin = require('./mixins/websocket/openWebSocketMixin');
 
@@ -138,9 +135,6 @@ Object.assign(
   getDevicePowerUsageMixin,
   getDeviceRawPowerUsageMixin
 );
-
-Object.assign(eWeLink.prototype, getTHMixin);
-
 
 Object.assign(eWeLink.prototype, openWebSocketMixin);
 

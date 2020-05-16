@@ -2,6 +2,7 @@ const { checkDevicesUpdates } = require('./checkDevicesUpdates');
 const { checkDeviceUpdate } = require('./checkDeviceUpdate');
 const { getDevice } = require('./getDevice');
 const { getDeviceChannelCount } = require('./getDeviceChannelCount');
+const { getDeviceCurrentTH } = require('./getDeviceCurrentTH');
 const { getDeviceIP } = require('./getDeviceIP');
 const { getDevices } = require('./getDevices');
 const { getFirmwareVersion } = require('./getFirmwareVersion');
@@ -12,6 +13,7 @@ const mixins = {
   checkDeviceUpdate,
   getDevice,
   getDeviceChannelCount,
+  getDeviceCurrentTH,
   getDeviceIP,
   getDevices,
   getFirmwareVersion,
