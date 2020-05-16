@@ -1,6 +1,7 @@
 const delay = require('delay');
 
 const ewelink = require('../main');
+const errors = require('../lib/errors');
 
 const {
   singleChannelDeviceId,
@@ -46,9 +47,10 @@ describe('invalid credentials', () => {
   test('get device power state should fail', async () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const powerState = await conn.getDevicePowerState(singleChannelDeviceId);
+    const { msg, error } = powerState;
     expect(typeof powerState).toBe('object');
-    expect(powerState.msg).toBe('Authentication error');
-    expect(powerState.error).toBe(401);
+    expect(msg).toBe(errors[406]);
+    expect(error).toBe(406);
   });
 
   test('set device power state should fail', async () => {
