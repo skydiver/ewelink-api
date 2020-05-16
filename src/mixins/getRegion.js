@@ -1,7 +1,7 @@
 const { _get } = require('../../lib/helpers');
 const errors = require('../../lib/errors');
 
-const getRegionMixin = {
+module.exports = {
   async getRegion() {
     if (!this.email || !this.password) {
       return { error: 406, msg: errors.invalidAuth };
@@ -21,5 +21,3 @@ const getRegionMixin = {
     };
   },
 };
-
-module.exports = getRegionMixin;

@@ -5,7 +5,7 @@ const { credentialsPayload } = require('../../lib/payloads');
 const { makeAuthorizationSign } = require('../../lib/ewelink-helper');
 const errors = require('../../lib/errors');
 
-const getCredentialsMixin = {
+module.exports = {
   /**
    * Returns user credentials information
    *
@@ -46,5 +46,3 @@ const getCredentialsMixin = {
     return response;
   },
 };
-
-module.exports = getCredentialsMixin;
