@@ -1,13 +1,8 @@
-const nonce = require('nonce')();
-
 const { APP_ID } = require('../../lib/constants');
-const { _get } = require('../../lib/helpers');
+const { _get, timestamp, nonce } = require('../../lib/helpers');
 const errors = require('../../lib/errors');
 
-const {
-  makeTimestamp,
-  getDeviceChannelCount,
-} = require('../../lib/ewelink-helper');
+const { getDeviceChannelCount } = require('../../lib/ewelink-helper');
 
 const ChangeStateZeroconf = require('../classes/ChangeStateZeroconf');
 
@@ -69,13 +64,13 @@ module.exports = {
 
     const response = await this.makeRequest({
       method: 'POST',
-      uri: `/user/device/status`,
+      uri: '/user/device/status',
       body: {
         deviceid: deviceId,
         params,
         appid: APP_ID,
-        nonce: `${nonce()}`,
-        ts: makeTimestamp,
+        nonce,
+        ts: timestamp,
         version: 8,
       },
     });
