@@ -1,5 +1,5 @@
 const ewelink = require('../main');
-const Zeroconf = require('../classes/Zeroconf');
+const Zeroconf = require('../src/classes/Zeroconf');
 const errors = require('../lib/errors');
 
 const {

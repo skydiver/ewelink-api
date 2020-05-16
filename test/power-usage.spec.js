@@ -27,7 +27,7 @@ describe('power usage: node script', () => {
 
   test('should return raw power usage', async () => {
     jest.setTimeout(30000);
-    const powerUsage = await conn.getDeviceRawPowerUsage(deviceIdWithPower);
+    const powerUsage = await conn.getDevicePowerUsageRaw(deviceIdWithPower);
     expect(typeof powerUsage).toBe('object');
     expect(powerUsage).toMatchObject(rawPowerUsageExpectations);
     expect(powerUsage.data.hundredDaysKwhData.length).toBe(600);
@@ -57,7 +57,7 @@ describe('power usage: serverless', () => {
   test('should return raw power usage', async () => {
     jest.setTimeout(30000);
     const conn = new ewelink({ at: accessToken, apiKey });
-    const powerUsage = await conn.getDeviceRawPowerUsage(deviceIdWithPower);
+    const powerUsage = await conn.getDevicePowerUsageRaw(deviceIdWithPower);
     expect(typeof powerUsage).toBe('object');
     expect(powerUsage).toMatchObject(rawPowerUsageExpectations);
     expect(powerUsage.data.hundredDaysKwhData.length).toBe(600);

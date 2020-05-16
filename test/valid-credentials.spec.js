@@ -67,7 +67,7 @@ describe('valid credentials, invalid device', () => {
   test('raw power usage on invalid device should fail', async () => {
     jest.setTimeout(30000);
     const conn = new ewelink({ email, password });
-    const powerUsage = await conn.getDeviceRawPowerUsage('invalid deviceid');
+    const powerUsage = await conn.getDevicePowerUsageRaw('invalid deviceid');
     expect(typeof powerUsage).toBe('object');
     expect(powerUsage.error).toBe(errors.noPower);
   });
@@ -83,7 +83,7 @@ describe('valid credentials, invalid device', () => {
   test('raw power on device without electricity monitor should fail', async () => {
     jest.setTimeout(30000);
     const conn = new ewelink({ email, password });
-    const powerUsage = await conn.getDeviceRawPowerUsage(deviceIdWithoutPower);
+    const powerUsage = await conn.getDevicePowerUsageRaw(deviceIdWithoutPower);
     expect(typeof powerUsage).toBe('object');
     expect(powerUsage.error).toBe(errors.noPower);
   });
