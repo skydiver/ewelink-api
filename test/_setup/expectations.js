@@ -25,7 +25,7 @@ const specificDeviceExpectations = {
   online: expect.any(Boolean),
   extra: {
     extra: {
-      uiid: expect.any(String),
+      uiid: expect.any(Number),
       model: expect.any(String),
     },
   },
