@@ -120,8 +120,8 @@ describe('current temperature and humidity: device without sensor', () => {
       deviceIdWithoutTempAndHum
     );
     expect(typeof temperature).toBe('object');
-    expect(temperature.msg).toBe("Can't read sensor data from device");
-    expect(temperature.error).toBe(500);
+    expect(temperature.msg).toBe(errors.noSensor);
+    expect(temperature.error).toBe(404);
   });
 
   test('get device current humidity should fail', async () => {
@@ -130,8 +130,8 @@ describe('current temperature and humidity: device without sensor', () => {
       deviceIdWithoutTempAndHum
     );
     expect(typeof humidity).toBe('object');
-    expect(humidity.msg).toBe("Can't read sensor data from device");
-    expect(humidity.error).toBe(500);
+    expect(humidity.msg).toBe(errors.noSensor);
+    expect(humidity.error).toBe(404);
   });
 });
 

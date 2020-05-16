@@ -1,12 +1,10 @@
 const { _get } = require('../../lib/helpers');
+const errors = require('../../lib/errors');
 
 const getRegionMixin = {
   async getRegion() {
     if (!this.email || !this.password) {
-      return {
-        error: 406,
-        msg: 'Library needs to be initialized using email and password',
-      };
+      return { error: 406, msg: errors.invalidAuth };
     }
 
     const credentials = await this.getCredentials();

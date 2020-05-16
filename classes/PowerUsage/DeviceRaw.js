@@ -1,6 +1,7 @@
 const WebSocket = require('../WebSocket');
 const payloads = require('../../lib/payloads');
 const { _get } = require('../../lib/helpers');
+const errors = require('../../lib/errors');
 
 class DeviceRaw extends WebSocket {
   /**
@@ -40,7 +41,7 @@ class DeviceRaw extends WebSocket {
     );
 
     if (!hundredDaysKwhData) {
-      return { error: 'No power usage data found.' };
+      return { error: errors.noPower };
     }
 
     return {

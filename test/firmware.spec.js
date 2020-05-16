@@ -1,4 +1,5 @@
 const ewelink = require('../main');
+const errors = require('../lib/errors');
 
 const {
   email,
@@ -42,16 +43,16 @@ describe('firmware: get version methods', () => {
     const conn = new ewelink({ email, password });
     const firmwareVersion = await conn.getFirmwareVersion('invalid deviceid');
     expect(typeof firmwareVersion).toBe('object');
-    expect(firmwareVersion.msg).toBe('Device does not exist');
-    expect(firmwareVersion.error).toBe(500);
+    expect(firmwareVersion.msg).toBe(errors['404']);
+    expect(firmwareVersion.error).toBe(404);
   });
 
   test('get device firmware version using invalid credentials should fail', async () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const firmware = await conn.getFirmwareVersion(singleChannelDeviceId);
     expect(typeof firmware).toBe('object');
-    expect(firmware.msg).toBe('Authentication error');
-    expect(firmware.error).toBe(401);
+    expect(firmware.msg).toBe(errors['406']);
+    expect(firmware.error).toBe(406);
   });
 });
 
@@ -82,7 +83,8 @@ describe('firmware: check updates methods', () => {
   test('invalid device update check should return error', async () => {
     const status = await connection.checkDeviceUpdate('invalid deviceid');
     expect(typeof status).toBe('object');
-    expect(status.error).toBe(500);
+    expect(status.msg).toBe(errors['404']);
+    expect(status.error).toBe(404);
   });
 
   test('get devices update check should be valid response', async () => {
@@ -95,7 +97,7 @@ describe('firmware: check updates methods', () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const status = await conn.checkDevicesUpdates();
     expect(typeof status).toBe('object');
-    expect(status.msg).toBe('Authentication error');
-    expect(status.error).toBe(401);
+    expect(status.msg).toBe(errors['406']);
+    expect(status.error).toBe(406);
   });
 });

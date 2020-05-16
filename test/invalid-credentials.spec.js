@@ -24,16 +24,16 @@ describe('invalid credentials', () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const credentials = await conn.getCredentials();
     expect(typeof credentials).toBe('object');
-    expect(credentials.msg).toBe('Authentication error');
-    expect(credentials.error).toBe(400);
+    expect(credentials.msg).toBe(errors[406]);
+    expect(credentials.error).toBe(406);
   });
 
   test('get error response on all devices', async () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const devices = await conn.getDevices();
     expect(typeof devices).toBe('object');
-    expect(devices.msg).toBe('Authentication error');
-    expect(devices.error).toBe(401);
+    expect(devices.msg).toBe(errors['406']);
+    expect(devices.error).toBe(406);
   });
 
   test('get error response on specific device', async () => {
@@ -71,7 +71,7 @@ describe('invalid credentials', () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const powerUsage = await conn.getDevicePowerUsage(deviceIdWithPower);
     expect(typeof powerUsage).toBe('object');
-    expect(powerUsage.error).toBe('No power usage data found.');
+    expect(powerUsage.error).toBe(errors.noPower);
   });
 
   test('get channel count 1 should fail', async () => {

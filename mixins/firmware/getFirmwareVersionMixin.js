@@ -1,4 +1,5 @@
 const { _get } = require('../../lib/helpers');
+const errors = require('../../lib/errors');
 
 const getFirmwareVersionMixin = {
   /**
@@ -14,10 +15,7 @@ const getFirmwareVersionMixin = {
     const fwVersion = _get(device, 'params.fwVersion', false);
 
     if (error || !fwVersion) {
-      if (error === 401) {
-        return device;
-      }
-      return { error, msg: 'Device does not exist' };
+      return { error, msg: errors[error] };
     }
 
     return { status: 'ok', fwVersion };

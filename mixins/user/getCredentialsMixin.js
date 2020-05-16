@@ -3,6 +3,7 @@ const rp = require('request-promise');
 const { _get } = require('../../lib/helpers');
 const { credentialsPayload } = require('../../lib/payloads');
 const { makeAuthorizationSign } = require('../../lib/ewelink-helper');
+const errors = require('../../lib/errors');
 
 const getCredentialsMixin = {
   /**
@@ -28,7 +29,7 @@ const getCredentialsMixin = {
     const region = _get(response, 'region', false);
 
     if (error && [400, 401, 404].indexOf(parseInt(error)) !== -1) {
-      return { error, msg: 'Authentication error' };
+      return { error: 406, msg: errors['406'] };
     }
 
     if (error && parseInt(error) === 301 && region) {

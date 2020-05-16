@@ -1,5 +1,6 @@
 const ewelink = require('../main');
 const Zeroconf = require('../classes/Zeroconf');
+const errors = require('../lib/errors');
 
 const {
   email,
@@ -36,8 +37,8 @@ describe('zeroconf: save devices to cache file', () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const result = await conn.saveDevicesCache(file);
     expect(typeof result).toBe('object');
-    expect(result.msg).toBe('Authentication error');
-    expect(result.error).toBe(401);
+    expect(result.msg).toBe(errors['406']);
+    expect(result.error).toBe(406);
   });
 });
 

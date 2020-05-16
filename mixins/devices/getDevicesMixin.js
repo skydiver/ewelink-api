@@ -1,5 +1,6 @@
 const { APP_ID } = require('../../lib/constants');
 const { _get } = require('../../lib/helpers');
+const errors = require('../../lib/errors');
 
 const getDevicesMixin = {
   /**
@@ -25,12 +26,12 @@ const getDevicesMixin = {
     const error = _get(response, 'error', false);
     const devicelist = _get(response, 'devicelist', false);
 
-    if (error === 406) {
-      return { error: 401, msg: 'Authentication error' };
+    if (error) {
+      return { error, msg: errors[error] };
     }
 
     if (!devicelist) {
-      return { error: 500, msg: 'No devices found' };
+      return { error: 404, msg: errors.noDevices };
     }
 
     return devicelist;

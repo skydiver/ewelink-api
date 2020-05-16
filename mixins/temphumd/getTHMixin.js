@@ -1,4 +1,5 @@
 const { _get } = require('../../lib/helpers');
+const errors = require('../../lib/errors');
 
 const getTHMixin = {
   /**
@@ -18,7 +19,7 @@ const getTHMixin = {
     }
 
     if (!temperature || !humidity) {
-      return { error: 500, msg: "Can't read sensor data from device" };
+      return { error: 404, msg: errors.noSensor };
     }
 
     const data = { status: 'ok', temperature, humidity };
