@@ -1,7 +1,7 @@
-const { _get } = require('../helpers');
-const errors = require('../errors');
+const { _get } = require('../../lib/helpers');
+const errors = require('../../lib/errors');
 
-const firmwareUpdate = devicesList =>
+const parseFirmwareUpdates = devicesList =>
   devicesList.map(device => {
     const model = _get(device, 'extra.extra.model', false);
     const fwVersion = _get(device, 'params.fwVersion', false);
@@ -13,4 +13,4 @@ const firmwareUpdate = devicesList =>
     return { model, version: fwVersion, deviceid: device.deviceid };
   });
 
-module.exports = firmwareUpdate;
+module.exports = parseFirmwareUpdates;

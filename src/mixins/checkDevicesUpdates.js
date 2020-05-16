@@ -1,5 +1,5 @@
 const { _get } = require('../../lib/helpers');
-const payloads = require('../../lib/payloads');
+const parseFirmwareUpdates = require('../helpers/parseFirmwareUpdates');
 
 module.exports = {
   async checkDevicesUpdates() {
@@ -11,7 +11,7 @@ module.exports = {
       return devices;
     }
 
-    const deviceInfoList = payloads.firmwareUpdate(devices);
+    const deviceInfoList = parseFirmwareUpdates(devices);
 
     const deviceInfoListError = _get(deviceInfoList, 'error', false);
 
