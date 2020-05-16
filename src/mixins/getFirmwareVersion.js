@@ -1,7 +1,7 @@
 const { _get } = require('../../lib/helpers');
 const errors = require('../../lib/errors');
 
-const getFirmwareVersionMixin = {
+module.exports = {
   /**
    * Get device firmware version
    *
@@ -21,5 +21,3 @@ const getFirmwareVersionMixin = {
     return { status: 'ok', fwVersion };
   },
 };
-
-module.exports = getFirmwareVersionMixin;

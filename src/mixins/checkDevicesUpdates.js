@@ -1,7 +1,7 @@
 const { _get } = require('../../lib/helpers');
 const payloads = require('../../lib/payloads');
 
-const checkDevicesUpdatesMixin = {
+module.exports = {
   async checkDevicesUpdates() {
     const devices = await this.getDevices();
 
@@ -52,5 +52,3 @@ const checkDevicesUpdatesMixin = {
     });
   },
 };
-
-module.exports = checkDevicesUpdatesMixin;

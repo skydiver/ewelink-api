@@ -1,7 +1,7 @@
 const { _get } = require('../../lib/helpers');
 const payloads = require('../../lib/payloads');
 
-const checkDeviceUpdateMixin = {
+module.exports = {
   /**
    * Check device firmware update
    *
@@ -46,5 +46,3 @@ const checkDeviceUpdateMixin = {
     };
   },
 };
-
-module.exports = checkDeviceUpdateMixin;
