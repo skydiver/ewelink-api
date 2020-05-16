@@ -2,7 +2,7 @@ const { APP_ID } = require('../data/constants');
 const { _get, timestamp, nonce } = require('../../lib/helpers');
 const errors = require('../data/errors');
 
-const { getDeviceChannelCount } = require('../../lib/ewelink-helper');
+const { getDeviceChannelCount } = require('../helpers/ewelink');
 
 const ChangeStateZeroconf = require('../classes/ChangeStateZeroconf');
 

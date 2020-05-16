@@ -2,10 +2,10 @@ const crypto = require('crypto');
 const CryptoJS = require('crypto-js');
 const random = require('random');
 
-const { APP_SECRET } = require('../src/data/constants');
+const { APP_SECRET } = require('../data/constants');
 
-const DEVICE_TYPE_UUID = require('../src/data/devices-type-uuid.json');
-const DEVICE_CHANNEL_LENGTH = require('../src/data/devices-channel-length.json');
+const DEVICE_TYPE_UUID = require('../data/devices-type-uuid.json');
+const DEVICE_CHANNEL_LENGTH = require('../data/devices-channel-length.json');
 
 const makeAuthorizationSign = body =>
   crypto

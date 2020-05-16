@@ -2,7 +2,7 @@ const rp = require('request-promise');
 
 const { _get } = require('../../lib/helpers');
 const { credentialsPayload } = require('../../lib/payloads');
-const { makeAuthorizationSign } = require('../../lib/ewelink-helper');
+const { makeAuthorizationSign } = require('../helpers/ewelink');
 const errors = require('../data/errors');
 
 module.exports = {

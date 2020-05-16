@@ -1,4 +1,4 @@
-const ewelinkHelpers = require('../lib/ewelink-helper');
+const ewelinkHelpers = require('../src/helpers/ewelink');
 
 describe('check eWeLink helpers', () => {
   test('make authorization sign should return right string', async () => {

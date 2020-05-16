@@ -1,6 +1,6 @@
 const { _get } = require('../../lib/helpers');
 const errors = require('../data/errors');
-const { getDeviceChannelCount } = require('../../lib/ewelink-helper');
+const { getDeviceChannelCount } = require('../helpers/ewelink');
 
 module.exports = {
   /**
