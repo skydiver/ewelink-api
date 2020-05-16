@@ -9,7 +9,7 @@ const {
   getDeviceChannelCount,
 } = require('../../lib/ewelink-helper');
 
-const { ChangeStateZeroconf } = require('../../classes/PowerState');
+const ChangeStateZeroconf = require('../classes/ChangeStateZeroconf');
 
 module.exports = {
   /**

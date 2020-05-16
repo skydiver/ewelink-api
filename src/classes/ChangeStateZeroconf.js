@@ -1,6 +1,6 @@
 const rp = require('request-promise');
 
-const WebSocket = require('../WebSocket');
+const WebSocket = require('../../classes/WebSocket');
 const payloads = require('../../lib/payloads');
 const { _get } = require('../../lib/helpers');
 
