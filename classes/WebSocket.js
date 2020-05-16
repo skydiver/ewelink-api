@@ -2,6 +2,8 @@ const W3CWebSocket = require('websocket').w3cwebsocket;
 const WebSocketAsPromised = require('websocket-as-promised');
 const delay = require('delay');
 
+const errors = require('../lib/errors');
+
 class WebSocket {
   /**
    * Open WebSocket connection and send provided payloads
@@ -46,9 +48,9 @@ class WebSocket {
   static customThrowError(e) {
     const loginError = e.message.indexOf('WebSocket is not opened');
     if (loginError > -1) {
-      return { error: 401, msg: 'Authentication error' };
+      return { error: 406, msg: errors['406'] };
     }
-    return { error: 'An unknown error occurred' };
+    return { error: errors.unknown };
   }
 }
 
