@@ -12,7 +12,6 @@ const allDevicesExpectations = {
   showBrand: expect.any(Boolean),
   extra: {
     extra: {
-      uiid: expect.any(Number),
       model: expect.any(String),
     },
   },
@@ -25,7 +24,6 @@ const specificDeviceExpectations = {
   online: expect.any(Boolean),
   extra: {
     extra: {
-      uiid: expect.any(Number),
       model: expect.any(String),
     },
   },

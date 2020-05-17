@@ -50,8 +50,8 @@ describe('invalid credentials', () => {
     const powerState = await conn.getDevicePowerState(singleChannelDeviceId);
     const { msg, error } = powerState;
     expect(typeof powerState).toBe('object');
-    expect(msg).toBe(errors[406]);
-    expect(error).toBe(406);
+    expect(msg).toBe(errors[401]);
+    expect(error).toBe(401);
   });
 
   test('set device power state should fail', async () => {
