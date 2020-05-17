@@ -21,7 +21,8 @@ module.exports = {
     const error = _get(status, 'error', false);
 
     if (error) {
-      return { error, msg: errors[error] };
+      const err = error === 400 ? 404 : error;
+      return { error: err, msg: errors[err] };
     }
 
     let state = _get(status, 'params.switch', false);
