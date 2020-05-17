@@ -81,6 +81,6 @@ module.exports = {
       return { error: responseError, msg: errors[responseError] };
     }
 
-    return { status: 'ok', state };
+    return { status: 'ok', state, channel };
   },
 };

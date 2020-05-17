@@ -24,6 +24,7 @@ Possible states: `on`, `off`, `toggle`.
 ```js
   {
     status: 'ok',
-    state: 'on'
+    state: 'on',
+    channel: 1
   }
 ```
