@@ -17,6 +17,10 @@ describe('current temperature and humidity: node script', () => {
     await conn.getCredentials();
   });
 
+  beforeEach(async () => {
+    device = await conn.getDevice(thDevice);
+  });
+
   test('should return current temperature/humidity', async () => {
     const { currentTemperature, currentHumidity } = device.params;
     const result = await conn.getDeviceCurrentTH(thDevice);
