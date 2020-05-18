@@ -1,5 +1,3 @@
-const delay = require('delay');
-
 const ewelink = require('../main');
 
 const {
@@ -18,10 +16,6 @@ const {
 describe('env: serverless', () => {
   let accessToken;
   let apiKey;
-
-  beforeEach(async () => {
-    await delay(1000);
-  });
 
   test('get ewelink credentials', async () => {
     const conn = new ewelink({ email, password });

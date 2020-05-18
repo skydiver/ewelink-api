@@ -1,5 +1,3 @@
-const delay = require('delay');
-
 const ewelink = require('../main');
 const errors = require('../src/data/errors');
 
@@ -13,10 +11,6 @@ const {
 const { credentialsExpectations } = require('./_setup/expectations');
 
 describe('valid credentials, invalid device', () => {
-  beforeEach(async () => {
-    await delay(1000);
-  });
-
   test('get power state on invalid device should fail', async () => {
     const conn = new ewelink({ email, password });
     const powerState = await conn.getDevicePowerState('invalid deviceid');

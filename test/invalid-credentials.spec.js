@@ -1,5 +1,3 @@
-const delay = require('delay');
-
 const ewelink = require('../main');
 const errors = require('../src/data/errors');
 
@@ -10,10 +8,6 @@ const {
 } = require('./_setup/config/credentials.js');
 
 describe('invalid credentials', () => {
-  beforeEach(async () => {
-    await delay(1000);
-  });
-
   test('no credentials given', async () => {
     const conn = new ewelink({});
     expect(typeof conn).toBe('object');

@@ -1,5 +1,3 @@
-const delay = require('delay');
-
 const ewelink = require('../main');
 
 const {
@@ -20,10 +18,6 @@ describe('env: node script', () => {
 
   beforeAll(() => {
     conn = new ewelink({ email, password });
-  });
-
-  beforeEach(async () => {
-    await delay(1000);
   });
 
   test('get ewelink credentials', async () => {

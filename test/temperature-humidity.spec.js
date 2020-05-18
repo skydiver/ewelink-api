@@ -1,5 +1,3 @@
-const delay = require('delay');
-
 const ewelink = require('../main');
 const errors = require('../src/data/errors');
 
@@ -17,11 +15,6 @@ describe('current temperature and humidity: node script', () => {
   beforeAll(async () => {
     conn = new ewelink({ email, password });
     await conn.getCredentials();
-  });
-
-  beforeEach(async () => {
-    await delay(1000);
-    device = await conn.getDevice(thDevice);
   });
 
   test('should return current temperature/humidity', async () => {
@@ -64,7 +57,6 @@ describe('current temperature and humidity: serverless', () => {
   });
 
   beforeEach(async () => {
-    await delay(1000);
     connSL = new ewelink({ at: accessToken, apiKey });
     device = await connSL.getDevice(thDevice);
   });

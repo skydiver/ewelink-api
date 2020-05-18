@@ -1,5 +1,3 @@
-const delay = require('delay');
-
 const ewelink = require('../main');
 
 const {
@@ -19,10 +17,6 @@ describe('power usage: node script', () => {
   beforeAll(async () => {
     conn = new ewelink({ email, password });
     await conn.getCredentials();
-  });
-
-  beforeEach(async () => {
-    await delay(1000);
   });
 
   test('should return raw power usage', async () => {
