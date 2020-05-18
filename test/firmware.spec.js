@@ -7,7 +7,7 @@ const {
   singleChannelDeviceId,
   outdatedFirmwareDevice,
   updatedFirmwareDevice,
-} = require('./_setup/credentials.js');
+} = require('./_setup/config/credentials.js');
 
 const { firmwareExpectations } = require('./_setup/expectations');
 

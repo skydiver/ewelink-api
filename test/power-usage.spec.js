@@ -6,7 +6,7 @@ const {
   email,
   password,
   deviceIdWithPower,
-} = require('./_setup/credentials.js');
+} = require('./_setup/config/credentials.js');
 
 const {
   rawPowerUsageExpectations,

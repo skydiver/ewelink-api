@@ -1,7 +1,7 @@
 const ewelink = require('../main');
 const errors = require('../src/data/errors');
 
-const { email, password, region } = require('./_setup/credentials.js');
+const { email, password, region } = require('./_setup/config/credentials.js');
 
 const { regionExpectations } = require('./_setup/expectations');
 

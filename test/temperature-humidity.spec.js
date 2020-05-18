@@ -8,7 +8,7 @@ const {
   password,
   deviceIdWithoutTempAndHum,
   deviceIdWithTempAndHum: thDevice,
-} = require('./_setup/credentials.js');
+} = require('./_setup/config/credentials.js');
 
 describe('current temperature and humidity: node script', () => {
   let conn;

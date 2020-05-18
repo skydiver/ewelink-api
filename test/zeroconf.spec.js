@@ -8,7 +8,7 @@ const {
   region,
   localIp,
   localIpInvalid,
-} = require('./_setup/credentials.js');
+} = require('./_setup/config/credentials.js');
 
 const { allDevicesExpectations } = require('./_setup/expectations');
 

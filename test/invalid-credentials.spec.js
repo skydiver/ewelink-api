@@ -7,7 +7,7 @@ const {
   singleChannelDeviceId,
   deviceIdWithPower,
   fourChannelsDevice,
-} = require('./_setup/credentials.js');
+} = require('./_setup/config/credentials.js');
 
 describe('invalid credentials', () => {
   beforeEach(async () => {
