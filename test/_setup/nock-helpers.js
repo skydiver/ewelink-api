@@ -18,6 +18,25 @@ exports.playbackNockTapes = pathToTape => {
   const nocks = nock.load(pathToTape);
 
   nocks.forEach(function(n) {
+    n.filteringPath(path => {
+      const regexTimestampInPath = /(?<=ts=)[^&]*/g;
+      const timestampInPath = path.match(regexTimestampInPath);
+
+      if (!timestampInPath) {
+        return path;
+      }
+
+      const regexTimestampInRecordedPath = /ts=[^&]*/g;
+      const recordedPath = n.interceptors[0].uri;
+      const timestampInRecordedPath = recordedPath.match(regexTimestampInPath);
+      const updatedPath = recordedPath.replace(
+        regexTimestampInRecordedPath,
+        `ts=${timestampInRecordedPath[0]}`
+      );
+
+      return updatedPath;
+    });
+
     n.filteringRequestBody((body, recordedBody) => {
       if (typeof body !== 'string' || typeof recordedBody !== 'object') {
         return body;
