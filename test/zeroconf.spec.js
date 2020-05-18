@@ -15,7 +15,7 @@ const { allDevicesExpectations } = require('./_setup/expectations');
 describe('zeroconf: save devices to cache file', () => {
   test('can save cached devices file', async () => {
     jest.setTimeout(30000);
-    const file = './test/_setup/devices-cache.json';
+    const file = './test/_setup/cache/devices-cache.json';
     const conn = new ewelink({ region, email, password });
     const result = await conn.saveDevicesCache(file);
     expect(typeof result).toBe('object');
@@ -45,7 +45,7 @@ describe('zeroconf: save devices to cache file', () => {
 describe('zeroconf: save arp table to file', () => {
   test('can save arp table file', async () => {
     jest.setTimeout(30000);
-    const file = './test/_setup/arp-table.json';
+    const file = './test/_setup/cache/arp-table.json';
     const arpTable = await Zeroconf.saveArpTable({
       ip: localIp,
       file,
@@ -68,7 +68,7 @@ describe('zeroconf: save arp table to file', () => {
 
   test('error saving arp table file with invalid local network', async () => {
     jest.setTimeout(30000);
-    const file = './test/_setup/arp-table.json';
+    const file = './test/_setup/cache/arp-table.json';
     const arpTable = await Zeroconf.saveArpTable({
       ip: localIpInvalid,
       file,
@@ -84,7 +84,7 @@ describe('zeroconf: load devices to cache file', () => {
     const conn = new ewelink({ region, email, password });
     const devices = await conn.getDevices();
     const devicesCache = await Zeroconf.loadCachedDevices(
-      './test/_setup/devices-cache.json'
+      './test/_setup/cache/devices-cache.json'
     );
     expect(typeof devicesCache).toBe('object');
     expect(devicesCache.length).toBe(devices.length);
@@ -102,7 +102,7 @@ describe('zeroconf: load devices to cache file', () => {
 describe('zeroconf: load arp table file', () => {
   test('can load arp table file', async () => {
     const arpTable = await Zeroconf.loadArpTable(
-      './test/_setup/arp-table.json'
+      './test/_setup/cache/arp-table.json'
     );
     expect(typeof arpTable).toBe('object');
     expect(arpTable[0]).toMatchObject({
