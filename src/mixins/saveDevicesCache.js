@@ -13,7 +13,6 @@ module.exports = {
     const error = _get(devices, 'error', false);
 
     if (error || !devices) {
-      console.log(devices);
       return devices;
     }
 
