@@ -27,6 +27,7 @@
     "lint:fix": "eslint . --fix"
   },
   "jest": {
+    "setupFilesAfterEnv": ["<rootDir>/test/_setup/setupTests.js"],
     "testPathIgnorePatterns": [
       "/node_modules/",
       ".cache"
@@ -59,6 +60,7 @@
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-hooks": "^4.0.2",
     "jest": "^26.0.1",
+    "nock": "^12.0.3",
     "prettier": "^1.19.1"
   }
 }
