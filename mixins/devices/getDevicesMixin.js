@@ -18,7 +18,7 @@ const getDevicesMixin = {
         getTags: 1,
         version: 6,
         ts,
-        appid: 'oeVkj2lYFGnJu5XUtWisfW4utiN4u9Mq',
+        appid: 'YzfeftUVcZ6twZw1OoVKPRFYTrGEg01Q',
         imei: makeFakeIMEI(),
         os: 'android',
         model: '',
