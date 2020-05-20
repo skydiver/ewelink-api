@@ -7,18 +7,25 @@ const errors = require('./src/data/errors');
 class eWeLink {
   constructor({
     region = 'us',
-    email,
-    password,
-    at,
-    apiKey,
-    devicesCache,
-    arpTable,
+    email = null,
+    phoneNumber = null,
+    password = null,
+    at = null,
+    apiKey = null,
+    devicesCache = null,
+    arpTable = null,
   }) {
-    if (!devicesCache && !arpTable && !at && !email && !password) {
+    if (
+      (email === null || password === null) &&
+      (phoneNumber === null || password === null) &&
+      at === null &&
+      (devicesCache === null || arpTable === null)
+    ) {
       return { error: 'No credentials provided' };
     }
 
     this.region = region;
+    this.phoneNumber = phoneNumber;
     this.email = email;
     this.password = password;
     this.at = at;
