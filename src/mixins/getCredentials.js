@@ -14,6 +14,7 @@ module.exports = {
   async getCredentials() {
     const body = credentialsPayload({
       email: this.email,
+      phoneNumber: this.phoneNumber,
       password: this.password,
     });
 
