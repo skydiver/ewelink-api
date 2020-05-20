@@ -1,7 +1,7 @@
 const ewelink = require('../main');
 const errors = require('../src/data/errors');
 
-describe('initialize main class: allowed combinations', () => {
+describe('main class instantiation: valid parameters combinations', () => {
   test('email and password should initialize class', async () => {
     const credentials = { email: 'user@email.com', password: 'pass' };
     const connection = new ewelink(credentials);
@@ -100,7 +100,7 @@ describe('initialize main class: allowed combinations', () => {
   });
 });
 
-describe('initialize main class: wrong parameters combinations', () => {
+describe('main class instantiation: invalid parameters combinations', () => {
   test('user and no password should fail', async () => {
     const credentials = { email: 'user@email.com' };
     expect(() => {
