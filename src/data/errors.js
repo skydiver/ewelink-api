@@ -15,6 +15,7 @@ const customErrors = {
   noSensor: "Can't read sensor data from device",
   noFirmware: "Can't get model or firmware version",
   invalidAuth: 'Library needs to be initialized using email and password',
+  invalidCredentials: 'Invalid credentials provided',
 };
 
 module.exports = Object.assign(errors, customErrors);

@@ -15,13 +15,19 @@ class eWeLink {
     devicesCache = null,
     arpTable = null,
   }) {
-    if (
-      (email === null || password === null) &&
-      (phoneNumber === null || password === null) &&
-      at === null &&
-      (devicesCache === null || arpTable === null)
-    ) {
-      return { error: 'No credentials provided' };
+    const check = this.checkLoginParameters({
+      region,
+      email,
+      phoneNumber,
+      password,
+      at,
+      apiKey,
+      devicesCache,
+      arpTable,
+    });
+
+    if (check === false) {
+      throw new Error(errors.invalidCredentials);
     }
 
     this.region = region;
@@ -32,6 +38,26 @@ class eWeLink {
     this.apiKey = apiKey;
     this.devicesCache = devicesCache;
     this.arpTable = arpTable;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  checkLoginParameters(params) {
+    const { email, phoneNumber, password, devicesCache, arpTable, at } = params;
+
+    if (email !== null && phoneNumber !== null) {
+      return false;
+    }
+
+    if (
+      (email !== null && password !== null) ||
+      (phoneNumber !== null && password !== null) ||
+      (devicesCache !== null && arpTable !== null) ||
+      at !== null
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   /**

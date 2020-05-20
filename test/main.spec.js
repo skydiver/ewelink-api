@@ -1,4 +1,5 @@
 const ewelink = require('../main');
+const errors = require('../src/data/errors');
 
 describe('initialize main class: allowed combinations', () => {
   test('email and password should initialize class', async () => {
@@ -102,25 +103,54 @@ describe('initialize main class: allowed combinations', () => {
 describe('initialize main class: wrong parameters combinations', () => {
   test('user and no password should fail', async () => {
     const credentials = { email: 'user@email.com' };
-    const connection = new ewelink(credentials);
-    expect(connection.error).toBe('No credentials provided');
+    expect(() => {
+      const connection = new ewelink(credentials);
+    }).toThrow(errors.invalidCredentials);
   });
 
-  test('no user and password should fail', async () => {
+  test('only password should fail', async () => {
     const credentials = { password: 'pass' };
-    const connection = new ewelink(credentials);
-    expect(connection.error).toBe('No credentials provided');
+    expect(() => {
+      const connection = new ewelink(credentials);
+    }).toThrow(errors.invalidCredentials);
   });
 
   test('phone number and no password should fail', async () => {
     const credentials = { phoneNumber: '555123789' };
-    const connection = new ewelink(credentials);
-    expect(connection.error).toBe('No credentials provided');
+    expect(() => {
+      const connection = new ewelink(credentials);
+    }).toThrow(errors.invalidCredentials);
   });
 
   test('email and phone number should fail', async () => {
     const credentials = { email: 'user@email.com', phoneNumber: '555123789' };
-    const connection = new ewelink(credentials);
-    expect(connection.error).toBe('No credentials provided');
+    expect(() => {
+      const connection = new ewelink(credentials);
+    }).toThrow(errors.invalidCredentials);
+  });
+
+  test('email and phone number with password should fail', async () => {
+    const credentials = {
+      email: 'user@email.com',
+      phoneNumber: '555123789',
+      password: 'pass',
+    };
+    expect(() => {
+      const connection = new ewelink(credentials);
+    }).toThrow(errors.invalidCredentials);
+  });
+
+  test('devices cache without arp table should fail', async () => {
+    const credentials = { devicesCache: 'devices' };
+    expect(() => {
+      const connection = new ewelink(credentials);
+    }).toThrow(errors.invalidCredentials);
+  });
+
+  test('arp table without devices cache should fail', async () => {
+    const credentials = { arpTable: 'arptable' };
+    expect(() => {
+      const connection = new ewelink(credentials);
+    }).toThrow(errors.invalidCredentials);
   });
 });
