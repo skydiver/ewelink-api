@@ -13,8 +13,14 @@ const _get = (obj, path, defaultValue = null) =>
       obj
     );
 
+const toQueryString = object =>
+  `?${Object.keys(object)
+    .map(key => `${key}=${object[key].toString()}`)
+    .join('&')}`;
+
 module.exports = {
   nonce,
   timestamp,
   _get,
+  toQueryString,
 };

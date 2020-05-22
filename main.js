@@ -1,7 +1,4 @@
-const rp = require('request-promise');
-
 const mixins = require('./src/mixins');
-const { _get } = require('./src/helpers/utilities');
 const errors = require('./src/data/errors');
 
 class eWeLink {
@@ -94,48 +91,6 @@ class eWeLink {
   getZeroconfUrl(device) {
     const ip = this.getDeviceIP(device);
     return `http://${ip}:8081/zeroconf`;
-  }
-
-  /**
-   * Generate http requests helpers
-   *
-   * @param method
-   * @param url
-   * @param uri
-   * @param body
-   * @param qs
-   *
-   * @returns {Promise<{msg: string, error: *}>}
-   */
-  async makeRequest({ method = 'GET', url, uri, body = {}, qs = {} }) {
-    const { at } = this;
-
-    if (!at) {
-      await this.getCredentials();
-    }
-
-    let apiUrl = this.getApiUrl();
-
-    if (url) {
-      apiUrl = url;
-    }
-
-    const response = await rp({
-      method,
-      uri: `${apiUrl}${uri}`,
-      headers: { Authorization: `Bearer ${this.at}` },
-      body,
-      qs,
-      json: true,
-    });
-
-    const error = _get(response, 'error', false);
-
-    if (error) {
-      return { error, msg: errors[error] };
-    }
-
-    return response;
   }
 }
 
