@@ -1,4 +1,4 @@
-const rp = require('request-promise');
+const fetch = require('node-fetch');
 
 const { _get } = require('../helpers/utilities');
 const credentialsPayload = require('../payloads/credentialsPayload');
@@ -18,13 +18,13 @@ module.exports = {
       password: this.password,
     });
 
-    let response = await rp({
-      method: 'POST',
-      uri: `${this.getApiUrl()}/user/login`,
+    let responseRequest = await fetch(`${this.getApiUrl()}/user/login`, {
+      method: 'post',
       headers: { Authorization: `Sign ${makeAuthorizationSign(body)}` },
-      body,
-      json: true,
+      body: JSON.stringify(body),
     });
+
+    const response = await responseRequest.json();
 
     const error = _get(response, 'error', false);
     const region = _get(response, 'region', false);
@@ -36,8 +36,8 @@ module.exports = {
     if (error && parseInt(error) === 301 && region) {
       if (this.region !== region) {
         this.region = region;
-        response = await this.getCredentials();
-        return response;
+        responseRequest = await this.getCredentials();
+        return responseRequest.json();
       }
       return { error, msg: 'Region does not exist' };
     }
