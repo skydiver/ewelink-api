@@ -9,9 +9,9 @@ const {
 
 describe('invalid credentials', () => {
   test('no credentials given', async () => {
-    const conn = new ewelink({});
-    expect(typeof conn).toBe('object');
-    expect(conn.error).toBe('No credentials provided');
+    expect(() => {
+      const conn = new ewelink({});
+    }).toThrow(errors.invalidCredentials);
   });
 
   test('get error response on ewelink credentials', async () => {
