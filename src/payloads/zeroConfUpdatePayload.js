@@ -5,7 +5,7 @@ const zeroConfUpdatePayload = (selfApikey, deviceId, deviceKey, params) => {
   const encryptedData = encryptationData(JSON.stringify(params), deviceKey);
 
   return {
-    sequence: Math.floor(timestamp * 1000),
+    sequence: Math.floor(timestamp * 1000).toString(),
     deviceid: deviceId,
     selfApikey,
     iv: encryptedData.iv,
