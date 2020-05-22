@@ -27,7 +27,9 @@
     "lint:fix": "eslint . --fix"
   },
   "jest": {
-    "setupFilesAfterEnv": ["<rootDir>/test/_setup/setupTests.js"],
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/_setup/setupTests.js"
+    ],
     "testPathIgnorePatterns": [
       "/node_modules/",
       ".cache"
@@ -41,9 +43,8 @@
     "arpping": "github:skydiver/arpping",
     "crypto-js": "^4.0.0",
     "delay": "^4.3.0",
+    "node-fetch": "^2.6.0",
     "random": "^2.2.0",
-    "request": "^2.88.2",
-    "request-promise": "^4.2.5",
     "websocket": "^1.0.31",
     "websocket-as-promised": "^1.0.1"
   },
