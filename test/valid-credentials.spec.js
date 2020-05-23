@@ -1,35 +1,30 @@
-const delay = require('delay');
-
 const ewelink = require('../main');
+const errors = require('../src/data/errors');
 
 const {
   email,
   password,
   deviceIdWithoutPower,
   fourChannelsDevice,
-} = require('./_setup/credentials.js');
+} = require('./_setup/config/credentials.js');
 
 const { credentialsExpectations } = require('./_setup/expectations');
 
 describe('valid credentials, invalid device', () => {
-  beforeEach(async () => {
-    await delay(1000);
-  });
-
   test('get power state on invalid device should fail', async () => {
     const conn = new ewelink({ email, password });
     const powerState = await conn.getDevicePowerState('invalid deviceid');
     expect(typeof powerState).toBe('object');
-    expect(powerState.msg).toBe('Device does not exist');
-    expect(powerState.error).toBe(500);
+    expect(powerState.msg).toBe(errors[404]);
+    expect(powerState.error).toBe(404);
   });
 
   test('get power state on wrong device channel should fail', async () => {
     const conn = new ewelink({ email, password });
     const powerState = await conn.getDevicePowerState(fourChannelsDevice, 8);
     expect(typeof powerState).toBe('object');
-    expect(powerState.msg).toBe('Device channel does not exist');
-    expect(powerState.error).toBe(false);
+    expect(powerState.msg).toBe(errors.ch404);
+    expect(powerState.error).toBe(404);
   });
 
   test('set power state on invalid device should fail', async () => {
@@ -37,8 +32,8 @@ describe('valid credentials, invalid device', () => {
     const conn = new ewelink({ email, password });
     const powerState = await conn.setDevicePowerState('invalid deviceid', 'on');
     expect(typeof powerState).toBe('object');
-    expect(powerState.msg).toBe('Device does not exist');
-    expect(powerState.error).toBe(500);
+    expect(powerState.msg).toBe(errors[404]);
+    expect(powerState.error).toBe(404);
   });
 
   test('set power state on wrong device channel should fail', async () => {
@@ -50,8 +45,8 @@ describe('valid credentials, invalid device', () => {
       8
     );
     expect(typeof powerState).toBe('object');
-    expect(powerState.msg).toBe('Device channel does not exist');
-    expect(powerState.error).toBe(false);
+    expect(powerState.msg).toBe(errors.ch404);
+    expect(powerState.error).toBe(404);
   });
 
   test('toggle power state on invalid device should fail', async () => {
@@ -59,17 +54,16 @@ describe('valid credentials, invalid device', () => {
     const conn = new ewelink({ email, password });
     const powerState = await conn.toggleDevice('invalid deviceid');
     expect(typeof powerState).toBe('object');
-    expect(powerState.msg).toBe('Device does not exist');
-    expect(powerState.error).toBe(500);
+    expect(powerState.msg).toBe(errors[404]);
+    expect(powerState.error).toBe(404);
   });
 
   test('raw power usage on invalid device should fail', async () => {
     jest.setTimeout(30000);
     const conn = new ewelink({ email, password });
-    const powerUsage = await conn.getDeviceRawPowerUsage('invalid deviceid');
+    const powerUsage = await conn.getDevicePowerUsageRaw('invalid deviceid');
     expect(typeof powerUsage).toBe('object');
-    expect(powerUsage.msg).toBe('Forbidden');
-    expect(powerUsage.error).toBe(403);
+    expect(powerUsage.error).toBe(errors.noPower);
   });
 
   test('current month power usage on invalid device should fail', async () => {
@@ -77,24 +71,23 @@ describe('valid credentials, invalid device', () => {
     const conn = new ewelink({ email, password });
     const powerUsage = await conn.getDevicePowerUsage('invalid deviceid');
     expect(typeof powerUsage).toBe('object');
-    expect(powerUsage.msg).toBe('Forbidden');
-    expect(powerUsage.error).toBe(403);
+    expect(powerUsage.error).toBe(errors.noPower);
   });
 
   test('raw power on device without electricity monitor should fail', async () => {
     jest.setTimeout(30000);
     const conn = new ewelink({ email, password });
-    const powerUsage = await conn.getDeviceRawPowerUsage(deviceIdWithoutPower);
+    const powerUsage = await conn.getDevicePowerUsageRaw(deviceIdWithoutPower);
     expect(typeof powerUsage).toBe('object');
-    expect(powerUsage.error).toBe('No power usage data found.');
+    expect(powerUsage.error).toBe(errors.noPower);
   });
 
   test('get channel count should fail', async () => {
     const conn = new ewelink({ email, password });
     const switchesAmount = await conn.getDeviceChannelCount('invalid deviceid');
     expect(typeof switchesAmount).toBe('object');
-    expect(switchesAmount.msg).toBe('Device does not exist');
-    expect(switchesAmount.error).toBe(500);
+    expect(switchesAmount.msg).toBe(errors[404]);
+    expect(switchesAmount.error).toBe(404);
   });
 });
 

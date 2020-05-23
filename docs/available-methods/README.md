@@ -17,7 +17,6 @@ Here is the list of available methods.
 * [getRegion](getregion.md)
 * [getFirmwareVersion](getfirmwareversion.md)
 * [saveDevicesCache](savedevicescache.md)
-* [login](login.md) <sup>_*deprecated_</sup>
 
 Remember to instantiate class before usage.
 

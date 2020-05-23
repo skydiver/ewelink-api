@@ -1,6 +1,7 @@
 const ewelink = require('../main');
+const errors = require('../src/data/errors');
 
-const { email, password, region } = require('./_setup/credentials.js');
+const { email, password, region } = require('./_setup/config/credentials.js');
 
 const { regionExpectations } = require('./_setup/expectations');
 
@@ -21,17 +22,15 @@ describe('check user information', () => {
     });
     const response = await connection.getRegion();
     expect(typeof response).toBe('object');
-    expect(response.msg).toBe('Authentication error');
-    expect(response.error).toBe(400);
+    expect(response.msg).toBe(errors['406']);
+    expect(response.error).toBe(406);
   });
 
   test('invalid initialization should warn user', async () => {
     const connection = new ewelink({ at: 'access token' });
     const response = await connection.getRegion();
     expect(typeof response).toBe('object');
-    expect(response.msg).toBe(
-      'Library needs to be initialized using email and password'
-    );
+    expect(response.msg).toBe(errors.invalidAuth);
     expect(response.error).toBe(406);
   });
 });

@@ -1,19 +1,10 @@
-const ewelinkHelpers = require('../lib/ewelink-helper');
+const ewelinkHelpers = require('../src/helpers/ewelink');
 
 describe('check eWeLink helpers', () => {
-  test('should return fake imei', async () => {
-    const imei = ewelinkHelpers.makeFakeIMEI();
-    expect(imei.length).toBe(36);
-    expect(imei.substr(0, 9)).toBe('DF7425A0-');
-    expect(imei.substr(imei.length - 18, imei.length)).toBe(
-      '-9F5E-3BC9179E48FB'
-    );
-  });
-
   test('make authorization sign should return right string', async () => {
     const auth = ewelinkHelpers.makeAuthorizationSign({ data: 'string' });
     expect(auth.length).toBe(44);
-    expect(auth).toBe('WtmdvaPxqhi3pd8ck1R/bvzfRzHgxDTwgnuOib33xx4=');
+    expect(auth).toBe('7Aaa/8EuRScACNrZTATW2WKIY7lcRnjgWHTiBl8G0TQ=');
   });
 
   test('getDeviceChannelCount method should return right value', async () => {

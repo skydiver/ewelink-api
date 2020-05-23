@@ -19,7 +19,7 @@ const connection = new ewelink({
 });
 
 // login into eWeLink
-await connection.login();
+await connection.getCredentials();
 
 // call openWebSocket method with a callback as argument
 const socket = await connection.openWebSocket(async data => {

@@ -1,5 +1,3 @@
-const delay = require('delay');
-
 const ewelink = require('../main');
 
 const {
@@ -7,7 +5,7 @@ const {
   password,
   singleChannelDeviceId,
   fourChannelsDevice,
-} = require('./_setup/credentials.js');
+} = require('./_setup/config/credentials.js');
 
 const {
   credentialsExpectations,
@@ -18,10 +16,6 @@ const {
 describe('env: serverless', () => {
   let accessToken;
   let apiKey;
-
-  beforeEach(async () => {
-    await delay(1000);
-  });
 
   test('get ewelink credentials', async () => {
     const conn = new ewelink({ email, password });

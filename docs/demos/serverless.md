@@ -17,11 +17,11 @@ So, instead of using email and password on every api call, you can login the fir
     region: '<your ewelink region>',
   });
 
-  const login = await connection.login();
+  const credentials = await connection.getCredentials();
 
-  const accessToken = login.at;
-  const apiKey = login.user.apikey
-  const region = login.region;
+  const accessToken = credentials.at;
+  const apiKey = credentials.user.apikey
+  const region = credentials.region;
 
 })();
 ```

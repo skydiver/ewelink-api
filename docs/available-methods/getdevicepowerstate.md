@@ -22,6 +22,7 @@ Query for specified device power status.
 ```js
   {
     status: 'ok',
-    state: 'off'
+    state: 'off',
+    channel: 1
   }
 ```

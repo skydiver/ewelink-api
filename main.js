@@ -1,28 +1,60 @@
-const rp = require('request-promise');
-
-const { _get } = require('./lib/helpers');
+const mixins = require('./src/mixins');
+const errors = require('./src/data/errors');
 
 class eWeLink {
   constructor({
     region = 'us',
-    email,
-    password,
-    at,
-    apiKey,
-    devicesCache,
-    arpTable,
+    email = null,
+    phoneNumber = null,
+    password = null,
+    at = null,
+    apiKey = null,
+    devicesCache = null,
+    arpTable = null,
   }) {
-    if (!devicesCache && !arpTable && !at && (!email && !password)) {
-      return { error: 'No credentials provided' };
+    const check = this.checkLoginParameters({
+      region,
+      email,
+      phoneNumber,
+      password,
+      at,
+      apiKey,
+      devicesCache,
+      arpTable,
+    });
+
+    if (check === false) {
+      throw new Error(errors.invalidCredentials);
     }
 
     this.region = region;
+    this.phoneNumber = phoneNumber;
     this.email = email;
     this.password = password;
     this.at = at;
     this.apiKey = apiKey;
     this.devicesCache = devicesCache;
     this.arpTable = arpTable;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  checkLoginParameters(params) {
+    const { email, phoneNumber, password, devicesCache, arpTable, at } = params;
+
+    if (email !== null && phoneNumber !== null) {
+      return false;
+    }
+
+    if (
+      (email !== null && password !== null) ||
+      (phoneNumber !== null && password !== null) ||
+      (devicesCache !== null && arpTable !== null) ||
+      at !== null
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   /**
@@ -57,116 +89,11 @@ class eWeLink {
    * @returns {string}
    */
   getZeroconfUrl(device) {
-    const ip = this.getLocalIp(device);
+    const ip = this.getDeviceIP(device);
     return `http://${ip}:8081/zeroconf`;
-  }
-
-  /**
-   * Generate http requests helpers
-   *
-   * @param method
-   * @param url
-   * @param uri
-   * @param body
-   * @param qs
-   *
-   * @returns {Promise<{msg: string, error: *}>}
-   */
-  async makeRequest({ method = 'GET', url, uri, body = {}, qs = {} }) {
-    const { at } = this;
-
-    if (!at) {
-      await this.getCredentials();
-    }
-
-    let apiUrl = this.getApiUrl();
-
-    if (url) {
-      apiUrl = url;
-    }
-
-    const response = await rp({
-      method,
-      uri: `${apiUrl}${uri}`,
-      headers: { Authorization: `Bearer ${this.at}` },
-      body,
-      qs,
-      json: true,
-    });
-
-    const error = _get(response, 'error', false);
-    if (error && [401, 402].indexOf(parseInt(error)) !== -1) {
-      return { error, msg: 'Authentication error' };
-    }
-
-    return response;
   }
 }
 
-/* LOAD MIXINS: user */
-const getCredentialsMixin = require('./mixins/user/getCredentialsMixin');
-const getRegionMixin = require('./mixins/user/getRegionMixin');
-
-/* LOAD MIXINS: power state */
-const getDevicePowerStateMixin = require('./mixins/powerState/getDevicePowerStateMixin');
-const setDevicePowerState = require('./mixins/powerState/setDevicePowerStateMixin');
-const toggleDeviceMixin = require('./mixins/powerState/toggleDeviceMixin');
-
-/* LOAD MIXINS: power usage */
-const getDevicePowerUsageMixin = require('./mixins/powerUsage/getDevicePowerUsageMixin');
-const getDeviceRawPowerUsageMixin = require('./mixins/powerUsage/getDeviceRawPowerUsageMixin');
-
-/* LOAD MIXINS: temperature & humidity */
-const getTHMixin = require('./mixins/temphumd/getTHMixin');
-
-/* LOAD MIXINS: devices */
-const getDevicesMixin = require('./mixins/devices/getDevicesMixin');
-const getDeviceMixin = require('./mixins/devices/getDeviceMixin');
-const getDeviceChannelCountMixin = require('./mixins/devices/getDeviceChannelCountMixin');
-const getLocalIpMixin = require('./mixins/devices/getLocalIpMixin');
-const saveDevicesCacheMixin = require('./mixins/devices/saveDevicesCacheMixin');
-
-/* LOAD MIXINS: firmware */
-const getFirmwareVersionMixin = require('./mixins/firmware/getFirmwareVersionMixin');
-const checkDeviceUpdateMixin = require('./mixins/firmware/checkDeviceUpdateMixin');
-const checkDevicesUpdatesMixin = require('./mixins/firmware/checkDevicesUpdatesMixin');
-
-/* LOAD MIXINS: websocket */
-const openWebSocketMixin = require('./mixins/websocket/openWebSocketMixin');
-
-Object.assign(eWeLink.prototype, getCredentialsMixin, getRegionMixin);
-
-Object.assign(
-  eWeLink.prototype,
-  getDevicePowerStateMixin,
-  setDevicePowerState,
-  toggleDeviceMixin
-);
-
-Object.assign(
-  eWeLink.prototype,
-  getDevicePowerUsageMixin,
-  getDeviceRawPowerUsageMixin
-);
-
-Object.assign(eWeLink.prototype, getTHMixin);
-
-Object.assign(
-  eWeLink.prototype,
-  getDevicesMixin,
-  getDeviceMixin,
-  getDeviceChannelCountMixin,
-  getLocalIpMixin,
-  saveDevicesCacheMixin
-);
-
-Object.assign(
-  eWeLink.prototype,
-  getFirmwareVersionMixin,
-  checkDeviceUpdateMixin,
-  checkDevicesUpdatesMixin
-);
-
-Object.assign(eWeLink.prototype, openWebSocketMixin);
+Object.assign(eWeLink.prototype, mixins);
 
 module.exports = eWeLink;

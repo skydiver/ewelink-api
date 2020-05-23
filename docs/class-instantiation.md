@@ -11,6 +11,15 @@
   });
 ```
 
+**_Using phone number and password_**
+```
+  const connection = new ewelink({
+    phoneNumber: '<your phone number>',
+    password: '<your ewelink password>',
+    region: '<your ewelink region>',
+  });
+```
+
 **_Using access token and api key_**
 ```
   const connection = new ewelink({
@@ -19,6 +28,9 @@
     region: '<your ewelink region>',
   });
 ```
+
+**_Using devices and arp table cache files_**
+Check [ZeroConf](zeroconf.md) docs for detailed information.
 
 > * If you don't know your region, use [getRegion](available-methods/getregion) method
 > * To get your access token and api key, use [getCredentials](available-methods/getcredentials) method

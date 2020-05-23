@@ -1,54 +1,51 @@
-const delay = require('delay');
-
 const ewelink = require('../main');
+const errors = require('../src/data/errors');
 
 const {
   singleChannelDeviceId,
   deviceIdWithPower,
   fourChannelsDevice,
-} = require('./_setup/credentials.js');
+} = require('./_setup/config/credentials.js');
 
 describe('invalid credentials', () => {
-  beforeEach(async () => {
-    await delay(1000);
-  });
-
   test('no credentials given', async () => {
-    const conn = new ewelink({});
-    expect(typeof conn).toBe('object');
-    expect(conn.error).toBe('No credentials provided');
+    expect(() => {
+      const conn = new ewelink({});
+    }).toThrow(errors.invalidCredentials);
   });
 
   test('get error response on ewelink credentials', async () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const credentials = await conn.getCredentials();
     expect(typeof credentials).toBe('object');
-    expect(credentials.msg).toBe('Authentication error');
-    expect(credentials.error).toBe(400);
+    expect(credentials.msg).toBe(errors[406]);
+    expect(credentials.error).toBe(406);
   });
 
   test('get error response on all devices', async () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const devices = await conn.getDevices();
     expect(typeof devices).toBe('object');
-    expect(devices.msg).toBe('Authentication error');
-    expect(devices.error).toBe(401);
+    expect(devices.msg).toBe(errors['406']);
+    expect(devices.error).toBe(406);
   });
 
   test('get error response on specific device', async () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const device = await conn.getDevice(singleChannelDeviceId);
+    const { msg, error } = device;
     expect(typeof device).toBe('object');
-    expect(device.msg).toBe('Authentication error');
-    expect(device.error).toBe(401);
+    expect(msg).toBe(errors[406]);
+    expect(error).toBe(406);
   });
 
   test('get device power state should fail', async () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const powerState = await conn.getDevicePowerState(singleChannelDeviceId);
+    const { msg, error } = powerState;
     expect(typeof powerState).toBe('object');
-    expect(powerState.msg).toBe('Authentication error');
-    expect(powerState.error).toBe(401);
+    expect(msg).toBe(errors[401]);
+    expect(error).toBe(401);
   });
 
   test('set device power state should fail', async () => {
@@ -58,17 +55,17 @@ describe('invalid credentials', () => {
       singleChannelDeviceId,
       'on'
     );
+    const { msg, error } = powerState;
     expect(typeof powerState).toBe('object');
-    expect(powerState.msg).toBe('Authentication error');
-    expect(powerState.error).toBe(401);
+    expect(msg).toBe(errors[406]);
+    expect(error).toBe(406);
   });
 
   test('current month power usage should fail', async () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const powerUsage = await conn.getDevicePowerUsage(deviceIdWithPower);
     expect(typeof powerUsage).toBe('object');
-    expect(powerUsage.msg).toBe('Forbidden');
-    expect(powerUsage.error).toBe(403);
+    expect(powerUsage.error).toBe(errors.noPower);
   });
 
   test('get channel count 1 should fail', async () => {
@@ -76,16 +73,18 @@ describe('invalid credentials', () => {
     const switchesAmount = await conn.getDeviceChannelCount(
       singleChannelDeviceId
     );
+    const { msg, error } = switchesAmount;
     expect(typeof switchesAmount).toBe('object');
-    expect(switchesAmount.msg).toBe('Authentication error');
-    expect(switchesAmount.error).toBe(401);
+    expect(msg).toBe(errors[406]);
+    expect(error).toBe(406);
   });
 
   test('get channel count 4 should fail', async () => {
     const conn = new ewelink({ email: 'invalid', password: 'credentials' });
     const switchesAmount = await conn.getDeviceChannelCount(fourChannelsDevice);
+    const { msg, error } = switchesAmount;
     expect(typeof switchesAmount).toBe('object');
-    expect(switchesAmount.msg).toBe('Authentication error');
-    expect(switchesAmount.error).toBe(401);
+    expect(msg).toBe(errors[406]);
+    expect(error).toBe(406);
   });
 });
