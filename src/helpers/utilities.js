@@ -13,6 +13,8 @@ const _get = (obj, path, defaultValue = null) =>
       obj
     );
 
+const _empty = obj => Object.entries(obj).length === 0;
+
 const toQueryString = object =>
   `?${Object.keys(object)
     .map(key => `${key}=${object[key].toString()}`)
@@ -22,5 +24,6 @@ module.exports = {
   nonce,
   timestamp,
   _get,
+  _empty,
   toQueryString,
 };

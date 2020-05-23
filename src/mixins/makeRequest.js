@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const { _get, toQueryString } = require('../helpers/utilities');
+const { _get, _empty, toQueryString } = require('../helpers/utilities');
 const errors = require('../data/errors');
 
 module.exports = {
@@ -34,12 +34,11 @@ module.exports = {
       },
     };
 
-    if (Object.entries(body).length > 0) {
+    if (!_empty(body)) {
       payload.body = JSON.stringify(body);
     }
 
-    const queryString = Object.entries(qs).length > 0 ? toQueryString(qs) : '';
-
+    const queryString = !_empty(qs) ? toQueryString(qs) : '';
     const requestUrl = `${apiUrl}${uri}${queryString}`;
 
     const responseRequest = await fetch(requestUrl, payload);
