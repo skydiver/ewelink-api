@@ -41,8 +41,8 @@ module.exports = {
     const queryString = !_empty(qs) ? toQueryString(qs) : '';
     const requestUrl = `${apiUrl}${uri}${queryString}`;
 
-    const responseRequest = await fetch(requestUrl, payload);
-    const response = await responseRequest.json();
+    const request = await fetch(requestUrl, payload);
+    const response = await request.json();
 
     const error = _get(response, 'error', false);
 

@@ -18,13 +18,13 @@ module.exports = {
       password: this.password,
     });
 
-    const responseRequest = await fetch(`${this.getApiUrl()}/user/login`, {
+    const request = await fetch(`${this.getApiUrl()}/user/login`, {
       method: 'post',
       headers: { Authorization: `Sign ${makeAuthorizationSign(body)}` },
       body: JSON.stringify(body),
     });
 
-    let response = await responseRequest.json();
+    let response = await request.json();
 
     const error = _get(response, 'error', false);
     const region = _get(response, 'region', false);

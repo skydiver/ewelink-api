@@ -14,12 +14,12 @@ class ChangeStateZeroconf extends WebSocket {
 
     const body = zeroConfUpdatePayload(selfApikey, deviceId, deviceKey, params);
 
-    const responseRequest = await fetch(`${url}/${endpoint}`, {
+    const request = await fetch(`${url}/${endpoint}`, {
       method: 'post',
       body: JSON.stringify(body),
     });
 
-    const response = await responseRequest.json();
+    const response = await request.json();
 
     const error = _get(response, 'error', false);
 
