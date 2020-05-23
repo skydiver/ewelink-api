@@ -18,13 +18,13 @@ module.exports = {
       password: this.password,
     });
 
-    let responseRequest = await fetch(`${this.getApiUrl()}/user/login`, {
+    const responseRequest = await fetch(`${this.getApiUrl()}/user/login`, {
       method: 'post',
       headers: { Authorization: `Sign ${makeAuthorizationSign(body)}` },
       body: JSON.stringify(body),
     });
 
-    const response = await responseRequest.json();
+    let response = await responseRequest.json();
 
     const error = _get(response, 'error', false);
     const region = _get(response, 'region', false);
@@ -36,8 +36,8 @@ module.exports = {
     if (error && parseInt(error) === 301 && region) {
       if (this.region !== region) {
         this.region = region;
-        responseRequest = await this.getCredentials();
-        return responseRequest.json();
+        response = await this.getCredentials();
+        return response;
       }
       return { error, msg: 'Region does not exist' };
     }

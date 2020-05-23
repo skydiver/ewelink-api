@@ -28,14 +28,18 @@ module.exports = {
 
     const payload = {
       method,
-      headers: { Authorization: `Bearer ${this.at}` },
+      headers: {
+        Authorization: `Bearer ${this.at}`,
+        'Content-Type': 'application/json',
+      },
     };
 
     if (Object.entries(body).length > 0) {
       payload.body = JSON.stringify(body);
     }
 
-    const queryString = toQueryString(qs);
+    const queryString = Object.entries(qs).length > 0 ? toQueryString(qs) : '';
+
     const requestUrl = `${apiUrl}${uri}${queryString}`;
 
     const responseRequest = await fetch(requestUrl, payload);
