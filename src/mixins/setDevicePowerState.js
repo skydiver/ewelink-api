@@ -63,7 +63,7 @@ module.exports = {
     }
 
     const response = await this.makeRequest({
-      method: 'POST',
+      method: 'post',
       uri: '/user/device/status',
       body: {
         deviceid: deviceId,

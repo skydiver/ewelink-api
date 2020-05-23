@@ -27,7 +27,7 @@ module.exports = {
     }
 
     const update = await this.makeRequest({
-      method: 'POST',
+      method: 'post',
       url: this.getOtaUrl(),
       uri: '/app',
       body: { deviceInfoList },
