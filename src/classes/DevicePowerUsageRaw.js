@@ -15,7 +15,7 @@ class DevicePowerUsageRaw extends WebSocket {
    * @returns {Promise<{error: string}|{data: {hundredDaysKwhData: *}, status: string}|{msg: any, error: *}|{msg: string, error: number}>}
    */
   static async get({ apiUrl, at, apiKey, deviceId }) {
-    const payloadLogin = wssLoginPayload({ at, apiKey });
+    const payloadLogin = wssLoginPayload({ at, apiKey, appid: this.APP_ID });
 
     const payloadUpdate = wssUpdatePayload({
       apiKey,

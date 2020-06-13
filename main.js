@@ -1,3 +1,4 @@
+const { APP_ID, APP_SECRET } = require('./src/data/constants');
 const mixins = require('./src/mixins');
 const errors = require('./src/data/errors');
 
@@ -35,6 +36,8 @@ class eWeLink {
     this.apiKey = apiKey;
     this.devicesCache = devicesCache;
     this.arpTable = arpTable;
+    this.APP_ID = APP_ID;
+    this.APP_SECRET = APP_SECRET;
   }
 
   // eslint-disable-next-line class-methods-use-this

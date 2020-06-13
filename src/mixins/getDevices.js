@@ -1,4 +1,3 @@
-const { APP_ID } = require('../data/constants');
 const { _get, timestamp } = require('../helpers/utilities');
 const errors = require('../data/errors');
 
@@ -9,6 +8,8 @@ module.exports = {
    * @returns {Promise<{msg: string, error: number}|*>}
    */
   async getDevices() {
+    const { APP_ID } = this;
+
     const response = await this.makeRequest({
       uri: '/user/device',
       qs: {

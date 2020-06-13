@@ -15,7 +15,11 @@ module.exports = {
   async getDevicePowerState(deviceId, channel = 1) {
     const status = await this.makeRequest({
       uri: '/user/device/status',
-      qs: deviceStatusPayload({ deviceId, params: 'switch|switches' }),
+      qs: deviceStatusPayload({
+        appid: this.APP_ID,
+        deviceId,
+        params: 'switch|switches',
+      }),
     });
 
     const error = _get(status, 'error', false);
