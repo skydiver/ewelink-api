@@ -1,3 +1,4 @@
+const { APP_ID, APP_SECRET } = require('../src/data/constants');
 const ewelink = require('../main');
 const errors = require('../src/data/errors');
 
@@ -14,6 +15,8 @@ describe('main class instantiation: valid parameters combinations', () => {
       arpTable: null,
       at: null,
       devicesCache: null,
+      APP_ID,
+      APP_SECRET,
     });
   });
 
@@ -33,6 +36,8 @@ describe('main class instantiation: valid parameters combinations', () => {
       arpTable: null,
       at: null,
       devicesCache: null,
+      APP_ID,
+      APP_SECRET,
     });
   });
 
@@ -48,6 +53,8 @@ describe('main class instantiation: valid parameters combinations', () => {
       at: null,
       arpTable: null,
       devicesCache: null,
+      APP_ID,
+      APP_SECRET,
     });
   });
 
@@ -63,6 +70,8 @@ describe('main class instantiation: valid parameters combinations', () => {
       at: credentials.at,
       arpTable: null,
       devicesCache: null,
+      APP_ID,
+      APP_SECRET,
     });
   });
 
@@ -78,6 +87,8 @@ describe('main class instantiation: valid parameters combinations', () => {
       at: null,
       arpTable: credentials.arpTable,
       devicesCache: credentials.devicesCache,
+      APP_ID,
+      APP_SECRET,
     });
   });
 
@@ -96,6 +107,8 @@ describe('main class instantiation: valid parameters combinations', () => {
       at: credentials.at,
       arpTable: null,
       devicesCache: null,
+      APP_ID,
+      APP_SECRET,
     });
   });
 });
