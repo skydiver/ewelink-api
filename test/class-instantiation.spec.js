@@ -111,6 +111,28 @@ describe('main class instantiation: valid parameters combinations', () => {
       APP_SECRET,
     });
   });
+
+  test('initialize class using custom APP_ID and APP_SECRET', async () => {
+    const credentials = {
+      email: 'user@email.com',
+      at: 'xxxyyyzzz',
+      APP_ID: 'CUSTOM_APP_ID',
+      APP_SECRET: 'CUSTOM_APP_SECRET',
+    };
+    const connection = new ewelink(credentials);
+    expect(connection).toEqual({
+      region: 'us',
+      email: credentials.email,
+      phoneNumber: null,
+      password: null,
+      apiKey: null,
+      at: credentials.at,
+      arpTable: null,
+      devicesCache: null,
+      APP_ID: 'CUSTOM_APP_ID',
+      APP_SECRET: 'CUSTOM_APP_SECRET',
+    });
+  });
 });
 
 describe('main class instantiation: invalid parameters combinations', () => {
