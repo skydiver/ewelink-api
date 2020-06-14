@@ -4,6 +4,8 @@ const delay = require('delay');
 
 const { nonce, timestamp } = require('../helpers/utilities');
 const getDevice = require('./getDevice');
+const errors = require('../data/errors');
+const getDevicePowerState = require('./getDevicePowerState');
 
 module.exports = {
   async initDeviceControl(params = {}) {
@@ -93,7 +95,7 @@ module.exports = {
   /**
    * Check device status (timers, share status, on/off etc)
    */
-  async getDeviceStatus(deviceId, param) {
+  async getDeviceStatus(deviceId, params) {
     await this.initDeviceControl();
 
     let response = null;
@@ -112,7 +114,7 @@ module.exports = {
       userAgent: 'ewelink-api',
       sequence: Math.floor(timestamp * 1000),
       ts: timestamp,
-      params: [param],
+      params,
     });
 
     this.wsp.send(payload);
@@ -124,18 +126,39 @@ module.exports = {
   /**
    * Set device power status
    */
-  async setWSDevicePowerState(deviceId, state) {
-    let status;
-
-    // if action is toggle, get current power status
-    if (state === 'toggle') {
-      status = await this.getDeviceStatus(deviceId, 'switch');
+  async setWSDevicePowerState(deviceId, state, channel = 1) {
+    // check for valid power state
+    if (!['on', 'off', 'toggle'].includes(state)) {
+      throw new Error(errors.invalidPowerState);
     }
 
-    const stateToSwitch = status.params.switch === 'on' ? 'off' : 'on';
+    let payload;
+    let stateToSwitch = state;
 
-    await this.updateDeviceStatus(deviceId, { switch: stateToSwitch });
+    // get device current state
+    const status = await this.getDeviceStatus(deviceId, ['switch', 'switches']);
+
+    // get current device state
+    const currentState = status.params.switches
+      ? status.params.switches[channel - 1].switch
+      : status.params.switch;
+
+    // if toggle, switch power state
+    if (state === 'toggle') {
+      stateToSwitch = currentState === 'on' ? 'off' : 'on';
+    }
+
+    if (status.params.switches) {
+      const switches = [...status.params.switches];
+      switches[channel - 1].switch = stateToSwitch;
+      payload = { switches };
+    } else {
+      payload = { switch: stateToSwitch };
+    }
+
+    await this.updateDeviceStatus(deviceId, payload);
     await delay(this.wsDelayTime);
+
     await this.wsp.close();
   },
 };
