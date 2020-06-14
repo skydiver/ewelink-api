@@ -3,9 +3,15 @@ const WebSocketAsPromised = require('websocket-as-promised');
 const delay = require('delay');
 
 const { nonce, timestamp } = require('../helpers/utilities');
+const getDevice = require('./getDevice');
 
 module.exports = {
   async initDeviceControl(params = {}) {
+    // check if socket is already initialized
+    if (this.wsp) {
+      return;
+    }
+
     let { APP_ID, at, apiKey } = this;
 
     // set delay between socket messages
@@ -65,7 +71,12 @@ module.exports = {
     await delay(this.wsDelayTime);
   },
 
+  /**
+   * Update device status (timers, share status, on/off etc)
+   */
   async updateDeviceStatus(deviceId, params) {
+    await this.initDeviceControl();
+
     const payload = JSON.stringify({
       action: 'update',
       deviceid: deviceId,
@@ -79,8 +90,51 @@ module.exports = {
     return this.wsp.send(payload);
   },
 
+  /**
+   * Check device status (timers, share status, on/off etc)
+   */
+  async getDeviceStatus(deviceId, param) {
+    await this.initDeviceControl();
+
+    let response = null;
+
+    this.wsp.onMessage.addListener(message => {
+      const data = JSON.parse(message);
+      if (data.deviceid === deviceId) {
+        response = data;
+      }
+    });
+
+    const payload = JSON.stringify({
+      action: 'query',
+      deviceid: deviceId,
+      apikey: this.apiKey,
+      userAgent: 'ewelink-api',
+      sequence: Math.floor(timestamp * 1000),
+      ts: timestamp,
+      params: [param],
+    });
+
+    this.wsp.send(payload);
+    await delay(this.wsDelayTime);
+
+    return response;
+  },
+
+  /**
+   * Set device power status
+   */
   async setWSDevicePowerState(deviceId, state) {
-    await this.updateDeviceStatus(deviceId, { switch: state });
+    let status;
+
+    // if action is toggle, get current power status
+    if (state === 'toggle') {
+      status = await this.getDeviceStatus(deviceId, 'switch');
+    }
+
+    const stateToSwitch = status.params.switch === 'on' ? 'off' : 'on';
+
+    await this.updateDeviceStatus(deviceId, { switch: stateToSwitch });
     await delay(this.wsDelayTime);
     await this.wsp.close();
   },
