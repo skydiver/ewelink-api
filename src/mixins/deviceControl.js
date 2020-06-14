@@ -14,7 +14,7 @@ module.exports = {
       return;
     }
 
-    let { APP_ID, at, apiKey } = this;
+    const { APP_ID, at, apiKey } = this;
 
     // set delay between socket messages
     const { delayTime = 1000 } = params;
@@ -23,8 +23,6 @@ module.exports = {
     // request credentials if needed
     if (at === null || apiKey === null) {
       await this.getCredentials();
-      at = this.at;
-      apiKey = this.apiKey;
     }
 
     // request distribution service
@@ -67,13 +65,15 @@ module.exports = {
    * WebSocket authentication process
    */
   async webSocketHandshake() {
+    const apikey = this.deviceApiKey || this.apiKey;
+
     const payload = JSON.stringify({
       action: 'userOnline',
       version: 8,
       ts: timestamp,
       at: this.at,
       userAgent: 'ewelink-api',
-      apikey: this.apiKey,
+      apikey,
       appid: this.APP_ID,
       nonce,
       sequence: Math.floor(timestamp * 1000),
@@ -89,10 +89,12 @@ module.exports = {
   async updateDeviceStatus(deviceId, params) {
     await this.initDeviceControl();
 
+    const apikey = this.deviceApiKey || this.apiKey;
+
     const payload = JSON.stringify({
       action: 'update',
       deviceid: deviceId,
-      apikey: this.apiKey,
+      apikey,
       userAgent: 'ewelink-api',
       sequence: Math.floor(timestamp * 1000),
       ts: timestamp,
@@ -117,10 +119,12 @@ module.exports = {
       }
     });
 
+    const apikey = this.deviceApiKey || this.apiKey;
+
     const payload = JSON.stringify({
       action: 'query',
       deviceid: deviceId,
-      apikey: this.apiKey,
+      apikey,
       userAgent: 'ewelink-api',
       sequence: Math.floor(timestamp * 1000),
       ts: timestamp,
@@ -136,14 +140,20 @@ module.exports = {
   /**
    * Set device power status
    */
-  async setWSDevicePowerState(deviceId, state, channel = 1) {
+  async setWSDevicePowerState(deviceId, state, options = {}) {
     // check for valid power state
     if (!['on', 'off', 'toggle'].includes(state)) {
       throw new Error(errors.invalidPowerState);
     }
 
-    let payload;
-    let stateToSwitch = state;
+    // get extra parameters
+    const { channel = 1, shared = false } = options;
+
+    // if device is shared by other account, fetch device api key
+    if (shared) {
+      const device = await this.getDevice(deviceId);
+      this.deviceApiKey = device.apikey;
+    }
 
     // get device current state
     const status = await this.getDeviceStatus(deviceId, ['switch', 'switches']);
@@ -154,10 +164,13 @@ module.exports = {
       : status.params.switch;
 
     // if toggle, switch power state
+    let stateToSwitch = state;
     if (state === 'toggle') {
       stateToSwitch = currentState === 'on' ? 'off' : 'on';
     }
 
+    // build request payload
+    let payload;
     if (status.params.switches) {
       const switches = [...status.params.switches];
       switches[channel - 1].switch = stateToSwitch;
@@ -166,6 +179,7 @@ module.exports = {
       payload = { switch: stateToSwitch };
     }
 
+    // change device status
     try {
       await this.updateDeviceStatus(deviceId, payload);
       await delay(this.wsDelayTime);
@@ -174,6 +188,9 @@ module.exports = {
     } finally {
       await this.wsp.close();
     }
+
+    // delete device api key
+    delete this.deviceApiKey;
 
     return true;
   },
