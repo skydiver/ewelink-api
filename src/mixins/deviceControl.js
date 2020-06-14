@@ -47,6 +47,16 @@ module.exports = {
 
     // open WebSocket connection
     this.wsp = new WebSocketAsPromised(WSS_URL, WSS_CONFIG);
+
+    // catch autentication errors
+    this.wsp.onMessage.addListener(message => {
+      const data = JSON.parse(message);
+      if (data.error) {
+        throw new Error(errors[data.error]);
+      }
+    });
+
+    // open socket connection
     await this.wsp.open();
 
     // WebSocket handshake
@@ -156,9 +166,15 @@ module.exports = {
       payload = { switch: stateToSwitch };
     }
 
-    await this.updateDeviceStatus(deviceId, payload);
-    await delay(this.wsDelayTime);
+    try {
+      await this.updateDeviceStatus(deviceId, payload);
+      await delay(this.wsDelayTime);
+    } catch (error) {
+      throw new Error(error);
+    } finally {
+      await this.wsp.close();
+    }
 
-    await this.wsp.close();
+    return true;
   },
 };
