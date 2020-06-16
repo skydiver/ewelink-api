@@ -3,9 +3,12 @@ const WebSocketAsPromised = require('websocket-as-promised');
 const delay = require('delay');
 
 const { nonce, timestamp } = require('../helpers/utilities');
-const getDevice = require('./getDevice');
 const errors = require('../data/errors');
-const getDevicePowerState = require('./getDevicePowerState');
+
+const {
+  getNewPowerState,
+  VALID_POWER_STATES,
+} = require('../helpers/device-control');
 
 module.exports = {
   async initDeviceControl(params = {}) {
@@ -142,7 +145,7 @@ module.exports = {
    */
   async setWSDevicePowerState(deviceId, state, options = {}) {
     // check for valid power state
-    if (!['on', 'off', 'toggle'].includes(state)) {
+    if (!VALID_POWER_STATES.includes(state)) {
       throw new Error(errors.invalidPowerState);
     }
 
@@ -163,11 +166,8 @@ module.exports = {
       ? status.params.switches[channel - 1].switch
       : status.params.switch;
 
-    // if toggle, switch power state
-    let stateToSwitch = state;
-    if (state === 'toggle') {
-      stateToSwitch = currentState === 'on' ? 'off' : 'on';
-    }
+    // resolve new power state
+    const stateToSwitch = getNewPowerState(currentState, state);
 
     // build request payload
     let payload;
