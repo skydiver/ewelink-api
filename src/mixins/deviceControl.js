@@ -88,6 +88,15 @@ module.exports = {
   },
 
   /**
+   * Close WebSocket connection and class cleanup
+   */
+  async webSocketClose() {
+    delete this.wsDelayTime;
+    delete this.wsp;
+    delete this.deviceApiKey;
+  },
+
+  /**
    * Update device status (timers, share status, on/off etc)
    */
   async updateDeviceStatus(deviceId, params) {
@@ -183,11 +192,8 @@ module.exports = {
     } catch (error) {
       throw new Error(error);
     } finally {
-      await this.wsp.close();
+      await this.webSocketClose();
     }
-
-    // delete device api key
-    delete this.deviceApiKey;
 
     return {
       status: 'ok',
