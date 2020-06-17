@@ -153,6 +153,11 @@ module.exports = {
     this.wsp.send(payload);
     await delay(this.wsDelayTime);
 
+    // throw error on invalid device
+    if (response.error) {
+      throw new Error(errors[response.error]);
+    }
+
     return response;
   },
 
