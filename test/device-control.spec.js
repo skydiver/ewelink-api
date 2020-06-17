@@ -1,4 +1,5 @@
 const ewelink = require('../main');
+const errors = require('../src/data/errors');
 
 const {
   email,
@@ -7,12 +8,6 @@ const {
   singleChannelDeviceId,
   fourChannelsDevice,
 } = require('./_setup/config/credentials.js');
-
-const {
-  credentialsExpectations,
-  allDevicesExpectations,
-  specificDeviceExpectations,
-} = require('./_setup/expectations');
 
 describe('device control using WebSockets', () => {
   let conn;
@@ -65,5 +60,27 @@ describe('device control using WebSockets', () => {
     const { switches: switchesVerify } = deviceVerify.params;
     const currentStateVerify = switchesVerify[channel - 1].switch;
     expect(newState).toBe(currentStateVerify);
+  });
+
+  test('using invalid credentials should throw an exception', async () => {
+    try {
+      const connection = new ewelink({
+        email: 'invalid',
+        password: 'credentials',
+      });
+      await connection.setWSDevicePowerState(singleChannelDeviceId, 'toggle');
+    } catch (error) {
+      expect(typeof error).toBe('object');
+      expect(error.toString()).toBe(`Error: ${errors[406]}`);
+    }
+  });
+
+  test('requesting invalid power state should throw an exception', async () => {
+    try {
+      await conn.setWSDevicePowerState(singleChannelDeviceId, 'INVALID STATE');
+    } catch (error) {
+      expect(typeof error).toBe('object');
+      expect(error.toString()).toBe(`Error: ${errors.invalidPowerState}`);
+    }
   });
 });
