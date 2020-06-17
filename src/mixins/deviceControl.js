@@ -162,8 +162,11 @@ module.exports = {
     // get device current state
     const status = await this.getDeviceStatus(deviceId, ['switch', 'switches']);
 
+    // check for multi-channel device
+    const multiChannelDevice = !!status.params.switches;
+
     // get current device state
-    const currentState = status.params.switches
+    const currentState = multiChannelDevice
       ? status.params.switches[channel - 1].switch
       : status.params.switch;
 
@@ -186,6 +189,10 @@ module.exports = {
     // delete device api key
     delete this.deviceApiKey;
 
-    return true;
+    return {
+      status: 'ok',
+      state: stateToSwitch,
+      channel: multiChannelDevice ? channel : 1,
+    };
   },
 };
