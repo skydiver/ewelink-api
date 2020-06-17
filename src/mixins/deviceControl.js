@@ -7,6 +7,7 @@ const errors = require('../data/errors');
 
 const {
   getNewPowerState,
+  getPowerStateParams,
   VALID_POWER_STATES,
 } = require('../helpers/device-control');
 
@@ -170,18 +171,11 @@ module.exports = {
     const stateToSwitch = getNewPowerState(currentState, state);
 
     // build request payload
-    let payload;
-    if (status.params.switches) {
-      const switches = [...status.params.switches];
-      switches[channel - 1].switch = stateToSwitch;
-      payload = { switches };
-    } else {
-      payload = { switch: stateToSwitch };
-    }
+    const params = getPowerStateParams(status.params, stateToSwitch, channel);
 
     // change device status
     try {
-      await this.updateDeviceStatus(deviceId, payload);
+      await this.updateDeviceStatus(deviceId, params);
       await delay(this.wsDelayTime);
     } catch (error) {
       throw new Error(error);
