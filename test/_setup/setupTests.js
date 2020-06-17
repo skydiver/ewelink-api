@@ -15,6 +15,7 @@ const nockAction = false;
 const testsToDelay = [
   'env-node.spec.js',
   'env-serverless.spec.js',
+  'device-control.spec.js',
   'invalid-credentials.spec.js',
   'power-usage.spec.js',
   'temperature-humidity.spec.js',
