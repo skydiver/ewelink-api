@@ -130,19 +130,6 @@ describe('device control using WebSockets: set power state', () => {
     expect(powerState.channel).toBe(channel);
     expect(powerState.state).toBe('off');
   });
-
-  test('turn off invalid device', async () => {
-    jest.setTimeout(30000);
-
-    try {
-      await conn.setWSDevicePowerState('INVALID DEVICE', 'off', {
-        shared: sharedAccount,
-      });
-    } catch (error) {
-      expect(typeof error).toBe('object');
-      expect(error.toString()).toBe(`Error: ${errors[403]}`);
-    }
-  });
 });
 
 describe('device control using WebSockets: errors and exceptions', () => {
@@ -152,7 +139,32 @@ describe('device control using WebSockets: errors and exceptions', () => {
     conn = new ewelink({ email, password });
   });
 
-  test('using invalid credentials should throw an exception', async () => {
+  test('get power state using invalid credentials should throw an exception', async () => {
+    try {
+      const connection = new ewelink({
+        email: 'invalid',
+        password: 'credentials',
+      });
+      await connection.getWSDevicePowerState(singleChannelDeviceId);
+    } catch (error) {
+      expect(typeof error).toBe('object');
+      expect(error.toString()).toBe(`Error: ${errors[406]}`);
+    }
+  });
+
+  test('get power state using invalid device should throw an exception', async () => {
+    jest.setTimeout(30000);
+    try {
+      await conn.getWSDevicePowerState('INVALID DEVICE', {
+        shared: sharedAccount,
+      });
+    } catch (error) {
+      expect(typeof error).toBe('object');
+      expect(error.toString()).toBe(`Error: ${errors[403]}`);
+    }
+  });
+
+  test('set power state using invalid credentials should throw an exception', async () => {
     try {
       const connection = new ewelink({
         email: 'invalid',
@@ -165,7 +177,19 @@ describe('device control using WebSockets: errors and exceptions', () => {
     }
   });
 
-  test('requesting invalid power state should throw an exception', async () => {
+  test('turn off invalid device', async () => {
+    jest.setTimeout(30000);
+    try {
+      await conn.setWSDevicePowerState('INVALID DEVICE', 'off', {
+        shared: sharedAccount,
+      });
+    } catch (error) {
+      expect(typeof error).toBe('object');
+      expect(error.toString()).toBe(`Error: ${errors[403]}`);
+    }
+  });
+
+  test('using invalid power state should throw an exception', async () => {
     try {
       await conn.setWSDevicePowerState(singleChannelDeviceId, 'INVALID STATE');
     } catch (error) {
