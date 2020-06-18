@@ -53,11 +53,12 @@ module.exports = {
     this.wsp = new WebSocketAsPromised(WSS_URL, WSS_CONFIG);
 
     // catch autentication errors
-    let authError;
-    this.wsp.onMessage.addListener(message => {
+    let socketError;
+    this.wsp.onMessage.addListener(async message => {
       const data = JSON.parse(message);
       if (data.error) {
-        authError = data;
+        socketError = data;
+        await this.webSocketClose();
       }
     });
 
@@ -68,8 +69,8 @@ module.exports = {
     await this.webSocketHandshake();
 
     // if auth error exists, throw an error
-    if (authError) {
-      throw new Error(errors[authError.error]);
+    if (socketError) {
+      throw new Error(errors[socketError.error]);
     }
   },
 
