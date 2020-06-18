@@ -27,6 +27,25 @@ const getPowerStateParams = (params, newState, channel) => {
   return { switch: newState };
 };
 
+/**
+ * Return status of all channels on a multi-channel device
+ */
+const getAllChannelsState = params => {
+  const { switches } = params;
+  return switches.map(ch => ({
+    channel: ch.outlet + 1,
+    state: ch.switch,
+  }));
+};
+
+/**
+ * Return status of specific channel on multi-channel device
+ */
+const getSpecificChannelState = (params, channel) => {
+  const { switches } = params;
+  return switches[channel - 1].switch;
+};
+
 module.exports = {
   STATE_ON,
   STATE_OFF,
@@ -34,4 +53,6 @@ module.exports = {
   VALID_POWER_STATES,
   getNewPowerState,
   getPowerStateParams,
+  getAllChannelsState,
+  getSpecificChannelState,
 };

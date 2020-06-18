@@ -6,9 +6,11 @@ const { nonce, timestamp } = require('../helpers/utilities');
 const errors = require('../data/errors');
 
 const {
+  VALID_POWER_STATES,
   getNewPowerState,
   getPowerStateParams,
-  VALID_POWER_STATES,
+  getAllChannelsState,
+  getSpecificChannelState,
 } = require('../helpers/device-control');
 
 module.exports = {
@@ -189,24 +191,17 @@ module.exports = {
 
     // returns all channels
     if (multiChannelDevice && allChannels) {
-      const { switches } = status.params;
-      const state = switches.map(ch => ({
-        channel: ch.outlet + 1,
-        state: ch.switch,
-      }));
-
       return {
         status: 'ok',
-        state,
+        state: getAllChannelsState(status.params),
       };
     }
 
     // multi-channel device & requested channel
     if (multiChannelDevice) {
-      const { switches } = status.params;
       return {
         status: 'ok',
-        state: switches[channel - 1].switch,
+        state: getSpecificChannelState(status.params, channel),
         channel,
       };
     }
