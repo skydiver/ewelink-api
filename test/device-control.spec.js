@@ -16,6 +16,35 @@ describe('device control using WebSockets', () => {
     conn = new ewelink({ email, password });
   });
 
+  test('get power state on single channel device', async () => {
+    jest.setTimeout(30000);
+    const device = await conn.getDevice(singleChannelDeviceId);
+    const { switch: originalState } = device.params;
+    const powerState = await conn.getWSDevicePowerState(singleChannelDeviceId, {
+      shared: sharedAccount,
+    });
+    expect(typeof powerState).toBe('object');
+    expect(powerState.status).toBe('ok');
+    expect(powerState.state).toBe(originalState);
+    expect(powerState.channel).toBe(1);
+  });
+
+  test('get power state on multi-channel device', async () => {
+    jest.setTimeout(30000);
+    const channel = 3;
+    const device = await conn.getDevice(fourChannelsDevice);
+    const { switches } = device.params;
+    const originalState = switches[channel - 1].switch;
+    const powerState = await conn.getWSDevicePowerState(fourChannelsDevice, {
+      channel,
+      shared: sharedAccount,
+    });
+    expect(typeof powerState).toBe('object');
+    expect(powerState.status).toBe('ok');
+    expect(powerState.state).toBe(originalState);
+    expect(powerState.channel).toBe(channel);
+  });
+
   test('toggle power state on single channel device', async () => {
     jest.setTimeout(30000);
     const device = await conn.getDevice(singleChannelDeviceId);
