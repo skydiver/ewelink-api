@@ -126,7 +126,7 @@ module.exports = {
   /**
    * Check device status (timers, share status, on/off etc)
    */
-  async getDeviceStatus(deviceId, params) {
+  async getWSDeviceStatus(deviceId, params) {
     await this.initDeviceControl();
 
     let response = null;
@@ -180,7 +180,10 @@ module.exports = {
     }
 
     // get device current state
-    const status = await this.getDeviceStatus(deviceId, ['switch', 'switches']);
+    const status = await this.getWSDeviceStatus(deviceId, [
+      'switch',
+      'switches',
+    ]);
 
     // check for multi-channel device
     const multiChannelDevice = !!status.params.switches;
