@@ -163,7 +163,64 @@ module.exports = {
   },
 
   /**
-   * Set device power status
+   * Get device power state
+   */
+  async getWSDevicePowerState(deviceId, options = {}) {
+    // get extra parameters
+    const { channel = 1, allChannels = false, shared = false } = options;
+
+    // if device is shared by other account, fetch device api key
+    if (shared) {
+      const device = await this.getDevice(deviceId);
+      this.deviceApiKey = device.apikey;
+    }
+
+    // get device current state
+    const status = await this.getWSDeviceStatus(deviceId, [
+      'switch',
+      'switches',
+    ]);
+
+    // close websocket connection
+    await this.webSocketClose();
+
+    // check for multi-channel device
+    const multiChannelDevice = !!status.params.switches;
+
+    // returns all channels
+    if (multiChannelDevice && allChannels) {
+      const { switches } = status.params;
+      const state = switches.map(ch => ({
+        channel: ch.outlet + 1,
+        state: ch.switch,
+      }));
+
+      return {
+        status: 'ok',
+        state,
+      };
+    }
+
+    // multi-channel device & requested channel
+    if (multiChannelDevice) {
+      const { switches } = status.params;
+      return {
+        status: 'ok',
+        state: switches[channel - 1].switch,
+        channel,
+      };
+    }
+
+    // single channel device
+    return {
+      status: 'ok',
+      state: status.params.switch,
+      channel,
+    };
+  },
+
+  /**
+   * Set device power state
    */
   async setWSDevicePowerState(deviceId, state, options = {}) {
     // check for valid power state
