@@ -1,5 +1,6 @@
 const ewelink = require('../main');
 const errors = require('../src/data/errors');
+const { getAllChannelsState } = require('../src/helpers/device-control');
 
 const {
   email,
@@ -29,7 +30,7 @@ describe('device control using WebSockets: get power state', () => {
     expect(powerState.channel).toBe(1);
   });
 
-  test('get power state on multi-channel device', async () => {
+  test('get power state for specific channel on multi-channel device', async () => {
     jest.setTimeout(30000);
     const channel = 3;
     const device = await conn.getDevice(fourChannelsDevice);
@@ -43,6 +44,20 @@ describe('device control using WebSockets: get power state', () => {
     expect(powerState.status).toBe('ok');
     expect(powerState.state).toBe(originalState);
     expect(powerState.channel).toBe(channel);
+  });
+
+  test('get power state for all channels on multi-channel device', async () => {
+    jest.setTimeout(30000);
+    const channel = 3;
+    const device = await conn.getDevice(fourChannelsDevice);
+    const originalState = getAllChannelsState(device.params);
+    const powerState = await conn.getWSDevicePowerState(fourChannelsDevice, {
+      allChannels: true,
+      shared: sharedAccount,
+    });
+    expect(typeof powerState).toBe('object');
+    expect(powerState.status).toBe('ok');
+    expect(powerState.state).toStrictEqual(originalState);
   });
 });
 
