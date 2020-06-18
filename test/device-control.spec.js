@@ -9,7 +9,7 @@ const {
   fourChannelsDevice,
 } = require('./_setup/config/credentials.js');
 
-describe('device control using WebSockets', () => {
+describe('device control using WebSockets: get power state', () => {
   let conn;
 
   beforeAll(() => {
@@ -43,6 +43,14 @@ describe('device control using WebSockets', () => {
     expect(powerState.status).toBe('ok');
     expect(powerState.state).toBe(originalState);
     expect(powerState.channel).toBe(channel);
+  });
+});
+
+describe('device control using WebSockets: set power state', () => {
+  let conn;
+
+  beforeAll(() => {
+    conn = new ewelink({ email, password });
   });
 
   test('toggle power state on single channel device', async () => {
@@ -134,6 +142,14 @@ describe('device control using WebSockets', () => {
       expect(typeof error).toBe('object');
       expect(error.toString()).toBe(`Error: ${errors[403]}`);
     }
+  });
+});
+
+describe('device control using WebSockets: errors and exceptions', () => {
+  let conn;
+
+  beforeAll(() => {
+    conn = new ewelink({ email, password });
   });
 
   test('using invalid credentials should throw an exception', async () => {
