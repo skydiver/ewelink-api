@@ -97,6 +97,7 @@ module.exports = {
    * Close WebSocket connection and class cleanup
    */
   async webSocketClose() {
+    await this.wsp.close();
     delete this.wsDelayTime;
     delete this.wsp;
     delete this.deviceApiKey;
