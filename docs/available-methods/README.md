@@ -8,6 +8,7 @@ Here is the list of available methods.
 * [getDevices](getdevices.md)
 * [getDevicePowerState](getdevicepowerstate.md)
 * [setDevicePowerState](setdevicepowerstate.md)
+* [getWSDevicePowerState](getwsdevicepowerstate.md)
 * [setWSDevicePowerState](setwsdevicepowerstate.md)
 * [toggleDevice](toggledevice.md)
 * [getDevicePowerUsage](getdevicepowerusage.md)

@@ -13,6 +13,7 @@
   * [getDevices](available-methods/getdevices.md)
   * [getDevicePowerState](available-methods/getdevicepowerstate.md)
   * [setDevicePowerState](available-methods/setdevicepowerstate.md)
+  * [getWSDevicePowerState](available-methods/getwsdevicepowerstate.md)
   * [setWSDevicePowerState](available-methods/setwsdevicepowerstate.md)
   * [toggleDevice](available-methods/toggledevice.md)
   * [getDevicePowerUsage](available-methods/getdevicepowerusage.md)
