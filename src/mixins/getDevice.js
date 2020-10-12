@@ -1,4 +1,3 @@
-const { APP_ID } = require('../data/constants');
 const { nonce, timestamp, _get } = require('../helpers/utilities');
 const errors = require('../data/errors');
 
@@ -13,6 +12,8 @@ module.exports = {
     if (this.devicesCache) {
       return this.devicesCache.find(dev => dev.deviceid === deviceId) || null;
     }
+
+    const { APP_ID } = this;
 
     const device = await this.makeRequest({
       uri: `/user/device/${deviceId}`,

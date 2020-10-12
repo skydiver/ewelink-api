@@ -16,6 +16,7 @@ module.exports = {
     const payloadLogin = wssLoginPayload({
       at: this.at,
       apiKey: this.apiKey,
+      appid: this.APP_ID,
     });
 
     const wsp = new WebSocketAsPromised(this.getApiWebSocket(), {

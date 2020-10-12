@@ -1,8 +1,11 @@
+const { APP_SECRET } = require('../src/data/constants');
 const ewelinkHelpers = require('../src/helpers/ewelink');
 
 describe('check eWeLink helpers', () => {
   test('make authorization sign should return right string', async () => {
-    const auth = ewelinkHelpers.makeAuthorizationSign({ data: 'string' });
+    const auth = ewelinkHelpers.makeAuthorizationSign(APP_SECRET, {
+      data: 'string',
+    });
     expect(auth.length).toBe(44);
     expect(auth).toBe('7Aaa/8EuRScACNrZTATW2WKIY7lcRnjgWHTiBl8G0TQ=');
   });

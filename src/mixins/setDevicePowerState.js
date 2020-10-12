@@ -1,4 +1,3 @@
-const { APP_ID } = require('../data/constants');
 const { _get, timestamp, nonce } = require('../helpers/utilities');
 const errors = require('../data/errors');
 
@@ -61,6 +60,8 @@ module.exports = {
         state: stateToSwitch,
       });
     }
+
+    const { APP_ID } = this;
 
     const response = await this.makeRequest({
       method: 'post',

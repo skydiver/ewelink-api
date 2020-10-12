@@ -1,17 +1,26 @@
+const {
+  APP_ID: DEFAULT_APP_ID,
+  APP_SECRET: DEFAULT_APP_SECRET,
+} = require('./src/data/constants');
+
 const mixins = require('./src/mixins');
 const errors = require('./src/data/errors');
 
 class eWeLink {
-  constructor({
-    region = 'us',
-    email = null,
-    phoneNumber = null,
-    password = null,
-    at = null,
-    apiKey = null,
-    devicesCache = null,
-    arpTable = null,
-  }) {
+  constructor(parameters = {}) {
+    const {
+      region = 'us',
+      email = null,
+      phoneNumber = null,
+      password = null,
+      at = null,
+      apiKey = null,
+      devicesCache = null,
+      arpTable = null,
+      APP_ID = DEFAULT_APP_ID,
+      APP_SECRET = DEFAULT_APP_SECRET,
+    } = parameters;
+
     const check = this.checkLoginParameters({
       region,
       email,
@@ -35,6 +44,9 @@ class eWeLink {
     this.apiKey = apiKey;
     this.devicesCache = devicesCache;
     this.arpTable = arpTable;
+
+    this.APP_ID = APP_ID;
+    this.APP_SECRET = APP_SECRET;
   }
 
   // eslint-disable-next-line class-methods-use-this

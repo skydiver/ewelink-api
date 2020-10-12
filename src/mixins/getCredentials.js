@@ -12,7 +12,10 @@ module.exports = {
    * @returns {Promise<{msg: string, error: *}>}
    */
   async getCredentials() {
+    const { APP_ID, APP_SECRET } = this;
+
     const body = credentialsPayload({
+      appid: APP_ID,
       email: this.email,
       phoneNumber: this.phoneNumber,
       password: this.password,
@@ -20,7 +23,9 @@ module.exports = {
 
     const request = await fetch(`${this.getApiUrl()}/user/login`, {
       method: 'post',
-      headers: { Authorization: `Sign ${makeAuthorizationSign(body)}` },
+      headers: {
+        Authorization: `Sign ${makeAuthorizationSign(APP_SECRET, body)}`,
+      },
       body: JSON.stringify(body),
     });
 
