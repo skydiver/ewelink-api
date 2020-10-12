@@ -8,7 +8,7 @@ const wssLoginPayload = ({ at, apiKey, appid }) => {
     appid,
     nonce,
     ts: timestamp,
-    userAgent: 'ewelink-api',
+    userAgent: 'app',
     sequence: Math.floor(timestamp * 1000),
     version: 8,
   };

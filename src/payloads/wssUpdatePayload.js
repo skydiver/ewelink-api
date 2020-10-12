@@ -8,7 +8,7 @@ const wssUpdatePayload = ({ apiKey, deviceId, params }) => {
     selfApikey: apiKey,
     params,
     ts: timestamp,
-    userAgent: 'ewelink-api',
+    userAgent: 'app',
     sequence: Math.floor(timestamp * 1000),
   };
   return JSON.stringify(payload);
