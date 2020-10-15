@@ -44,7 +44,7 @@ module.exports = {
     const request = await fetch(requestUrl, payload);
 
     if (!request.ok) {
-      return { error: request.status, msg: request.statusText };
+      return { error: request.status, msg: errors[request.status] };
     }
 
     const response = await request.json();
