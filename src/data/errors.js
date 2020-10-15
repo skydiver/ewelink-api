@@ -5,6 +5,7 @@ const errors = {
   403: 'Forbidden',
   404: 'Device does not exist',
   406: 'Authentication failed',
+  503: 'Service Temporarily Unavailable or Device is offline'
 };
 
 const customErrors = {

@@ -42,14 +42,13 @@ module.exports = {
     const requestUrl = `${apiUrl}${uri}${queryString}`;
 
     const request = await fetch(requestUrl, payload);
-    const response = await request.json();
 
-    const error = _get(response, 'error', false);
-
-    if (error) {
-      return { error, msg: errors[error] };
+    if (!request.ok) {
+      return { error: request.status, msg: request.statusText };
     }
 
-    return response;
+    const response = await request.json();
+
+    return response
   },
 };
