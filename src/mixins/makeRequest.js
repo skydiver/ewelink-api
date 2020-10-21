@@ -57,7 +57,7 @@ module.exports = {
 
     /** Throw error if needed */
     if (error) {
-      throw new Error(`Error ${error}: ${response.msg}`);
+      throw new Error(`[${error}] ${response.msg}`);
     }
 
     /** Return response data */
