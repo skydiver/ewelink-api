@@ -35,8 +35,9 @@ module.exports = {
     const error = _get(response, 'error', false);
 
     if (error) {
-      throw new Error(`Error ${error}: ${response.msg}`);
+      throw new Error(`[${error}] ${response.msg}`);
     }
+
     this.apiKey = _get(response, 'data.user.apikey', '');
     this.at = _get(response, 'data.at', '');
 
