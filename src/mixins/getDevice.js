@@ -10,16 +10,14 @@ module.exports = {
    */
   async getDevice(deviceId) {
     if (this.devicesCache) {
-      return this.devicesCache.find(dev => dev.deviceid === deviceId) || null;
+      return this.devicesCache.find((dev) => dev.deviceid === deviceId) || null;
     }
 
     const device = await this.makeRequest({
       method: 'post',
       uri: `/v2/device/thing/`,
       body: {
-        thingList: [
-          { id: deviceId, itemType: 1 }
-        ]
+        thingList: [{ id: deviceId, itemType: 1 }],
       },
     });
 
