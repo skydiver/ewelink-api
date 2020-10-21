@@ -16,7 +16,7 @@ module.exports = {
     const thingList = _get(response, 'thingList', false);
 
     if (error) {
-      return { error, msg: errors[error] };
+      throw new Error(`[${error}] ${errors[error]}`);
     }
 
     if (!thingList) {
