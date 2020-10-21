@@ -1,4 +1,4 @@
-const { nonce, timestamp, _get } = require('../helpers/utilities');
+const { _get } = require('../helpers/utilities');
 const errors = require('../data/errors');
 
 module.exports = {
@@ -16,13 +16,12 @@ module.exports = {
     const { APP_ID } = this;
 
     const device = await this.makeRequest({
-      uri: `/user/device/${deviceId}`,
-      qs: {
-        deviceid: deviceId,
-        appid: APP_ID,
-        nonce,
-        ts: timestamp,
-        version: 8,
+      method: 'post',
+      uri: `/v2/device/thing/`,
+      body: {
+        thingList: [
+          { id: deviceId, itemType: 1 }
+        ]
       },
     });
 
@@ -32,6 +31,10 @@ module.exports = {
       return { error, msg: errors[error] };
     }
 
-    return device;
+    if (device.thingList.length === 0) {
+      throw new Error(`${errors.noDevice}`);
+    }
+
+    return device.thingList.shift().itemData;
   },
 };

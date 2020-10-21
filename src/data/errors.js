@@ -11,6 +11,7 @@ const errors = {
 const customErrors = {
   ch404: 'Device channel does not exist',
   unknown: 'An unknown error occurred',
+  noDevice: 'No device found',
   noDevices: 'No devices found',
   noPower: 'No power usage data found',
   noSensor: "Can't read sensor data from device",
