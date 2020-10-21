@@ -37,9 +37,9 @@ module.exports = {
     if (error) {
       throw new Error(`Error ${error}: ${response.msg}`);
     }
+    this.apiKey = _get(response, 'data.user.apikey', '');
+    this.at = _get(response, 'data.at', '');
 
-    this.apiKey = _get(response, 'user.apikey', '');
-    this.at = _get(response, 'at', '');
     return response;
   },
 };
