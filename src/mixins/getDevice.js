@@ -13,8 +13,6 @@ module.exports = {
       return this.devicesCache.find(dev => dev.deviceid === deviceId) || null;
     }
 
-    const { APP_ID } = this;
-
     const device = await this.makeRequest({
       method: 'post',
       uri: `/v2/device/thing/`,
@@ -28,7 +26,7 @@ module.exports = {
     const error = _get(device, 'error', false);
 
     if (error) {
-      return { error, msg: errors[error] };
+      throw new Error(`[${error}] ${errors[error]}`);
     }
 
     if (device.thingList.length === 0) {
