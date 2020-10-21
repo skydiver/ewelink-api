@@ -46,7 +46,7 @@ module.exports = {
 
     /** Catch request status code other than 200 */
     if (!request.ok) {
-      throw new Error(`Error ${request.status}: ${errors[request.status]}`);
+      throw new Error(`[${request.status}] ${errors[request.status]}`);
     }
 
     /** Parse API response */
