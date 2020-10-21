@@ -1,8 +1,6 @@
 const { _get } = require('../helpers/utilities');
 const errors = require('../data/errors');
 
-const deviceStatusPayload = require('../payloads/deviceStatus');
-
 module.exports = {
   /**
    * Get current power state for a specific device
@@ -14,19 +12,18 @@ module.exports = {
    */
   async getDevicePowerState(deviceId, channel = 1) {
     const status = await this.makeRequest({
-      uri: '/user/device/status',
-      qs: deviceStatusPayload({
-        appid: this.APP_ID,
-        deviceId,
+      uri: '/v2/device/thing/status',
+      qs: {
+        type: 1,
+        id: deviceId,
         params: 'switch|switches',
-      }),
+      },
     });
 
     const error = _get(status, 'error', false);
 
     if (error) {
-      const err = error === 400 ? 404 : error;
-      return { error: err, msg: errors[err] };
+      throw new Error(`[${error}] ${errors[error]}`);
     }
 
     let state = _get(status, 'params.switch', false);
@@ -35,7 +32,7 @@ module.exports = {
     const switchesAmount = switches ? switches.length : 1;
 
     if (switchesAmount > 0 && switchesAmount < channel) {
-      return { error: 404, msg: errors.ch404 };
+      throw new Error(`${errors.ch404}`);
     }
 
     if (switches) {
