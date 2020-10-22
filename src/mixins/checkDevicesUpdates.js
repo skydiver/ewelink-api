@@ -1,53 +1,42 @@
-const { _get } = require('../helpers/utilities');
+const compareVersions = require('compare-versions');
 const parseFirmwareUpdates = require('../parsers/parseFirmwareUpdates');
+const errors = require('../data/errors');
 
 module.exports = {
   async checkDevicesUpdates() {
     const devices = await this.getDevices();
 
-    const error = _get(devices, 'error', false);
-
-    if (error) {
-      return devices;
-    }
-
     const deviceInfoList = parseFirmwareUpdates(devices);
-
-    const deviceInfoListError = _get(deviceInfoList, 'error', false);
-
-    if (deviceInfoListError) {
-      return deviceInfoList;
-    }
 
     const updates = await this.makeRequest({
       method: 'post',
-      url: this.getOtaUrl(),
-      uri: '/app',
+      uri: '/v2/device/ota/query',
       body: { deviceInfoList },
     });
 
-    const upgradeInfoList = _get(updates, 'upgradeInfoList', false);
+    const { otaInfoList } = updates;
 
-    if (!upgradeInfoList) {
-      return { error: "Can't find firmware update information" };
+    if (!otaInfoList) {
+      throw new Error(`${errors.noFirmwares}`);
     }
 
-    return upgradeInfoList.map(device => {
-      const upd = _get(device, 'version', false);
+    /** Get current versions */
+    const currentVersions = {};
+    deviceInfoList.forEach((device) => {
+      currentVersions[device.deviceid] = device.version;
+    });
 
-      if (!upd) {
-        return {
-          status: 'ok',
-          deviceId: device.deviceid,
-          msg: 'No update available',
-        };
-      }
+    return otaInfoList.map((device) => {
+      const current = currentVersions[device.deviceid];
+      const { version } = device;
+      const outdated = compareVersions(version, current);
 
       return {
-        status: 'ok',
+        update: !!outdated,
         deviceId: device.deviceid,
-        msg: 'Update available',
-        version: upd,
+        msg: outdated ? 'Update available' : 'No update available',
+        current,
+        version,
       };
     });
   },
