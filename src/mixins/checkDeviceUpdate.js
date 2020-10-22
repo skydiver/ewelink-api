@@ -1,5 +1,4 @@
-const { _get } = require('../helpers/utilities');
-const parseFirmwareUpdates = require('../parsers/parseFirmwareUpdates');
+const errors = require('../data/errors');
 
 module.exports = {
   /**
@@ -10,26 +9,14 @@ module.exports = {
    * @returns {Promise<{msg: string, version: *}|{msg: string, error: number}|{msg: string, error: *}|Device|{msg: string}>}
    */
   async checkDeviceUpdate(deviceId) {
-    const device = await this.getDevice(deviceId);
-    const deviceInfoList = parseFirmwareUpdates([device]);
+    const updates = await this.checkDevicesUpdates();
 
-    const update = await this.makeRequest({
-      method: 'post',
-      uri: '/v2/device/ota/query',
-      body: { deviceInfoList },
-    });
+    const update = updates.find((device) => device.deviceId === deviceId);
 
-    const isUpdate = _get(update, 'otaInfoList.0.version', false);
+    if (!update) {
+      throw new Error(`${errors.noFirmware}`);
+    }
 
-    return isUpdate
-      ? {
-          status: 'ok',
-          msg: 'Update available',
-          version: isUpdate,
-        }
-      : {
-          status: 'ok',
-          msg: 'No update available',
-        };
+    return update;
   },
 };
