@@ -14,12 +14,6 @@ module.exports = {
   async setDevicePowerState(deviceId, state, channel = 1) {
     const device = await this.getDevice(deviceId);
 
-    /** Check for errors */
-    const error = _get(device, 'error', false);
-    if (error) {
-      throw new Error(`[${error}] ${errors[error]}`);
-    }
-
     let status = _get(device, 'params.switch', false);
     const switches = _get(device, 'params.switches', false);
 
