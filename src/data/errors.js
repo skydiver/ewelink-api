@@ -11,6 +11,7 @@ const errors = {
 const customErrors = {
   ch404: 'Device channel does not exist',
   unknown: 'An unknown error occurred',
+  noARP: 'No ARP information found. You need to generate the ARP file.',
   noDevice: 'No device found',
   noDevices: 'No devices found',
   noPower: 'No power usage data found',

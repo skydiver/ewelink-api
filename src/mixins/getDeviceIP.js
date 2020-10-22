@@ -1,3 +1,5 @@
+const errors = require('../data/errors');
+
 module.exports = {
   /**
    * Get local IP address from a given MAC
@@ -6,10 +8,16 @@ module.exports = {
    * @returns {Promise<string>}
    */
   getDeviceIP(device) {
-    const mac = device.extra.extra.staMac;
+    if (!this.arpTable) {
+      throw new Error(errors.noARP);
+    }
+
+    const mac = device.extra.staMac;
+
     const arpItem = this.arpTable.find(
-      item => item.mac.toLowerCase() === mac.toLowerCase()
+      (item) => item.mac.toLowerCase() === mac.toLowerCase()
     );
+
     return arpItem.ip;
   },
 };
