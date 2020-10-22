@@ -11,11 +11,11 @@ module.exports = {
    */
   async getFirmwareVersion(deviceId) {
     const device = await this.getDevice(deviceId);
-    const error = _get(device, 'error', false);
+
     const fwVersion = _get(device, 'params.fwVersion', false);
 
-    if (error || !fwVersion) {
-      return { error, msg: errors[error] };
+    if (!fwVersion) {
+      throw new Error(`${errors.noFirmware}`);
     }
 
     return { status: 'ok', fwVersion };
