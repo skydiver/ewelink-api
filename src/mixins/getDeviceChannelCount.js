@@ -1,7 +1,4 @@
 const { _get } = require('../helpers/utilities');
-const errors = require('../data/errors');
-
-const { getDeviceChannelCount } = require('../helpers/ewelink');
 
 module.exports = {
   /**
@@ -13,12 +10,18 @@ module.exports = {
    */
   async getDeviceChannelCount(deviceId) {
     const device = await this.getDevice(deviceId);
-    const error = _get(device, 'error', false);
-    const uiid = _get(device, 'extra.extra.uiid', false);
-    const switchesAmount = getDeviceChannelCount(uiid);
 
-    if (error) {
-      return { error, msg: errors[error] };
+    const paramSwitch = _get(device, 'params.switch', false);
+    const paramSwitches = _get(device, 'params.switches', false);
+
+    let switchesAmount;
+
+    if (paramSwitches) {
+      switchesAmount = paramSwitches.length;
+    }
+
+    if (!paramSwitches && paramSwitch) {
+      switchesAmount = 1;
     }
 
     return { status: 'ok', switchesAmount };
