@@ -96,6 +96,11 @@ class eWeLink {
     return `wss://${this.region}-pconnect3.coolkit.cc:8080/api/ws`;
   }
 
+  getDispatchServiceUrl() {
+    const domain = this.region === 'cn' ? 'cn' : 'cc';
+    return `https://${this.region}-dispa.coolkit.${domain}`;
+  }
+
   /**
    * Generate Zeroconf URL
    * @param device
