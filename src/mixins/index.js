@@ -13,10 +13,10 @@ const { getDevices } = require('./getDevices');
 const { getFirmwareVersion } = require('./getFirmwareVersion');
 const { getRegion } = require('./getRegion');
 const { makeRequest } = require('./makeRequest');
-const { openWebSocket } = require('./openWebSocket');
+const openWebSocket = require('./openWebSocket');
 const { saveDevicesCache } = require('./saveDevicesCache');
 const { setDevicePowerState } = require('./setDevicePowerState');
-const { toggleDevice } = require('./toggleDevice');
+const { toggleDevicePowerState } = require('./toggleDevicePowerState');
 
 const mixins = {
   checkDevicesUpdates,
@@ -34,10 +34,10 @@ const mixins = {
   getFirmwareVersion,
   getRegion,
   makeRequest,
-  openWebSocket,
+  ...openWebSocket,
   saveDevicesCache,
   setDevicePowerState,
-  toggleDevice,
+  toggleDevicePowerState,
 };
 
 module.exports = mixins;

@@ -1,9 +1,5 @@
-const { _get, timestamp, nonce } = require('../helpers/utilities');
+const { _get } = require('../helpers/utilities');
 const errors = require('../data/errors');
-
-const { getDeviceChannelCount } = require('../helpers/ewelink');
-
-const ChangeStateZeroconf = require('../classes/ChangeStateZeroconf');
 
 module.exports = {
   /**
@@ -17,20 +13,14 @@ module.exports = {
    */
   async setDevicePowerState(deviceId, state, channel = 1) {
     const device = await this.getDevice(deviceId);
-    const error = _get(device, 'error', false);
-    const uiid = _get(device, 'extra.extra.uiid', false);
 
     let status = _get(device, 'params.switch', false);
     const switches = _get(device, 'params.switches', false);
 
-    const switchesAmount = getDeviceChannelCount(uiid);
+    const switchesAmount = switches.length;
 
     if (switchesAmount > 0 && switchesAmount < channel) {
-      return { error: 404, msg: errors.ch404 };
-    }
-
-    if (error || (!status && !switches)) {
-      return { error, msg: errors[error] };
+      throw new Error(`${errors.ch404}`);
     }
 
     let stateToSwitch = state;
@@ -51,35 +41,31 @@ module.exports = {
       params.switch = stateToSwitch;
     }
 
-    if (this.devicesCache) {
-      return ChangeStateZeroconf.set({
-        url: this.getZeroconfUrl(device),
-        device,
-        params,
-        switches,
-        state: stateToSwitch,
-      });
-    }
-
-    const { APP_ID } = this;
+    // DISABLED DURING v4.0.0 DEVELOPMENT
+    // if (this.devicesCache) {
+    //   return ChangeStateZeroconf.set({
+    //     url: this.getZeroconfUrl(device),
+    //     device,
+    //     params,
+    //     switches,
+    //     state: stateToSwitch,
+    //   });
+    // }
 
     const response = await this.makeRequest({
       method: 'post',
-      uri: '/user/device/status',
+      uri: '/v2/device/thing/status',
       body: {
-        deviceid: deviceId,
+        type: 1,
+        id: deviceId,
         params,
-        appid: APP_ID,
-        nonce,
-        ts: timestamp,
-        version: 8,
       },
     });
 
     const responseError = _get(response, 'error', false);
 
     if (responseError) {
-      return { error: responseError, msg: errors[responseError] };
+      throw new Error(`[${error}] ${errors[error]}`);
     }
 
     return { status: 'ok', state, channel };

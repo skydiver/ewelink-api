@@ -1,4 +1,4 @@
-const { nonce, timestamp, _get } = require('../helpers/utilities');
+const { _get } = require('../helpers/utilities');
 const errors = require('../data/errors');
 
 module.exports = {
@@ -10,28 +10,27 @@ module.exports = {
    */
   async getDevice(deviceId) {
     if (this.devicesCache) {
-      return this.devicesCache.find(dev => dev.deviceid === deviceId) || null;
+      return this.devicesCache.find((dev) => dev.deviceid === deviceId) || null;
     }
 
-    const { APP_ID } = this;
-
     const device = await this.makeRequest({
-      uri: `/user/device/${deviceId}`,
-      qs: {
-        deviceid: deviceId,
-        appid: APP_ID,
-        nonce,
-        ts: timestamp,
-        version: 8,
+      method: 'post',
+      uri: `/v2/device/thing/`,
+      body: {
+        thingList: [{ id: deviceId, itemType: 1 }],
       },
     });
 
     const error = _get(device, 'error', false);
 
     if (error) {
-      return { error, msg: errors[error] };
+      throw new Error(`[${error}] ${errors[error]}`);
     }
 
-    return device;
+    if (device.thingList.length === 0) {
+      throw new Error(`${errors.noDevice}`);
+    }
+
+    return device.thingList.shift().itemData;
   },
 };

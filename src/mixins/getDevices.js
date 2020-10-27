@@ -1,4 +1,4 @@
-const { _get, timestamp } = require('../helpers/utilities');
+const { _get } = require('../helpers/utilities');
 const errors = require('../data/errors');
 
 module.exports = {
@@ -8,30 +8,21 @@ module.exports = {
    * @returns {Promise<{msg: string, error: number}|*>}
    */
   async getDevices() {
-    const { APP_ID } = this;
-
     const response = await this.makeRequest({
-      uri: '/user/device',
-      qs: {
-        lang: 'en',
-        appid: APP_ID,
-        ts: timestamp,
-        version: 8,
-        getTags: 1,
-      },
+      uri: `/v2/device/thing/`,
     });
 
     const error = _get(response, 'error', false);
-    const devicelist = _get(response, 'devicelist', false);
+    const thingList = _get(response, 'thingList', false);
 
     if (error) {
-      return { error, msg: errors[error] };
+      throw new Error(`[${error}] ${errors[error]}`);
     }
 
-    if (!devicelist) {
-      return { error: 404, msg: errors.noDevices };
+    if (!thingList) {
+      throw new Error(`${errors.noDevices}`);
     }
 
-    return devicelist;
+    return thingList.map((thing) => thing.itemData);
   },
 };

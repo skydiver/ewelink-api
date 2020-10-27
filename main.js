@@ -75,7 +75,8 @@ class eWeLink {
    * @returns {string}
    */
   getApiUrl() {
-    return `https://${this.region}-api.coolkit.cc:8080/api`;
+    const domain = this.region === 'cn' ? 'cn' : 'cc';
+    return `https://${this.region}-apia.coolkit.${domain}`;
   }
 
   /**
@@ -93,6 +94,11 @@ class eWeLink {
    */
   getApiWebSocket() {
     return `wss://${this.region}-pconnect3.coolkit.cc:8080/api/ws`;
+  }
+
+  getDispatchServiceUrl() {
+    const domain = this.region === 'cn' ? 'cn' : 'cc';
+    return `https://${this.region}-dispa.coolkit.${domain}`;
   }
 
   /**

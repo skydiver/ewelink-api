@@ -14,7 +14,7 @@ module.exports = {
    * @returns {Promise<{msg: *, error: *}|*>}
    */
   async makeRequest({ method = 'get', url, uri, body = {}, qs = {} }) {
-    const { at } = this;
+    const { at, APP_ID } = this;
 
     if (!at) {
       await this.getCredentials();
@@ -31,6 +31,7 @@ module.exports = {
       headers: {
         Authorization: `Bearer ${this.at}`,
         'Content-Type': 'application/json',
+        'X-CK-Appid': APP_ID,
       },
     };
 
@@ -43,12 +44,23 @@ module.exports = {
 
     const request = await fetch(requestUrl, payload);
 
+    /** Catch request status code other than 200 */
     if (!request.ok) {
-      return { error: request.status, msg: errors[request.status] };
+      throw new Error(`[${request.status}] ${errors[request.status]}`);
     }
 
+    /** Parse API response */
     const response = await request.json();
 
-    return response
+    /** Catch errors with status code 200 */
+    const error = _get(response, 'error', false);
+
+    /** Throw error if needed */
+    if (error) {
+      throw new Error(`[${error}] ${response.msg}`);
+    }
+
+    /** Return response data */
+    return response.data;
   },
 };

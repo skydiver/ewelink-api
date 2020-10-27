@@ -10,16 +10,12 @@ module.exports = {
    */
   async getDeviceCurrentTH(deviceId, type = '') {
     const device = await this.getDevice(deviceId);
-    const error = _get(device, 'error', false);
+
     const temperature = _get(device, 'params.currentTemperature', false);
     const humidity = _get(device, 'params.currentHumidity', false);
 
-    if (error) {
-      return device;
-    }
-
     if (!temperature || !humidity) {
-      return { error: 404, msg: errors.noSensor };
+      throw new Error(`${errors.noSensor}`);
     }
 
     const data = { status: 'ok', temperature, humidity };
