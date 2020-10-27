@@ -41,6 +41,6 @@ module.exports = {
     this.apiKey = _get(response, 'data.user.apikey', '');
     this.at = _get(response, 'data.at', '');
 
-    return response;
+    return response.data;
   },
 };
