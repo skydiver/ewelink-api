@@ -40,7 +40,6 @@
     ]
   },
   "dependencies": {
-    "arpping": "github:skydiver/arpping",
     "crypto-js": "^4.0.0",
     "delay": "^4.4.0",
     "node-fetch": "^2.6.1",
@@ -63,5 +62,8 @@
     "jest": "^26.5.3",
     "nock": "^12.0.3",
     "prettier": "^1.19.1"
+  },
+  "optionalDependencies": {
+    "arpping": "github:skydiver/arpping"
   }
 }
