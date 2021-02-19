@@ -45,8 +45,8 @@ module.exports = {
     }
 
     if (switches) {
-      params.switches = switches;
-      params.switches[channel - 1].switch = stateToSwitch;
+      params.switches = [ switches[channel-1] ]
+      params.switches[0].switch = stateToSwitch;
     } else {
       params.switch = stateToSwitch;
     }
