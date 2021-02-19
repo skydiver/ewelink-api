@@ -1,5 +1,10 @@
 const fs = require('fs');
-const arpping = require('arpping')({});
+let arpping
+
+try {
+  arpping = require('arpping')({});
+} catch ( err ) {
+}
 
 class Zeroconf {
   /**
@@ -9,13 +14,17 @@ class Zeroconf {
    */
   static getArpTable(ip = null) {
     return new Promise((resolve, reject) => {
-      arpping.discover(ip, (err, hosts) => {
-        if (err) {
-          return reject(err);
-        }
-        const arpTable = Zeroconf.fixMacAddresses(hosts);
-        return resolve(arpTable);
-      });
+      if ( !arpping ) {
+        reject(new Error('arpping is not installed'))
+      } else {
+        arpping.discover(ip, (err, hosts) => {
+          if (err) {
+            return reject(err);
+          }
+          const arpTable = Zeroconf.fixMacAddresses(hosts);
+          return resolve(arpTable);
+        });
+      }
     });
   }
 
