@@ -25,8 +25,19 @@ module.exports = {
 
     const switchesAmount = getDeviceChannelCount(uiid);
 
-    if (switchesAmount > 0 && switchesAmount < channel) {
-      return { error: 404, msg: errors.ch404 };
+    if (switchesAmount > 0) {
+      if (Array.isArray(channel)) {
+        for (let i = 0; i < channel.length; i++) {
+          if (switchesAmount < channel[i]) {
+            return { error: 404, msg: errors.ch404 };
+          }
+        }
+      }
+      else {
+        if (channel != 0 && switchesAmount < channel) {
+          return { error: 404, msg: errors.ch404 };
+        }  
+      }
     }
 
     if (error || (!status && !switches)) {
@@ -37,7 +48,15 @@ module.exports = {
     const params = {};
 
     if (switches) {
-      status = switches[channel - 1].switch;
+      if (Array.isArray(channel)) {
+        status = switches[channel[0] - 1].switch;
+      }
+      else if (channel == 0) {
+        status = switches[0].switch;
+      }
+      else {
+        status = switches[channel - 1].switch;
+      }
     }
 
     if (state === 'toggle') {
@@ -46,7 +65,22 @@ module.exports = {
 
     if (switches) {
       params.switches = switches;
-      params.switches[channel - 1].switch = stateToSwitch;
+      if (Array.isArray(channel)) {
+        // for (let i = 0; i < switchesAmount; i++) {
+        //   params.switches[i].switch = stateToSwitch === 'on' ? 'off' : 'on';
+        // }
+        for (let i = 0; i < channel.length; i++) {
+          params.switches[channel[i] - 1].switch = stateToSwitch;
+        }
+      }
+      else if (channel == 0) {
+        for (let i = 0; i < switchesAmount; i++) {
+          params.switches[i].switch = stateToSwitch;
+        }
+      }
+      else {
+        params.switches[channel - 1].switch = stateToSwitch;
+      }
     } else {
       params.switch = stateToSwitch;
     }
