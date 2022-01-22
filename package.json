@@ -43,7 +43,7 @@
     "arpping": "github:skydiver/arpping",
     "crypto-js": "^4.0.0",
     "delay": "^4.4.0",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^3.1.1",
     "random": "^2.2.0",
     "websocket": "^1.0.32",
     "websocket-as-promised": "^1.0.1"
