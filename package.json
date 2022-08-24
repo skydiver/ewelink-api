@@ -41,27 +41,27 @@
   },
   "dependencies": {
     "arpping": "github:skydiver/arpping",
-    "crypto-js": "^4.0.0",
-    "delay": "^4.4.0",
-    "node-fetch": "^2.6.1",
-    "random": "^2.2.0",
-    "websocket": "^1.0.32",
-    "websocket-as-promised": "^1.0.1"
+    "crypto-js": "^4.1.1",
+    "delay": "^5.0.0",
+    "node-fetch": "^2.6.7",
+    "random": "^3.0.6",
+    "websocket": "^1.0.34",
+    "websocket-as-promised": "^2.0.1"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.11.0",
-    "eslint-config-airbnb": "^18.2.0",
-    "eslint-config-prettier": "^6.12.0",
-    "eslint-config-wesbos": "0.0.19",
+    "eslint": "^8.22.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-wesbos": "3.0.2",
     "eslint-plugin-html": "^6.1.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.3.1",
-    "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "^7.21.4",
-    "eslint-plugin-react-hooks": "^4.1.2",
-    "jest": "^26.5.3",
-    "nock": "^12.0.3",
-    "prettier": "^1.19.1"
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "jest": "^28.1.3",
+    "nock": "^13.2.9",
+    "prettier": "^2.7.1"
   }
 }
