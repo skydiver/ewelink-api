@@ -36,7 +36,20 @@ module.exports = {
     await wsp.send(payloadLogin);
 
     setInterval(async () => {
-      await wsp.send('ping');
+      try {
+        await wsp.send('ping');
+      } catch (error) {
+        console.error(`openWebSocket.js: ${error}`);
+        console.log(`openWebSocket.js: Reconnecting...`);
+        const auth = await this.getCredentials();
+        const payloadLogin = wssLoginPayload({
+          at: auth.at,
+          apiKey: auth.user.apikey,
+          appid: this.APP_ID,
+        });
+        await wsp.open();
+        await wsp.send(payloadLogin);
+      }
     }, heartbeat);
 
     return wsp;
