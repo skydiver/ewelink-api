@@ -10,6 +10,7 @@ const { getDevicePowerState } = require('./getDevicePowerState');
 const { getDevicePowerUsage } = require('./getDevicePowerUsage');
 const { getDevicePowerUsageRaw } = require('./getDevicePowerUsageRaw');
 const { getDevices } = require('./getDevices');
+const { getHomepage } = require('./getHomepage');
 const { getFirmwareVersion } = require('./getFirmwareVersion');
 const { getRegion } = require('./getRegion');
 const { makeRequest } = require('./makeRequest');
@@ -31,6 +32,7 @@ const mixins = {
   getDevicePowerUsage,
   getDevicePowerUsageRaw,
   getDevices,
+  getHomepage,
   getFirmwareVersion,
   getRegion,
   makeRequest,

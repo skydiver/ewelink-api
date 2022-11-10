@@ -11,6 +11,7 @@
   * [openWebSocket](available-methods/openwebsocket.md)
   * [getDevice](available-methods/getdevice.md)
   * [getDevices](available-methods/getdevices.md)
+  * [getHomepage](available-methods/gethomepage.md)
   * [getDevicePowerState](available-methods/getdevicepowerstate.md)
   * [setDevicePowerState](available-methods/setdevicepowerstate.md)
   * [getWSDevicePowerState](available-methods/getwsdevicepowerstate.md)
