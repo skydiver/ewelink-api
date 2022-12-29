@@ -25,7 +25,7 @@ class Zeroconf {
    */
   static fixMacAddresses(hosts) {
     return hosts.map(host => {
-      const octets = host.mac.split(/:|-/);
+      const octets = host.mac.split(/[:-]/);
 
       const fixedMac = octets.map(octet => {
         if (octet.length === 1) {
