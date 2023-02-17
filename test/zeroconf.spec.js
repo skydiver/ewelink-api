@@ -55,6 +55,15 @@ describe('zeroconf: save arp table to file', () => {
     expect(arpTable.file).toBe(file);
   });
 
+  test('fix mac address for address with -', async () => {
+    const someIp = `127.0.0.1`;
+    const macWithKebabCase = `01:02-03-0a-0b-0c`;
+    
+    const fixedAddressed = Zeroconf.fixMacAddresses([{ip: someIp, mac: macWithKebabCase}]);
+
+    expect(fixedAddressed[0].mac).toEqual(`01:02:03:0a:0b:0c`);
+  });
+
   test('error saving arp table file', async () => {
     jest.setTimeout(30000);
     const file = '/tmp/non-existent-folder/arp-table.json';

@@ -213,3 +213,68 @@ describe('device control using WebSockets: errors and exceptions', () => {
     }
   });
 });
+
+describe('device control using Zeroconf', () => {
+
+  test('getDeviceIP with mac address on device.params', () => {
+    const staMac = '3A:5C:E6:C9:8A:9E';
+    const ip = '192.101.1.102';
+    const device = aDevice().withParams({staMac}).device();
+    const arpEntry = anArpTableEntry().withIp(ip).withMac(staMac).entry();
+    const devicesCache = [device];
+    const arpTable = [arpEntry];
+    
+    const conn = new ewelink({ email: 'someEmail', password: 'some password', devicesCache, arpTable });
+
+    expect(conn.getZeroconfUrl(device)).toBe(`http://${ip}:8081/zeroconf`);
+  });
+
+  test('getDeviceIP with mac address on device.extra.extra', () => {
+    const staMac = '3A:5C:E6:C9:8A:9E';
+    const ip = '192.101.1.102';
+    const device = aDevice().withExtra({staMac}).device();
+    const arpEntry = anArpTableEntry().withIp(ip).withMac(staMac).entry();
+    const devicesCache = [device];
+    const arpTable = [arpEntry];
+    
+    const conn = new ewelink({ email: 'someEmail', password: 'some password', devicesCache, arpTable });
+    
+    expect(conn.getZeroconfUrl(device)).toBe(`http://${ip}:8081/zeroconf`);
+  });
+});
+
+function anArpTableEntry() {
+  const entry = {};
+  return {
+    withIp: function(ip) {
+      entry.ip = ip;
+      return this;
+    },
+    withMac: function(mac) {
+      entry.mac = mac;
+      return this;
+    },
+    entry: () => entry
+  }
+}
+
+function aDevice() {
+  let device = {};
+  return {
+    withExtra: function(extra) {
+      device = {
+        ...device,
+        extra: {
+          ...device.extra,
+          extra
+        }
+      }
+      return this;
+    },
+    withParams: function(params) {
+      device.params = params;
+      return this;
+    },
+    device: () => device
+  }
+}
